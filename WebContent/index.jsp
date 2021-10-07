@@ -1,3 +1,7 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c"%>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -9,24 +13,24 @@
       href="assets/images/favicon.svg"
       type="image/x-icon"
     />
-    <title>PlainAdmin Demo | Bootstrap 5 Admin Template</title>
+	<title>Cửa hàng phụ kiện</title>
 
     <!-- ========== All CSS files linkup ========= -->
-    <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="assets/css/LineIcons.css" />
-    <link rel="stylesheet" href="assets/css/materialdesignicons.min.css" />
-    <link rel="stylesheet" href="assets/css/fullcalendar.css" />
-    <link rel="stylesheet" href="assets/css/fullcalendar.css" />
-    <link rel="stylesheet" href="assets/css/main.css" />
+    <link rel="stylesheet" href="<c:url value='/resources/assets/css/bootstrap.min.css' />" />
+    <link rel="stylesheet" href="<c:url value='/resources/assets/css/LineIcons.css' />" />
+    <link rel="stylesheet" href="<c:url value='/resources/assets/css/materialdesignicons.min.css' />" />
+    <link rel="stylesheet" href="<c:url value='/resources/assets/css/fullcalendar.css' />" />
+    <link rel="stylesheet" href="<c:url value='/resources/assets/css/fullcalendar.css' />" />
+    <link rel="stylesheet" href="<c:url value='/resources/assets/css/main.css' />" />
   </head>
   <body>
     <!-- ======== sidebar-nav start =========== -->
     <aside class="sidebar-nav-wrapper">
       <div class="navbar-logo">
         <a href="index.html">
-          <img src="assets/images/logo/logo.svg" alt="logo" />
+          <img src="<c:url value='/resources/assets/images/logo/logo.svg' />" alt="logo" />
         </a>
-      </div>
+		</div>
       <nav class="sidebar-nav">
         <ul>
           <li class="nav-item nav-item-has-children">
