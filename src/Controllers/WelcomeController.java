@@ -7,8 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class WelcomeController {
 	@RequestMapping(value = "/index")
 	public String welcome() {
-		
-		return "index";
+		return "admin/index";
 	}
 	
 	@RequestMapping(value="signin")
