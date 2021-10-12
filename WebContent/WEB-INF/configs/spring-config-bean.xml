@@ -15,10 +15,10 @@
 			http://www.springframework.org/schema/mvc 
 			http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 	
-	<bean id="poly" class="poly.bean.Company">
+	<!-- <bean id="poly" class="poly.bean.Company">
 		<property name="name" value="FPT Polytechnic"/>
 		<property name="slogan" value="Thực Học - Thực Nghiệp"/>
 		<property name="logo" value="images/logos/poly.png"/>
-	</bean>
+	</bean> -->
 
 </beans>

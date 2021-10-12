@@ -17,15 +17,16 @@
 	<!-- Cấu hình interceptor --> 
 	<mvc:interceptors>  
 		<!-- Lọc tất cả các URL -->
-		<bean class="poly.interceptor.LoggerInterceptor" />
+		<bean class="Interceptor.GlobalInterceptor" />
 		
-		<!-- Chỉ lọc các URL theo path
-		<mvc:interceptor>
+		<!-- Chỉ lọc các URL theo path -->
+		<!-- <mvc:interceptor>
 			<mvc:mapping path="/home/**"/>
 			<mvc:exclude-mapping path="/home/index.htm"/>
-			<bean class="poly.interceptor.LoggerInterceptor" />
+			<mvc:exclude-mapping path="/home/about.htm"/>
+			<bean class="Interceptor.LoggerInterceptor" />
 		</mvc:interceptor>
-		 -->
+		 
 		 <mvc:interceptor>
 			<mvc:mapping path="/user/**"/>
 			<mvc:mapping path="/order/**"/>
@@ -33,8 +34,8 @@
 			<mvc:exclude-mapping path="/user/register.htm"/>
 			<mvc:exclude-mapping path="/user/forgot-password.htm"/>
 			<mvc:exclude-mapping path="/user/activate.htm"/>
-			<bean class="poly.interceptor.SecurityInterceptor" />
-		</mvc:interceptor>
+			<bean class="Interceptor.AuthorizeInterceptor" />
+		</mvc:interceptor> -->
 	</mvc:interceptors>
 
 </beans>
