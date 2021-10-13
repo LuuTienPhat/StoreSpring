@@ -30,10 +30,15 @@ public class GlobalInterceptor extends HandlerInterceptorAdapter {
 			throws Exception {
 		System.out.println("Global Interceptor preHandler()");
 		
-		application.setAttribute("dashboardPage", "admin/page/dashboard.html");
-		application.setAttribute("loginInPage", "admin/page/account");
-		application.setAttribute("RegisterPage", "admin/page");
+		// DEFAULT LINKS
+		application.setAttribute("dashboardPage", "admin/dashboard.html");
+		application.setAttribute("loginInPage", "admin/log-in.html");
+		application.setAttribute("registerPage", "admin/register.html");
+		application.setAttribute("resetPasswordPage", "admin/reset-password.html");
+		application.setAttribute("forgotPasswordPage", "admin/forgot-password.html");
+		application.setAttribute("productPage", "admin/product.html");
 		
+		// DEFAULT LINKS
 		/*
 		 * Session session = factory.getCurrentSession(); String hql =
 		 * "FROM MajorEntity"; Query query = session.createQuery(hql); List
