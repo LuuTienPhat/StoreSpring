@@ -11,9 +11,9 @@ import Models.Login;
 @Controller
 @RequestMapping("/admin/")
 public class AuthenticationController {
-	@RequestMapping(value = "sign-in", method = RequestMethod.GET)
+	@RequestMapping(value = "login")
 	public String renderSignInPage() {
-		return "admin/signin";
+		return "admin/pages/login";
 	}
 	
 	@RequestMapping(value = "insert", method = RequestMethod.POST)
@@ -23,13 +23,13 @@ public class AuthenticationController {
 		return "index";
 	}
 	
-	@RequestMapping("sign-up")
+	@RequestMapping("register")
 	public String renderSignUpPage() {
-		return "admin/signup";
+		return "admin/pages/register";
 	}
 	
 	@RequestMapping("forgot-password")
 	public String renderForgotPasswordPage() {
-		return "admin/forgot-password";
+		return "admin/pages/forgot-password";
 	}
 }
