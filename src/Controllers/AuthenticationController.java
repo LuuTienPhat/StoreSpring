@@ -9,7 +9,7 @@ import Models.Login;
 
 
 @Controller
-public class SignInController {
+public class AuthenticationController {
 	@RequestMapping(value = "insert", method = RequestMethod.GET)
 	public String renderSignInPage() {
 		return "admin/signin";
@@ -20,5 +20,15 @@ public class SignInController {
 		
 		
 		return "index";
+	}
+	
+	@RequestMapping("signup")
+	public String renderSignUpPage() {
+		return "admin/signup";
+	}
+	
+	@RequestMapping("forgot-password")
+	public String renderForgotPasswordPage() {
+		return "admin/forgot-password";
 	}
 }
