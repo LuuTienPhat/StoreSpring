@@ -30,7 +30,7 @@
       <li class="nav-item">
         <a href="../../index.html" class="nav-link d-flex align-items-center">
           <span class="sidebar-icon">
-            <img src="../../assets/img/brand/light.svg" height="20" width="20" alt="Volt Logo">
+            <img src="<c:url value='/resources/admin/assets/img/brand/light.svg' />" height="20" width="20" alt="Volt Logo">
           </span>
           <span class="mt-1 ms-1 sidebar-text">Volt Overview</span>
         </a>
@@ -43,7 +43,9 @@
           <span class="sidebar-text">Dashboard</span>
         </a>
       </li>
-      <li class="nav-item">
+      
+      <!-- KANBAN -->
+      <!-- <li class="nav-item">
         <a href="https://demo.themesberg.com/volt-pro/pages/kanban.html" target="_blank" class="nav-link d-flex justify-content-between">
           <span>
             <span class="sidebar-icon">
@@ -55,7 +57,9 @@
             <span class="badge badge-sm bg-secondary ms-1 text-gray-800">Pro</span>
           </span>
         </a>
-      </li>
+      </li> -->
+      
+      
       <li class="nav-item ">
         <a href="../../pages/transactions.html" class="nav-link">
           <span class="sidebar-icon">
@@ -244,7 +248,7 @@
       <li class="nav-item">
         <a href="https://themesberg.com" target="_blank" class="nav-link d-flex align-items-center">
           <span class="sidebar-icon">
-            <img src="../../assets/img/themesberg.svg" height="20" width="28" alt="Themesberg Logo">
+            <img src="<c:url value='/resources/admin/assets/img/themesberg.svg' />" height="20" width="28" alt="Themesberg Logo">
           </span>
           <span class="sidebar-text">Themesberg</span>
         </a>

@@ -2,6 +2,7 @@ package Interceptor;
 
 import java.util.List;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,10 +22,17 @@ public class GlobalInterceptor extends HandlerInterceptorAdapter {
 	@Autowired
 	SessionFactory factory;
 	
+	@Autowired
+	ServletContext application;
+	
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		System.out.println("Global Interceptor preHandler()");
+		
+		application.setAttribute("dashboardPage", "admin/page/dashboard.html");
+		application.setAttribute("loginInPage", "admin/page/account");
+		application.setAttribute("RegisterPage", "admin/page");
 		
 		/*
 		 * Session session = factory.getCurrentSession(); String hql =
