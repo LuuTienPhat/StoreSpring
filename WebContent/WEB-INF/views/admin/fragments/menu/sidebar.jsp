@@ -26,15 +26,17 @@
           </a>
       </div>
     </div>
+    
+    <!-- SIDE MENU BAR -->
     <ul class="nav flex-column pt-3 pt-md-0">
-      <li class="nav-item">
+      <%-- <li class="nav-item">
         <a href="../../index.html" class="nav-link d-flex align-items-center">
           <span class="sidebar-icon">
             <img src="<c:url value='/resources/admin/assets/img/brand/light.svg' />" height="20" width="20" alt="Volt Logo">
           </span>
           <span class="mt-1 ms-1 sidebar-text">Volt Overview</span>
         </a>
-      </li>
+      </li> --%>
       <li class="nav-item  active ">
         <a href="../../pages/dashboard/dashboard.html" class="nav-link">
           <span class="sidebar-icon">
@@ -76,7 +78,9 @@
           <span class="sidebar-text">Settings</span>
         </a>
       </li>
-      <li class="nav-item">
+      
+      <!-- CALENDAR -->
+      <!-- <li class="nav-item">
         <a href="https://demo.themesberg.com/volt-pro/pages/calendar.html" target="_blank" class="nav-link d-flex justify-content-between">
           <span>
             <span class="sidebar-icon">
@@ -88,8 +92,10 @@
             <span class="badge badge-sm bg-secondary ms-1 text-gray-800">Pro</span>
           </span>
         </a>
-      </li>
-      <li class="nav-item">
+      </li> -->
+      
+      <!-- MAP -->
+      <!-- <li class="nav-item">
         <a href="https://demo.themesberg.com/volt-pro/pages/map.html" target="_blank" class="nav-link d-flex justify-content-between">
           <span>
             <span class="sidebar-icon">
@@ -101,7 +107,8 @@
             <span class="badge badge-sm bg-secondary ms-1 text-gray-800">Pro</span>
           </span>
         </a>
-      </li>
+      </li> -->
+      
       <li class="nav-item">
         <span
           class="nav-link  collapsed  d-flex justify-content-between align-items-center"
@@ -126,6 +133,16 @@
             </li>
           </ul>
         </div>
+      </li>
+      
+      <!-- Product Manager -->
+      <li class="nav-item ">
+        <a href="${applicationScope.productPage }" class="nav-link">
+          <span class="sidebar-icon">
+            <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"></path><path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clip-rule="evenodd"></path></svg>
+          </span>
+          <span class="sidebar-text">Product Manager</span>
+        </a>
       </li>
       
       <!-- Page Examples -->
@@ -236,7 +253,8 @@
         </div>
       </li>
       <li role="separator" class="dropdown-divider mt-4 mb-3 border-gray-700"></li>
-      <li class="nav-item">
+      
+     <!--  <li class="nav-item">
         <a href="https://themesberg.com/docs/volt-bootstrap-5-dashboard/getting-started/quick-start/" target="_blank"
           class="nav-link d-flex align-items-center">
           <span class="sidebar-icon">
@@ -244,16 +262,16 @@
           </span>
           <span class="sidebar-text">Documentation <span class="badge badge-sm bg-secondary ms-1 text-gray-800">v1.4</span></span>
         </a>
-      </li>
-      <li class="nav-item">
+      </li> -->
+      <%-- <li class="nav-item">
         <a href="https://themesberg.com" target="_blank" class="nav-link d-flex align-items-center">
           <span class="sidebar-icon">
             <img src="<c:url value='/resources/admin/assets/img/themesberg.svg' />" height="20" width="28" alt="Themesberg Logo">
           </span>
           <span class="sidebar-text">Themesberg</span>
         </a>
-      </li>
-      <li class="nav-item">
+      </li> --%>
+      <!-- <li class="nav-item">
         <a href="../../pages/upgrade-to-pro.html"
           class="btn btn-secondary d-flex align-items-center justify-content-center btn-upgrade-pro">
           <span class="sidebar-icon d-inline-flex align-items-center justify-content-center">
@@ -261,7 +279,7 @@
           </span> 
           <span>Upgrade to Pro</span>
         </a>
-      </li>
+      </li> -->
     </ul>
   </div>
 </nav>
