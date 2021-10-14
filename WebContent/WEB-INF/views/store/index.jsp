@@ -18,11 +18,11 @@
                 <!-- Additional required wrapper -->
                 <div class="swiper-wrapper">
                     <!-- Slides -->
-                    <div class="swiper-slide"><a href="#" class="w-full"><img src="./assets/img/BannerM5.png"
+                    <div class="swiper-slide"><a href="#" class="w-full"><img src="<c:url value='/resources/store/assets/img/BannerM5.png'/>"
                                 alt=""></a></div>
-                    <div class="swiper-slide"><a href="#" class="w-full"><img src="./assets/img/sb_1612181109_394.png"
+                    <div class="swiper-slide"><a href="#" class="w-full"><img src="<c:url value='/resources/store/assets/img/sb_1612181109_394.png'/>"
                                 alt=""></a></div>
-                    <div class="swiper-slide"><a href="#" class="w-full"><img src="./assets/img/T9_Banner web.png"
+                    <div class="swiper-slide"><a href="#" class="w-full"><img src="<c:url value='/resources/store/assets/img/T9_Banner web.png'/>"
                                 alt=""></a></div>
                 </div>
                 <!-- If we need pagination -->
@@ -34,8 +34,8 @@
 
             </div>
             <div class="slider__right flex flex-col flex-1 ml-2">
-                <a href="#" class="w-full mb-2"><img src="./assets/img/Youtube - 1_tuan_mua_do_cute.jpg" alt=""></a>
-                <a href="#" class="w-full"><img src="./assets/img/sb_1622297902_958.jpg" alt=""></a>
+                <a href="#" class="w-full mb-2"><img src="<c:url value='/resources/store/assets/img/Youtube - 1_tuan_mua_do_cute.jpg'/>" alt=""></a>
+                <a href="#" class="w-full"><img src="<c:url value='/resources/store/assets/img/sb_1622297902_958.jpg'/>" alt=""></a>
             </div>
         </div>
         <div class="main__new-product section px-32 my-16">
@@ -47,7 +47,7 @@
                 <div class="item w-1/4 px-3 mb-4">
                     <div class="relative item-menu-container overflow-hidden">
                         <a href="${applicationScope.productDetailPage}" class="block overflow-hidden">
-                            <img src="./assets/img/sp1.jpeg" alt=""
+                            <img src="<c:url value='/resources/store/assets/img/sp1.jpeg'/>" alt=""
                                 class="transform hover:scale-110 transition-all "></a>
 
                         <div class="flex justify-center bg-pink-300 items-center py-2 absolute item__menu w-full">
@@ -67,7 +67,7 @@
                 <div class="item w-1/4 px-3 mb-4">
                     <div class="relative item-menu-container overflow-hidden">
                         <a href="${applicationScope.productDetailPage}" class="block overflow-hidden">
-                            <img src="./assets/img/sp1.jpeg" alt=""
+                            <img src="<c:url value='/resources/store/assets/img/sp1.jpeg'/>" alt=""
                                 class="transform hover:scale-110 transition-all "></a>
 
                         <div class="flex justify-center bg-pink-300 items-center py-2 absolute item__menu w-full">
@@ -86,7 +86,7 @@
                 <div class="item w-1/4 px-3 mb-4">
                     <div class="relative item-menu-container overflow-hidden">
                         <a href="${applicationScope.productDetailPage}" class="block overflow-hidden">
-                            <img src="./assets/img/sp1.jpeg" alt=""
+                            <img src="<c:url value='/resources/store/assets/img/sp1.jpeg'/>" alt=""
                                 class="transform hover:scale-110 transition-all "></a>
 
                         <div class="flex justify-center bg-pink-300 items-center py-2 absolute item__menu w-full">
@@ -105,7 +105,7 @@
                 <div class="item w-1/4 px-3 mb-4">
                     <div class="relative item-menu-container overflow-hidden">
                         <a href="${applicationScope.productDetailPage}" class="block overflow-hidden">
-                            <img src="./assets/img/sp1.jpeg" alt=""
+                            <img src="<c:url value='/resources/store/assets/img/sp1.jpeg'/>" alt=""
                                 class="transform hover:scale-110 transition-all "></a>
 
                         <div class="flex justify-center bg-pink-300 items-center py-2 absolute item__menu w-full">
@@ -124,7 +124,7 @@
                 <div class="item w-1/4 px-3 mb-4">
                     <div class="relative item-menu-container overflow-hidden">
                         <a href="${applicationScope.productDetailPage}" class="block overflow-hidden">
-                            <img src="./assets/img/sp1.jpeg" alt=""
+                            <img src="<c:url value='/resources/store/assets/img/sp1.jpeg'/>" alt=""
                                 class="transform hover:scale-110 transition-all "></a>
 
                         <div class="flex justify-center bg-pink-300 items-center py-2 absolute item__menu w-full">
@@ -143,7 +143,7 @@
                 <div class="item w-1/4 px-3 mb-4">
                     <div class="relative item-menu-container overflow-hidden">
                         <a href="${applicationScope.productDetailPage}" class="block overflow-hidden">
-                            <img src="./assets/img/sp1.jpeg" alt=""
+                            <img src="<c:url value='/resources/store/assets/img/sp1.jpeg'/>" alt=""
                                 class="transform hover:scale-110 transition-all "></a>
 
                         <div class="flex justify-center bg-pink-300 items-center py-2 absolute item__menu w-full">
@@ -162,7 +162,7 @@
                 <div class="item w-1/4 px-3 mb-4">
                     <div class="relative item-menu-container overflow-hidden">
                         <a href="${applicationScope.productDetailPage}" class="block overflow-hidden">
-                            <img src="./assets/img/sp1.jpeg" alt=""
+                            <img src="<c:url value='/resources/store/assets/img/sp1.jpeg'/>" alt=""
                                 class="transform hover:scale-110 transition-all "></a>
 
                         <div class="flex justify-center bg-pink-300 items-center py-2 absolute item__menu w-full">
@@ -181,7 +181,7 @@
                 <div class="item w-1/4 px-3 mb-4">
                     <div class="relative item-menu-container overflow-hidden">
                         <a href="${applicationScope.productDetailPage}" class="block overflow-hidden">
-                            <img src="./assets/img/sp1.jpeg" alt=""
+                            <img src="<c:url value='/resources/store/assets/img/sp1.jpeg'/>" alt=""
                                 class="transform hover:scale-110 transition-all "></a>
 
                         <div class="flex justify-center bg-pink-300 items-center py-2 absolute item__menu w-full">
@@ -200,7 +200,7 @@
                 <div class="item w-1/4 px-3 mb-4">
                     <div class="relative item-menu-container overflow-hidden">
                         <a href="${applicationScope.productDetailPage}" class="block overflow-hidden">
-                            <img src="./assets/img/sp1.jpeg" alt=""
+                            <img src="<c:url value='/resources/store/assets/img/sp1.jpeg'/>" alt=""
                                 class="transform hover:scale-110 transition-all "></a>
 
                         <div class="flex justify-center bg-pink-300 items-center py-2 absolute item__menu w-full">
@@ -219,7 +219,7 @@
                 <div class="item w-1/4 px-3 mb-4">
                     <div class="relative item-menu-container overflow-hidden">
                         <a href="${applicationScope.productDetailPage}" class="block overflow-hidden">
-                            <img src="./assets/img/sp1.jpeg" alt=""
+                            <img src="<c:url value='/resources/store/assets/img/sp1.jpeg'/>" alt=""
                                 class="transform hover:scale-110 transition-all "></a>
 
                         <div class="flex justify-center bg-pink-300 items-center py-2 absolute item__menu w-full">
@@ -238,7 +238,7 @@
                 <div class="item w-1/4 px-3 mb-4">
                     <div class="relative item-menu-container overflow-hidden">
                         <a href="${applicationScope.productDetailPage}" class="block overflow-hidden">
-                            <img src="./assets/img/sp1.jpeg" alt=""
+                            <img src="<c:url value='/resources/store/assets/img/sp1.jpeg'/>" alt=""
                                 class="transform hover:scale-110 transition-all "></a>
 
                         <div class="flex justify-center bg-pink-300 items-center py-2 absolute item__menu w-full">
@@ -257,7 +257,7 @@
                 <div class="item w-1/4 px-3 mb-4">
                     <div class="relative item-menu-container overflow-hidden">
                         <a href="${applicationScope.productDetailPage}" class="block overflow-hidden">
-                            <img src="./assets/img/sp1.jpeg" alt=""
+                            <img src="<c:url value='/resources/store/assets/img/sp1.jpeg'/>" alt=""
                                 class="transform hover:scale-110 transition-all "></a>
 
                         <div class="flex justify-center bg-pink-300 items-center py-2 absolute item__menu w-full">
@@ -287,19 +287,19 @@
                 </div>
                 <div class="mb-6 flex new-topic__nav">
                     <div class="item w-1/4 px-3 transform hover:scale-110 transition-all"> <a href="#"
-                            class="w-1/4"><img src="./assets/img/topic1.png" alt="" class="transition-all"></a></div>
+                            class="w-1/4"><img src="<c:url value='/resources/store/assets/img/topic1.png'/>" alt="" class="transition-all"></a></div>
                     <div class="item w-1/4 px-3 transform hover:scale-110 transition-all"> <a href="#"
-                            class="w-1/4"><img src="./assets/img/topic2.png" alt="" class="transition-all"></a></div>
+                            class="w-1/4"><img src="<c:url value='/resources/store/assets/img/topic2.png'/>" alt="" class="transition-all"></a></div>
                     <div class="item w-1/4 px-3 transform hover:scale-110 transition-all"> <a href="#"
-                            class="w-1/4"><img src="./assets/img/topic3.png" alt="" class="transition-all"></a></div>
+                            class="w-1/4"><img src="<c:url value='/resources/store/assets/img/topic3.png'/>" alt="" class="transition-all"></a></div>
                     <div class="item w-1/4 px-3 transform hover:scale-110 transition-all"> <a href="#"
-                            class="w-1/4"><img src="./assets/img/topic4.png" alt="" class="transition-all"></a></div>
+                            class="w-1/4"><img src="<c:url value='/resources/store/assets/img/topic4.png'/>" alt="" class="transition-all"></a></div>
                 </div>
                 <div class="new-product__list flex flex-wrap">
                     <div class="item w-1/4 px-3 mb-4">
                         <div class="relative item-menu-container overflow-hidden">
                             <a href="${applicationScope.productDetailPage}" class="block overflow-hidden">
-                                <img src="./assets/img/sp1.jpeg" alt=""
+                                <img src="<c:url value='/resources/store/assets/img/sp1.jpeg'/>" alt=""
                                     class="transform hover:scale-110 transition-all "></a>
 
                             <div class="flex justify-center bg-pink-300 items-center py-2 absolute item__menu w-full">
@@ -318,7 +318,7 @@
                     <div class="item w-1/4 px-3 mb-4">
                         <div class="relative item-menu-container overflow-hidden">
                             <a href="${applicationScope.productDetailPage}" class="block overflow-hidden">
-                                <img src="./assets/img/sp1.jpeg" alt=""
+                                <img src="<c:url value='/resources/store/assets/img/sp1.jpeg'/>" alt=""
                                     class="transform hover:scale-110 transition-all "></a>
 
                             <div class="flex justify-center bg-pink-300 items-center py-2 absolute item__menu w-full">
@@ -337,7 +337,7 @@
                     <div class="item w-1/4 px-3 mb-4">
                         <div class="relative item-menu-container overflow-hidden">
                             <a href="${applicationScope.productDetailPage}" class="block overflow-hidden">
-                                <img src="./assets/img/sp1.jpeg" alt=""
+                                <img src="<c:url value='/resources/store/assets/img/sp1.jpeg'/>" alt=""
                                     class="transform hover:scale-110 transition-all "></a>
 
                             <div class="flex justify-center bg-pink-300 items-center py-2 absolute item__menu w-full">
@@ -356,7 +356,7 @@
                     <div class="item w-1/4 px-3 mb-4">
                         <div class="relative item-menu-container overflow-hidden">
                             <a href="${applicationScope.productDetailPage}" class="block overflow-hidden">
-                                <img src="./assets/img/sp1.jpeg" alt=""
+                                <img src="<c:url value='/resources/store/assets/img/sp1.jpeg'/>" alt=""
                                     class="transform hover:scale-110 transition-all "></a>
 
                             <div class="flex justify-center bg-pink-300 items-center py-2 absolute item__menu w-full">
@@ -389,19 +389,19 @@
                     <div class="swiper-wrapper">
                         <!-- Slides -->
                         <div class="swiper-slide flex justify-between">
-                            <div class="px-3"><a href="#" class="w-full block"><img src="./assets/img/bottomslide18.jpg"
+                            <div class="px-3"><a href="#" class="w-full block"><img src="<c:url value='/resources/store/assets/img/bottomslide18.jpg'/>"
                                         alt=""></a></div>
-                            <div class="px-3"><a href="#" class="w-full block"><img src="./assets/img/bottomslide18.jpg"
+                            <div class="px-3"><a href="#" class="w-full block"><img src="<c:url value='/resources/store/assets/img/bottomslide18.jpg'/>"
                                         alt=""></a></div>
-                            <div class="px-3"><a href="#" class="w-full block"><img src="./assets/img/bottomslide18.jpg"
+                            <div class="px-3"><a href="#" class="w-full block"><img src="<c:url value='/resources/store/assets/img/bottomslide18.jpg'/>"
                                         alt=""></a></div>
                         </div>
                         <div class="swiper-slide flex justify-between">
-                            <div class="px-3"><a href="#" class="w-full block"><img src="./assets/img/bottomslide18.jpg"
+                            <div class="px-3"><a href="#" class="w-full block"><img src="<c:url value='/resources/store/assets/img/bottomslide18.jpg'/>"
                                         alt=""></a></div>
-                            <div class="px-3"><a href="#" class="w-full block"><img src="./assets/img/bottomslide18.jpg"
+                            <div class="px-3"><a href="#" class="w-full block"><img src="<c:url value='/resources/store/assets/img/bottomslide18.jpg'/>"
                                         alt=""></a></div>
-                            <div class="px-3"><a href="#" class="w-full block"><img src="./assets/img/bottomslide18.jpg"
+                            <div class="px-3"><a href="#" class="w-full block"><img src="<c:url value='/resources/store/assets/img/bottomslide18.jpg'/>"
                                         alt=""></a></div>
                         </div>
                     </div>

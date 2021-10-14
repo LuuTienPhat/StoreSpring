@@ -26,7 +26,7 @@
                     <tr class="card-list__table-item">
                         <td class="card-list__table-image">
                             <a href="${applicationScope.productDetailPage}" class="table-image__container">
-                                <img src="./assets/img/sp1.jpeg" alt="">
+                                <img src="<c:url value='/resources/store/assets/img/sp1.jpeg'/>" alt="">
                             </a>
                         </td>
                         <!-- desc = tên sản phẩm + màu sắc + kích cỡ (nếu có) -->
@@ -50,7 +50,7 @@
                     <tr class="card-list__table-item">
                         <td class="card-list__table-image">
                             <a href="${applicationScope.productDetailPage}" class="table-image__container">
-                                <img src="./assets/img/sp1.jpeg" alt="">
+                                <img src="<c:url value='/resources/store/assets/img/sp1.jpeg'/>" alt="">
                             </a>
                         </td>
                         <!-- desc = tên sản phẩm + màu sắc + kích cỡ (nếu có) -->
@@ -88,7 +88,7 @@
                 <div class="item w-1/5 px-3 mb-4">
                     <div class="relative item-menu-container overflow-hidden">
                         <a href="#" class="block overflow-hidden">
-                            <img src="./assets/img/sp1.jpeg" alt=""
+                            <img src="<c:url value='/resources/store/assets/img/sp1.jpeg'/>" alt=""
                                 class="transform hover:scale-110 transition-all "></a>
 
                         <div class="flex justify-center bg-pink-300 items-center py-2 absolute item__menu w-full">
@@ -104,7 +104,7 @@
                 <div class="item w-1/5 px-3 mb-4">
                     <div class="relative item-menu-container overflow-hidden">
                         <a href="#" class="block overflow-hidden">
-                            <img src="./assets/img/sp1.jpeg" alt=""
+                            <img src="<c:url value='/resources/store/assets/img/sp1.jpeg'/>" alt=""
                                 class="transform hover:scale-110 transition-all "></a>
 
                         <div class="flex justify-center bg-pink-300 items-center py-2 absolute item__menu w-full">
@@ -120,7 +120,7 @@
                 <div class="item w-1/5 px-3 mb-4">
                     <div class="relative item-menu-container overflow-hidden">
                         <a href="#" class="block overflow-hidden">
-                            <img src="./assets/img/sp1.jpeg" alt=""
+                            <img src="<c:url value='/resources/store/assets/img/sp1.jpeg'/>" alt=""
                                 class="transform hover:scale-110 transition-all "></a>
 
                         <div class="flex justify-center bg-pink-300 items-center py-2 absolute item__menu w-full">
@@ -136,7 +136,7 @@
                 <div class="item w-1/5 px-3 mb-4">
                     <div class="relative item-menu-container overflow-hidden">
                         <a href="#" class="block overflow-hidden">
-                            <img src="./assets/img/sp1.jpeg" alt=""
+                            <img src="<c:url value='/resources/store/assets/img/sp1.jpeg'/>" alt=""
                                 class="transform hover:scale-110 transition-all "></a>
 
                         <div class="flex justify-center bg-pink-300 items-center py-2 absolute item__menu w-full">
