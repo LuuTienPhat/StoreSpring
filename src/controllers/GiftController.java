@@ -8,6 +8,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class GiftController {
+	@RequestMapping("index")
+	public String product() {
+		return "store/index";
+	}
 	@RequestMapping("product-detail")
 	public String productDetail() {
 		return "store/product-detail";
