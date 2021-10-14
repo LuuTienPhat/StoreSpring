@@ -1,27 +1,17 @@
-package Interceptor;
-
-import java.util.List;
+package interceptors;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.transaction.Transactional;
 
-import org.hibernate.Query;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 
-@Transactional
 public class GlobalInterceptor extends HandlerInterceptorAdapter {
-	@Autowired
-	SessionFactory factory;
-	
 	@Autowired
 	ServletContext application;
 	
@@ -30,21 +20,13 @@ public class GlobalInterceptor extends HandlerInterceptorAdapter {
 			throws Exception {
 		System.out.println("Global Interceptor preHandler()");
 		
-		// DEFAULT LINKS
+		// DEFAULT PAGE LINKS
 		application.setAttribute("dashboardPage", "admin/dashboard.html");
 		application.setAttribute("loginInPage", "admin/log-in.html");
 		application.setAttribute("registerPage", "admin/register.html");
 		application.setAttribute("resetPasswordPage", "admin/reset-password.html");
 		application.setAttribute("forgotPasswordPage", "admin/forgot-password.html");
-		application.setAttribute("productPage", "admin/product.html");
-		
-		// DEFAULT LINKS
-		/*
-		 * Session session = factory.getCurrentSession(); String hql =
-		 * "FROM MajorEntity"; Query query = session.createQuery(hql); List
-		 * <MajorEntity> list = query.list(); request.setAttribute("majors", list);
-		 */
-	
+		application.setAttribute("productPage", "admin/product.html");	
 		return true;
 		
 	}
