@@ -21,8 +21,6 @@
 
 <body>
 
-<%-- <%@include file="/WEB-INF/views/admin/fragments/menu/navigation.jsp"%> --%>
-
 <%@include file="/WEB-INF/views/admin/fragments/menu/sidebar.jsp"%>
     
 <main class="content">

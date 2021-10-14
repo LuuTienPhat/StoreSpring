@@ -2,6 +2,20 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c"%>
 
+<!-- SIDE BAR RESPONSIVE -->
+<nav class="navbar navbar-dark navbar-theme-primary px-4 col-12 d-lg-none">
+    <a class="navbar-brand me-lg-5" href="${applicationScope.dashboardPage }">
+        <img class="navbar-brand-dark" src="<c:url value='/resources/admin/assets/img/brand/light.svg' />" alt="Volt logo" /> 
+        <img class="navbar-brand-light" src="<c:url value='/resources/admin/assets/img/brand/dark.svg' />" alt="Volt logo" />
+    </a>
+    <div class="d-flex align-items-center">
+        <button class="navbar-toggler d-lg-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+</nav>
+
+<!-- SIDE BAR -->
 <nav id="sidebarMenu" class="sidebar d-lg-block bg-gray-800 text-white collapse" data-simplebar>
   <div class="sidebar-inner px-4 pt-3">
     <div class="user-card d-flex d-md-none align-items-center justify-content-between justify-content-md-center pb-4">
@@ -29,14 +43,14 @@
     
     <!-- SIDE MENU BAR -->
     <ul class="nav flex-column pt-3 pt-md-0">
-      <%-- <li class="nav-item">
+      <li class="nav-item">
         <a href="../../index.html" class="nav-link d-flex align-items-center">
           <span class="sidebar-icon">
             <img src="<c:url value='/resources/admin/assets/img/brand/light.svg' />" height="20" width="20" alt="Volt Logo">
           </span>
           <span class="mt-1 ms-1 sidebar-text">Volt Overview</span>
         </a>
-      </li> --%>
+      </li>
       <li class="nav-item  active ">
         <a href="../../pages/dashboard/dashboard.html" class="nav-link">
           <span class="sidebar-icon">
