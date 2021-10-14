@@ -35,19 +35,19 @@
 
             <div class="flex flex-col w-32 ml-3">
                 <div class="">
-                    <a href="#" class="w-full"><img src="./assets/img/logo-f.png"></a>
+                    <a href="index.html" class="w-full"><img src="<c:url value='/resources/store/assets/img/logo-f.png'/>"></a>
                 </div>
                 <span class="mb-1">Hãy kết nối với chúng mình</span>
                 <div class="flex justify-between items-center h-fit mb-2 social">
                     <div class="transform hover:scale-110 transition-all w-10 social-icon-container"> <a href="#" class="w-full"><img
-                                src="./assets/img/social-color-insta.png" class="h-15"></a></div>
+                                src="<c:url value='/resources/store/assets/img/social-color-insta.png'/>" class="h-15"></a></div>
                     <div class="transform hover:scale-110 transition-all w-10 social-icon-container"> <a href="#" class="w-full"><img
-                                src="./assets/img/social-color-youtube.png" class="h-15"></a></div>
+                                src="<c:url value='/resources/store/assets/img/social-color-youtube.png'/>" class="h-15"></a></div>
                     <div class="transform hover:scale-110 transition-all w-10 social-icon-container"> <a href="#" class="w-full"><img
-                                src="./assets/img/fb-logo.png" class="h-7"></a></div>
+                                src="<c:url value='/resources/store/assets/img/fb-logo.png'/>" class="h-7"></a></div>
                 </div>
                 <div class="h-fit w-full">
-                    <a href="#" class="w-full"><img src="./assets/img/dathongbaobocongthuong.png"></a>
+                    <a href="#" class="w-full"><img src="<c:url value='/resources/store/assets/img/dathongbaobocongthuong.png'/>"></a>
                 </div>
             </div>
 
