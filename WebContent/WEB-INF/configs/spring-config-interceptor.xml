@@ -14,28 +14,28 @@
 			http://www.springframework.org/schema/mvc 
 			http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
-	<!-- Cấu hình interceptor --> 
+	<!-- Cấu hình Interceptor --> 
 	<mvc:interceptors>  
 		<!-- Lọc tất cả các URL -->
-		<bean class="Interceptor.GlobalInterceptor" />
+		<bean class="interceptors.GlobalInterceptor" />
 		
 		<!-- Chỉ lọc các URL theo path -->
-		<!-- <mvc:interceptor>
+		<!-- <mvc:interceptors>
 			<mvc:mapping path="/home/**"/>
 			<mvc:exclude-mapping path="/home/index.htm"/>
 			<mvc:exclude-mapping path="/home/about.htm"/>
-			<bean class="Interceptor.LoggerInterceptor" />
-		</mvc:interceptor>
+			<bean class="interceptors.LoggerInterceptor" />
+		</mvc:interceptors> -->
 		 
-		 <mvc:interceptor>
+		 <!-- <mvc:interceptors>
 			<mvc:mapping path="/user/**"/>
 			<mvc:mapping path="/order/**"/>
 			<mvc:exclude-mapping path="/user/login.htm"/>
 			<mvc:exclude-mapping path="/user/register.htm"/>
 			<mvc:exclude-mapping path="/user/forgot-password.htm"/>
 			<mvc:exclude-mapping path="/user/activate.htm"/>
-			<bean class="Interceptor.AuthorizeInterceptor" />
-		</mvc:interceptor> -->
+			<bean class="interceptors.AuthorizeInterceptor" />
+		</mvc:interceptors> -->
 	</mvc:interceptors>
 
 </beans>

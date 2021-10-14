@@ -18,7 +18,7 @@
 	<bean id="dataSource" 
 	    	class="org.springframework.jdbc.datasource.DriverManagerDataSource"
 			p:driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver"
-			p:url="jdbc:sqlserver://localhost:1433; Database=Personel"
+			p:url="jdbc:sqlserver://localhost:1433; Database=Store"
 			p:username="sa"
 			p:password="123">
 	</bean>
@@ -33,7 +33,7 @@
 	            <prop key="hibernate.show_sql">false</prop>
 	       </props>
 	    </property>
-		<property name="packagesToScan" value="ptithcm.entity"/>
+		<property name="packagesToScan" value="entities"/>
 	</bean>
 	
 	<!-- Transaction Manager -->
