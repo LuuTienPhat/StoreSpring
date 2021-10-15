@@ -20,11 +20,10 @@
 	 	<property name="maxUploadSize" value="20971520"/>
 	</bean>
 	
-	<!-- <bean id="uploadFile" class="models.UploadFile">
+	<bean id="uploadFile" class="models.UploadFile">
 		<property name="basePath"
-			value="C:\Users\Phat\Documents\eclipse-workspace\AdminPage\WebContent\files"></property>
-	</bean> -->
-	
+			value="/WebContent/files"></property>
+	</bean>
 </beans>
 
 
