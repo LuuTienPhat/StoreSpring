@@ -9,7 +9,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "Product")
-public class ProductEntitiy {
+public class ProductEntity {
 	@Id
 	@Column(name = "id")
 	private String id;
@@ -19,6 +19,9 @@ public class ProductEntitiy {
 
 	@Column(name = "quantity")
 	private int quantity;
+	
+	@Column(name = "unit")
+	private String unit;
 
 	@Column(name = "price")
 	private float price;
@@ -57,6 +60,14 @@ public class ProductEntitiy {
 		this.quantity = quantity;
 	}
 
+	public String getUnit() {
+		return unit;
+	}
+
+	public void setUnit(String unit) {
+		this.unit = unit;
+	}
+
 	public float getPrice() {
 		return price;
 	}
@@ -88,22 +99,4 @@ public class ProductEntitiy {
 	public void setCategory(CategoryEntity category) {
 		this.category = category;
 	}
-
-	public ProductEntitiy(String id, String name, int quantity, float price, String image, String description,
-			CategoryEntity category) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.quantity = quantity;
-		this.price = price;
-		this.image = image;
-		this.description = description;
-		this.category = category;
-	}
-
-	public ProductEntitiy() {
-		super();
-	}
-	
-	
 }

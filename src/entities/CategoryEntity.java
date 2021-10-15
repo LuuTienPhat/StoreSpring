@@ -23,7 +23,7 @@ public class CategoryEntity {
 	private String description;
 
 	@OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private List<ProductEntitiy> products;
+	private List<ProductEntity> products;
 
 	public String getId() {
 		return id;
@@ -57,15 +57,15 @@ public class CategoryEntity {
 		this.description = description;
 	}
 
-	public List<ProductEntitiy> getProducts() {
+	public List<ProductEntity> getProducts() {
 		return products;
 	}
 
-	public void setProducts(List<ProductEntitiy> products) {
+	public void setProducts(List<ProductEntity> products) {
 		this.products = products;
 	}
 
-	public CategoryEntity(String id, String name, String image, String description, List<ProductEntitiy> products) {
+	public CategoryEntity(String id, String name, String image, String description, List<ProductEntity> products) {
 		super();
 		this.id = id;
 		this.name = name;
