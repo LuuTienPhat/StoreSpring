@@ -11,7 +11,7 @@
 <script src="<c:url value='/resources/admin/vendor/onscreen/dist/on-screen.umd.min.js' />"></script>
 
 <!-- Slider -->
-<script src="<c:url value='/resources/admin/vendor/nouislider/distribute/nouislider.min.js' />"></script>
+<script src="<c:url value='/resources/admin/vendor/nouislider/dist/nouislider.min.js' />"></script>
 
 <!-- Smooth scroll -->
 <script
