@@ -7,14 +7,14 @@
 <head>
 
   <!-- ========== Meta Tags ========= -->
-  <%@include file="/WEB-INF/views/admin/includes/header/head.jsp" %>
+  <%@include file="/WEB-INF/views/admin/include/head.jsp" %>
   <title>Admin Log In</title>
 
   <!-- ========== Favicon linkup ========= -->
-  <%@include file="/WEB-INF/views/admin/includes/header/favicon.jsp" %>
+  <%@include file="/WEB-INF/views/admin/include/favicon.jsp" %>
 
   <!-- ========== All CSS files linkup ========= -->
-  <%@include file="/WEB-INF/views/admin/includes/header/styles.jsp" %>
+  <%@include file="/WEB-INF/views/admin/include/styles.jsp" %>
 
 </head>
 
@@ -118,7 +118,7 @@
 	  </main>
 
 <!-- ========== All JS files linkup ========= -->
-<%@include file="/WEB-INF/views/admin/includes/footer/script.jsp" %>
+<%@include file="/WEB-INF/views/admin/include/script.jsp" %>
 
 </body>
 
