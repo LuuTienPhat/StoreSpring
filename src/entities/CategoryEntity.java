@@ -1,5 +1,6 @@
 package entities;
 
+import java.sql.Blob;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -7,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -21,6 +23,12 @@ public class CategoryEntity {
 	private String image;
 	@Column(name = "description")
 	private String description;
+
+	/*
+	 * @Lob
+	 * 
+	 * @Column(name = "image_data") private byte[] data;
+	 */
 
 	@OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<ProductEntity> products;
@@ -57,6 +65,12 @@ public class CategoryEntity {
 		this.description = description;
 	}
 
+	/*
+	 * public byte[] getData() { return data; }
+	 * 
+	 * public void setData(byte[] data) { this.data = data; }
+	 */
+
 	public List<ProductEntity> getProducts() {
 		return products;
 	}
@@ -77,5 +91,5 @@ public class CategoryEntity {
 	public CategoryEntity() {
 		super();
 	}
-		
+
 }

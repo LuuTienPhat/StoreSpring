@@ -7,29 +7,29 @@ import javax.servlet.http.HttpSession;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-public class LoggerInterceptor extends HandlerInterceptorAdapter {
+public class AdminAuthInterceptor extends HandlerInterceptorAdapter {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		//System.out.println("Logger Interceptor preHandler()");
-		/*
-		 * HttpSession session = request.getSession(); if (session.getAttribute("user")
-		 * == null) { response.sendRedirect(request.getContextPath() +
-		 * "/user/login.htm"); return false; }
-		 */
+		//System.out.println("Authorize Interceptor preHandler()");
+		HttpSession session = request.getSession();		
+		if (session.getAttribute("admin") == null) {
+			response.sendRedirect(request.getContextPath() + "/admin/login");
+			return false;
+		}	
 		return true;
-		
+
 	}
 
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
-		//System.out.println("Logger Interceptor postHandler()");
+		//System.out.println("Authorize Interceptor postHandler()");
 	}
 
 	@Override
 	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
 			throws Exception {
-		//System.out.println("LoggerInterceptor afterCompletion()");
+		//System.out.println("Authorize Interceptor afterCompletion()");
 	}
 }

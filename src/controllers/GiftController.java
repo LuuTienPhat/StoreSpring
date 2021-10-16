@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/")
+@RequestMapping("/store")
 public class GiftController {
-	@RequestMapping("/")
+	@RequestMapping("")
 	public String product() {
 		return "store/index";
 	}

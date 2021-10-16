@@ -20,12 +20,19 @@
 		<bean class="interceptors.GlobalInterceptor" />
 		
 		<!-- Chỉ lọc các URL theo path -->
-		<!-- <mvc:interceptors>
-			<mvc:mapping path="/home/**"/>
-			<mvc:exclude-mapping path="/home/index.htm"/>
-			<mvc:exclude-mapping path="/home/about.htm"/>
-			<bean class="interceptors.LoggerInterceptor" />
-		</mvc:interceptors> -->
+		<mvc:interceptor>
+			<mvc:mapping path="/admin/**"/>
+			<mvc:exclude-mapping path="/admin/login"/>
+			<bean class="interceptors.AdminAuthInterceptor" />
+		</mvc:interceptor>
+		
+		<mvc:interceptor>
+			<mvc:mapping path="/store/**"/>
+			<mvc:exclude-mapping path="/store"/>
+			<mvc:exclude-mapping path="/store/sign-in"/>
+			<mvc:exclude-mapping path="/store/sign-up"/>
+			<bean class="interceptors.CustomerAuthInterceptor" />
+		</mvc:interceptor>
 		 
 		 <!-- <mvc:interceptors>
 			<mvc:mapping path="/user/**"/>
@@ -34,7 +41,7 @@
 			<mvc:exclude-mapping path="/user/register.htm"/>
 			<mvc:exclude-mapping path="/user/forgot-password.htm"/>
 			<mvc:exclude-mapping path="/user/activate.htm"/>
-			<bean class="interceptors.AuthorizeInterceptor" />
+			<bean class="interceptors.AdminAuthInterceptor" />
 		</mvc:interceptors> -->
 	</mvc:interceptors>
 

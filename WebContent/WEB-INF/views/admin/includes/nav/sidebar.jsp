@@ -59,23 +59,7 @@
           <span class="sidebar-text">Dashboard</span>
         </a>
       </li>
-      
-      <!-- KANBAN -->
-      <!-- <li class="nav-item">
-        <a href="https://demo.themesberg.com/volt-pro/pages/kanban.html" target="_blank" class="nav-link d-flex justify-content-between">
-          <span>
-            <span class="sidebar-icon">
-              <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
-            </span>
-            <span class="sidebar-text">Kanban</span>
-          </span>
-          <span>
-            <span class="badge badge-sm bg-secondary ms-1 text-gray-800">Pro</span>
-          </span>
-        </a>
-      </li> -->
-      
-      
+
       <li class="nav-item ">
         <a href="../../pages/transactions.html" class="nav-link">
           <span class="sidebar-icon">
@@ -93,35 +77,6 @@
         </a>
       </li>
       
-      <!-- CALENDAR -->
-      <!-- <li class="nav-item">
-        <a href="https://demo.themesberg.com/volt-pro/pages/calendar.html" target="_blank" class="nav-link d-flex justify-content-between">
-          <span>
-            <span class="sidebar-icon">
-              <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M12 1.586l-4 4v12.828l4-4V1.586zM3.707 3.293A1 1 0 002 4v10a1 1 0 00.293.707L6 18.414V5.586L3.707 3.293zM17.707 5.293L14 1.586v12.828l2.293 2.293A1 1 0 0018 16V6a1 1 0 00-.293-.707z" clip-rule="evenodd"></path></svg>
-            </span>
-            <span class="sidebar-text">Calendar</span>
-          </span>
-          <span>
-            <span class="badge badge-sm bg-secondary ms-1 text-gray-800">Pro</span>
-          </span>
-        </a>
-      </li> -->
-      
-      <!-- MAP -->
-      <!-- <li class="nav-item">
-        <a href="https://demo.themesberg.com/volt-pro/pages/map.html" target="_blank" class="nav-link d-flex justify-content-between">
-          <span>
-            <span class="sidebar-icon">
-              <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
-            </span>
-            <span class="sidebar-text">Map</span>
-          </span>
-          <span>
-            <span class="badge badge-sm bg-secondary ms-1 text-gray-800">Pro</span>
-          </span>
-        </a>
-      </li> -->
       
       <li class="nav-item">
         <span
@@ -149,6 +104,38 @@
         </div>
       </li>
       
+      <!-- Category Manager -->
+      <li class="nav-item">
+        <span
+          class="nav-link  collapsed  d-flex justify-content-between align-items-center"
+          data-bs-toggle="collapse" data-bs-target="#subcategory-pages">
+          <span>
+            <span class="sidebar-icon">
+              <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M2 5a2 2 0 012-2h8a2 2 0 012 2v10a2 2 0 002 2H4a2 2 0 01-2-2V5zm3 1h6v4H5V6zm6 6H5v2h6v-2z" clip-rule="evenodd"></path><path d="M15 7h1a2 2 0 012 2v5.5a1.5 1.5 0 01-3 0V7z"></path></svg>
+            </span> 
+            <span class="sidebar-text">Danh mục</span>
+          </span>
+          <span class="link-arrow">
+            <svg class="icon icon-sm" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+          </span>
+        </span>
+        <div class="multi-level collapse " role="list"
+          id="subcategory-pages" aria-expanded="false">
+          <ul class="flex-column nav">
+            <li class="nav-item">
+              <a class="nav-link" href="${applicationScope.categoryPage}">
+                <span class="sidebar-text">Quản Lý</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="${applicationScope.addCategoryPage}">
+                <span class="sidebar-text">Thêm danh mục</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+      
       <!-- Product Manager -->
       <li class="nav-item">
         <span
@@ -158,7 +145,7 @@
             <span class="sidebar-icon">
               <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M2 5a2 2 0 012-2h8a2 2 0 012 2v10a2 2 0 002 2H4a2 2 0 01-2-2V5zm3 1h6v4H5V6zm6 6H5v2h6v-2z" clip-rule="evenodd"></path><path d="M15 7h1a2 2 0 012 2v5.5a1.5 1.5 0 01-3 0V7z"></path></svg>
             </span> 
-            <span class="sidebar-text">Product Manager</span>
+            <span class="sidebar-text">Sản phẩm</span>
           </span>
           <span class="link-arrow">
             <svg class="icon icon-sm" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
@@ -169,12 +156,12 @@
           <ul class="flex-column nav">
             <li class="nav-item">
               <a class="nav-link" href="${applicationScope.productPage}">
-                <span class="sidebar-text">Overview</span>
+                <span class="sidebar-text">Quản Lý</span>
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="${applicationScope.addProductPage}">
-                <span class="sidebar-text">Add Product</span>
+                <span class="sidebar-text">Thêm sản phẩm</span>
               </a>
             </li>
           </ul>
