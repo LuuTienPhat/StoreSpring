@@ -14,10 +14,10 @@
 <meta name="description" content="404 Error Page">
 
 <!-- ========== Favicon linkup ========= -->
-<%@include file="/WEB-INF/views/admin/include/favicon.jsp"%>
+<%@include file="/WEB-INF/views/admin/includes/header/favicon.jsp"%>
 
 <!-- ========== All CSS files linkup ========= -->
-<%@include file="/WEB-INF/views/admin/include/styles.jsp"%>
+<%@include file="/WEB-INF/views/admin/includes/header/styles.jsp"%>
 
 <!-- NOTICE: You can use the _analytics.html partial to include production code specific code & trackers -->
 </head>
@@ -48,7 +48,7 @@
     </main>
     
 <!-- ========== All JS files linkup ========= -->
-<%@include file="/WEB-INF/views/admin/include/script.jsp"%>
+<%@include file="/WEB-INF/views/admin/includes/footer/script.jsp"%>
 
     
 </body>

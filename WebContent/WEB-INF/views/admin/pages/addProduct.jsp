@@ -8,21 +8,21 @@
 <head>
 
 <!-- ========== Meta Tags ========= -->
-<%@include file="/WEB-INF/views/admin/include/head.jsp"%>
+<%@include file="/WEB-INF/views/admin/includes/header/head.jsp"%>
 <title>Gifts and Accessories Store Dashboard</title>
 
 <!-- ========== Favicon linkup ========= -->
-<%@include file="/WEB-INF/views/admin/include/favicon.jsp"%>
+<%@include file="/WEB-INF/views/admin/includes/header/favicon.jsp"%>
 
 <!-- ========== All CSS files linkup ========= -->
-<%@include file="/WEB-INF/views/admin/include/styles.jsp"%>
+<%@include file="/WEB-INF/views/admin/includes/header/styles.jsp"%>
 
 </head>
 
 <body>
-<%@include file="/WEB-INF/views/admin/fragments/menu/sidebar.jsp"%>
+<%@include file="/WEB-INF/views/admin/includes/nav/sidebar.jsp"%>
 <main class="content">
-	<%@include file="/WEB-INF/views/admin/fragments/menu/navbar.jsp"%>
+	<%@include file="/WEB-INF/views/admin/includes/nav/navbar.jsp"%>
 	
             <div class="py-4">
                 <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
@@ -106,7 +106,7 @@
             </div>
         </main>
 <!-- ========== All JS files linkup ========= -->
-<%@include file="/WEB-INF/views/admin/include/script.jsp"%>
+<%@include file="/WEB-INF/views/admin/includes/footer/script.jsp"%>
     
 </body>
 

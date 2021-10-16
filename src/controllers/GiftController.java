@@ -7,24 +7,25 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@RequestMapping("/")
 public class GiftController {
-	@RequestMapping("index")
+	@RequestMapping("/")
 	public String product() {
 		return "store/index";
 	}
-	@RequestMapping("product-detail")
+	@RequestMapping("/product-detail")
 	public String productDetail() {
 		return "store/product-detail";
 	}
-	@RequestMapping("sign-in")
+	@RequestMapping("/sign-in")
 	public String signIn() {
 		return "store/sign-in";
 	}
-	@RequestMapping("sign-up")
+	@RequestMapping("/sign-up")
 	public String signUp() {
 		return "store/sign-up";
 	}
-	@RequestMapping("shopping-cart")
+	@RequestMapping("/shopping-cart")
 	public String shoppingCart() {
 		return "store/shopping-cart";
 	}

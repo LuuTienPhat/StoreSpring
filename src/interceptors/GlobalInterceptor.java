@@ -22,19 +22,19 @@ public class GlobalInterceptor extends HandlerInterceptorAdapter {
 		
 		// DEFAULT PAGE LINKS
 		// ADMIN
-		application.setAttribute("dashboardPage", "admin/dashboard.html");
-		application.setAttribute("loginInPage", "admin/log-in.html");
-		application.setAttribute("registerPage", "admin/register.html");
-		application.setAttribute("resetPasswordPage", "admin/reset-password.html");
-		application.setAttribute("forgotPasswordPage", "admin/forgot-password.html");
-		application.setAttribute("productPage", "admin/product.html");	
-		application.setAttribute("addProductPage", "admin/product/add.html");
+		application.setAttribute("dashboardPage", "admin/dashboard");
+		application.setAttribute("loginInPage", "admin/log-in");
+		application.setAttribute("registerPage", "admin/register");
+		application.setAttribute("resetPasswordPage", "admin/reset-password");
+		application.setAttribute("forgotPasswordPage", "admin/forgot-password");
+		application.setAttribute("productPage", "admin/product");	
+		application.setAttribute("addProductPage", "admin/product/add");
 		
 		// STORE
-		application.setAttribute("productDetailPage", "product-detail.html");
-		application.setAttribute("signInPage", "sign-in.html");
-		application.setAttribute("signUpPage", "sign-up.html");
-		application.setAttribute("shoppingCartPage", "shopping-cart.html");
+		application.setAttribute("productDetailPage", "product-detail");
+		application.setAttribute("signInPage", "sign-in");
+		application.setAttribute("signUpPage", "sign-up");
+		application.setAttribute("shoppingCartPage", "shopping-cart");
 		return true;
 		
 	}
