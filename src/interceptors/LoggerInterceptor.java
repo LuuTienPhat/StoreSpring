@@ -11,7 +11,7 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		System.out.println("Logger Interceptor preHandler()");
+		//System.out.println("Logger Interceptor preHandler()");
 		/*
 		 * HttpSession session = request.getSession(); if (session.getAttribute("user")
 		 * == null) { response.sendRedirect(request.getContextPath() +
@@ -24,12 +24,12 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter {
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
-		System.out.println("Logger Interceptor postHandler()");
+		//System.out.println("Logger Interceptor postHandler()");
 	}
 
 	@Override
 	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
 			throws Exception {
-		System.out.println("LoggerInterceptor afterCompletion()");
+		//System.out.println("LoggerInterceptor afterCompletion()");
 	}
 }

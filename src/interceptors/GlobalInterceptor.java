@@ -18,7 +18,7 @@ public class GlobalInterceptor extends HandlerInterceptorAdapter {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		System.out.println("Global Interceptor preHandler()");
+//		System.out.println("Global Interceptor preHandler()");
 		
 		// DEFAULT PAGE LINKS
 		// ADMIN
@@ -27,14 +27,16 @@ public class GlobalInterceptor extends HandlerInterceptorAdapter {
 		application.setAttribute("registerPage", "admin/register");
 		application.setAttribute("resetPasswordPage", "admin/reset-password");
 		application.setAttribute("forgotPasswordPage", "admin/forgot-password");
-		application.setAttribute("productPage", "admin/product");	
-		application.setAttribute("addProductPage", "admin/product/add");
+		application.setAttribute("productPage", "admin/products");	
+		application.setAttribute("addProductPage", "admin/products/add");
+		application.setAttribute("categoryPage", "admin/categories");
+		application.setAttribute("addCategoryPage", "admin/categories/add");
 		
 		// STORE
-		application.setAttribute("productDetailPage", "product-detail");
-		application.setAttribute("signInPage", "sign-in");
-		application.setAttribute("signUpPage", "sign-up");
-		application.setAttribute("shoppingCartPage", "shopping-cart");
+		application.setAttribute("productDetailPage", "/store/product-detail");
+		application.setAttribute("signInPage", "/store/sign-in");
+		application.setAttribute("signUpPage", "/store/sign-up");
+		application.setAttribute("shoppingCartPage", "/store/shopping-cart");
 		return true;
 		
 	}
@@ -42,7 +44,7 @@ public class GlobalInterceptor extends HandlerInterceptorAdapter {
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
-		System.out.println("Global Interceptor postHandler()");
+		//System.out.println("Global Interceptor postHandler()");
 		HttpSession session = request.getSession();
 		session.setAttribute("title", "Lab 7");
 	}
@@ -50,6 +52,6 @@ public class GlobalInterceptor extends HandlerInterceptorAdapter {
 	@Override
 	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
 			throws Exception {
-		System.out.println("Global Interceptor afterCompletion()");
+		//System.out.println("Global Interceptor afterCompletion()");
 	}
 }
