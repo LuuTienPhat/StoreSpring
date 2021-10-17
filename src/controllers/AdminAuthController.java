@@ -9,7 +9,7 @@ import models.Login;
 
 @Controller
 @RequestMapping("/admin/")
-public class AuthenticationController {
+public class AdminAuthController {
 	@RequestMapping(value = "login")
 	public String renderSignInPage() {
 		return "admin/pages/login";
