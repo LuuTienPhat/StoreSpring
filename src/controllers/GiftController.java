@@ -1,14 +1,29 @@
 package controllers;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
+
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import entities.CartDetailEntity;
+import entities.CustomerEntity;
+
+@Transactional
 @Controller
 @RequestMapping("/store")
 public class GiftController {
+	@Autowired
+	SessionFactory factory;
 	@RequestMapping("")
 	public String product() {
 		return "store/index";
@@ -26,7 +41,31 @@ public class GiftController {
 		return "store/sign-up";
 	}
 	@RequestMapping("/shopping-cart")
-	public String shoppingCart() {
+	public String shoppingCart(ModelMap model) {
+		model.addAttribute("listCartDetail", getListCartDetail(getUserIdByUserName("tuanbui")));
+		
+		for(CartDetailEntity  c : getListCartDetail(getUserIdByUserName("tuanbui"))) {
+			System.out.println("user_id: " + c.getCustomer().getId() +"; product_id: "+c.getProduct().getId()+"; quantity= "+c.getQuantity());
+		}
+//		System.out.println("==================== +\n userid = " + getUserIdByUserName("tuanbui"));
 		return "store/shopping-cart";
+	}
+	
+	public List<CartDetailEntity> getListCartDetail(String userId){
+		/* System.out.println("getListCartDetail"); */
+		Session session = factory.getCurrentSession();
+		String hql="FROM CartDetailEntity c WHERE c.customer.id =:userId";
+		Query query = session.createQuery(hql);
+		
+		List<CartDetailEntity> list = query.setParameter("userId", userId).list();
+		return list;
+	}
+	public String getUserIdByUserName(String userName) {
+		/* System.out.println("getUserIdByUserName"); */;
+		Session session = factory.getCurrentSession();
+		String hql="SELECT id FROM CustomerEntity c WHERE c.username =:userName";
+		Query query = session.createQuery(hql);
+		String customer_id = (String) query.setParameter("userName", userName).uniqueResult();
+		return customer_id;
 	}
 }
