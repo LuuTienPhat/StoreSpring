@@ -23,7 +23,8 @@ public class GlobalInterceptor extends HandlerInterceptorAdapter {
 		// DEFAULT PAGE LINKS
 		// ADMIN
 		application.setAttribute("dashboardPage", "admin/dashboard");
-		application.setAttribute("loginInPage", "admin/log-in");
+		application.setAttribute("loginPage", "admin/login");
+		application.setAttribute("logoutPage", "admin/logout");
 		application.setAttribute("registerPage", "admin/register");
 		application.setAttribute("resetPasswordPage", "admin/reset-password");
 		application.setAttribute("forgotPasswordPage", "admin/forgot-password");
@@ -45,8 +46,6 @@ public class GlobalInterceptor extends HandlerInterceptorAdapter {
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
 		//System.out.println("Global Interceptor postHandler()");
-		HttpSession session = request.getSession();
-		session.setAttribute("title", "Lab 7");
 	}
 
 	@Override
