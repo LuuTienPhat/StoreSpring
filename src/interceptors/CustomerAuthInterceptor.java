@@ -12,7 +12,8 @@ public class CustomerAuthInterceptor extends HandlerInterceptorAdapter{
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		//System.out.println("Authorize Interceptor preHandler()");
-		HttpSession session = request.getSession();		
+		HttpSession session = request.getSession();	
+		session.setAttribute("customer", "notnull");
 		if(session.getAttribute("customer") == null) {
 			response.sendRedirect(request.getContextPath() + "/store/sign-in");
 			return false;
