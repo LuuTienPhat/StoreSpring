@@ -32,7 +32,7 @@
 
                     </div>
                 </div>
-                <a href="index.html" class="logo inline-flex items-center mr-5 img-container">
+                <a href="${applicationScope.storeIndexPage}" class="logo inline-flex items-center mr-5 img-container">
                     <img src="<c:url value='/resources/store/assets/img/logo_1626144063_logo web_B2S season.png' />">
                 </a>
             </div>
