@@ -11,12 +11,18 @@ public class AdminAuthInterceptor extends HandlerInterceptorAdapter {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		//System.out.println("Authorize Interceptor preHandler()");
-		HttpSession session = request.getSession();		
+		// System.out.println("Authorize Interceptor preHandler()");
+		HttpSession session = request.getSession();
+
 		if (session.getAttribute("admin") == null) {
 			response.sendRedirect(request.getContextPath() + "/admin/login");
 			return false;
-		}	
+		}
+		
+		/*
+		 * String referer = request.getHeader("Referer"); System.out.println(referer);
+		 * response.sendRedirect(request.getContextPath() + referer);
+		 */
 		return true;
 
 	}
@@ -24,12 +30,12 @@ public class AdminAuthInterceptor extends HandlerInterceptorAdapter {
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
-		//System.out.println("Authorize Interceptor postHandler()");
+		// System.out.println("Authorize Interceptor postHandler()");
 	}
 
 	@Override
 	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
 			throws Exception {
-		//System.out.println("Authorize Interceptor afterCompletion()");
+		// System.out.println("Authorize Interceptor afterCompletion()");
 	}
 }
