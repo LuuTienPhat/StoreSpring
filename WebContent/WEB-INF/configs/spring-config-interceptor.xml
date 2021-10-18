@@ -23,6 +23,8 @@
 		<mvc:interceptor>
 			<mvc:mapping path="/admin/**"/>
 			<mvc:exclude-mapping path="/admin/login"/>
+			<mvc:exclude-mapping path="/admin/forgot-password"/>
+			<mvc:exclude-mapping path="/admin/reset-password"/>
 			<bean class="interceptors.AdminAuthInterceptor" />
 		</mvc:interceptor>
 		

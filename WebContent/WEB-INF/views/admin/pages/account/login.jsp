@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c" %>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -35,21 +36,28 @@
 	                  <div class="col-12 d-flex align-items-center justify-content-center">
 	                      <div class="bg-white shadow border-0 rounded border-light p-4 p-lg-5 w-100 fmxw-500">
 	                          <div class="text-center text-md-center mb-4 mt-md-0">
-	                              <h1 class="mb-0 h3">Log In</h1>
+	                              <h1 class="mb-0 h3">Đăng nhập</h1>
 	                          </div>
-	                          <form
-	                              action="#" class="mt-4">
+	                          <form:form action="admin/login" class="mt-4" method="post" modelAttribute="account">
 	                              <!-- Form -->
+	                              <c:if test="${message != null}">
+		                              <div class="form-group mb-4">
+			                              	<div class="alert alert-danger text-center" role="alert">
+											  ${message}
+											</div>
+										</div>
+									</c:if>
 	                              <div class="form-group mb-4">
-	                                  <label for="email">Your Email</label>
+	                                  <label for="username">Tên đăng nhập</label>
 	                                  <div class="input-group">
 	                                      <span class="input-group-text" id="basic-addon1">
-	                                          <svg class="icon icon-xs text-gray-600" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-	                                              <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
-	                                              <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
-	                                          </svg>
+	                                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+												  <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+												  <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+												</svg>
 	                                      </span>
-	                                      <input type="email" class="form-control" placeholder="example@company.com" id="email" autofocus required>
+	                                      <form:input type="text" placeholder="Nhập tên đăng nhập..." class="form-control ${usernameValid }" id="username" path="username" autofocus = "autofocus"/>
+	                                      <form:errors path="username" class="invalid-feedback" />
 	                                  </div>
 	                              </div>
 	                              <!-- End of Form -->
@@ -57,14 +65,15 @@
 	                                  class="form-group">
 	                                  <!-- Form -->
 	                                  <div class="form-group mb-4">
-	                                      <label for="password">Your Password</label>
+	                                      <label for="password">Mật khẩu</label>
 	                                      <div class="input-group">
 	                                          <span class="input-group-text" id="basic-addon2">
-	                                              <svg class="icon icon-xs text-gray-600" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-	                                                  <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path>
-	                                              </svg>
+	                                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lock-fill" viewBox="0 0 16 16">
+													  <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+													</svg>
 	                                          </span>
-	                                          <input type="password" placeholder="Password" class="form-control" id="password" required>
+	                                          <form:input type="password" placeholder="Nhập mật khẩu..." class="form-control ${passwordValid }" id="password" path = "password" autofocus = "autofocus"/>
+	                                      		<form:errors path="password" class="invalid-feedback" />
 	                                      </div>
 	                                  </div>
 	                                  <!-- End of Form -->
@@ -72,18 +81,18 @@
 	                                      <div class="form-check">
 	                                          <input class="form-check-input" type="checkbox" value="" id="remember">
 	                                          <label class="form-check-label mb-0" for="remember">
-	                                              Remember me
+	                                              Ghi nhớ tôi
 	                                          </label>
 	                                      </div>
-	                                      <%-- <div>
-	                                          <a href="${applicationScope.forgotPasswordPage }" class="small text-right">Lost password?</a>
-	                                      </div> --%>
+	                                      <div>
+	                                          <a href="${applicationScope.forgotPasswordPage }" class="small text-right">Quên mật khẩu?</a>
+	                                      </div>
 	                                  </div>
 	                              </div>
 	                              <div class="d-grid">
-	                                  <button type="submit" class="btn btn-gray-800">Log In</button>
+	                                  <button type="submit" class="btn btn-gray-800">Đăng nhập</button>
 	                              </div>
-	                          </form>
+	                          </form:form>
 	                          <%-- <div class="mt-3 mb-4 text-center">
 	                              <span class="fw-normal">or login with</span>
 	                          </div>
