@@ -23,7 +23,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="card-list__table-item">
+                    <%-- <tr class="card-list__table-item">
                         <td class="card-list__table-image">
                             <a href="${applicationScope.productDetailPage}" class="table-image__container">
                                 <img src="<c:url value='/resources/store/assets/img/sp1.jpeg'/>" alt="">
@@ -69,7 +69,33 @@
                         </td>
                         <td class="card-list__total font-bold">100000đ</td>
                         <td class="card-list__action"><a href="#" class="hover:text-pink-400">Xóa</a></td>
+                    </tr> --%>
+                    <c:forEach var = "c" items="${listCartDetail}">
+                    <tr class="card-list__table-item">
+                        <td class="card-list__table-image">
+                            <a href="${applicationScope.productDetailPage}" class="table-image__container">
+                                <img src="<c:url value='/resources/store/assets/img/sp1.jpeg'/>" alt="">
+                            </a>
+                        </td>
+                        <!-- desc = tên sản phẩm + màu sắc + kích cỡ (nếu có) -->
+                        <td class="card-list__table-desc"><a href="${applicationScope.productDetailPage}"
+                                class="hover:text-pink-400">${c.product.name}</a></td>
+                        <td class="cart-list__price font-bold">${c.product.price}đ</td>
+                        <td class="cart-list__quantity">
+                            <div class="input-group flex align-items-center">
+                                <button class="button-minus">-</button>
+                                <input type="number" step="1" max="" min="1" value="${c.quantity}" name="quantity"
+                                    class="quantity-field">
+    
+                                <button class="button-plus">+</button>
+    
+                            </div>
+                        </td>
+                        <td class="card-list__total font-bold">100000đ</td>
+                        <td class="card-list__action"><a href="#" class="hover:text-pink-400">Xóa</a></td>
                     </tr>
+                    
+                    </c:forEach>
                 </tbody>
                 
             </table>
