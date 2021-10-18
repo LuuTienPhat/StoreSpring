@@ -34,10 +34,10 @@ public class GlobalInterceptor extends HandlerInterceptorAdapter {
 		application.setAttribute("addCategoryPage", "admin/categories/add");
 		
 		// STORE
-		application.setAttribute("productDetailPage", "/store/product-detail");
-		application.setAttribute("signInPage", "/store/sign-in");
-		application.setAttribute("signUpPage", "/store/sign-up");
-		application.setAttribute("shoppingCartPage", "/store/shopping-cart");
+		application.setAttribute("productDetailPage", "store/product-detail");
+		application.setAttribute("signInPage", "store/sign-in");
+		application.setAttribute("signUpPage", "store/sign-up");
+		application.setAttribute("shoppingCartPage", "store/shopping-cart");
 		return true;
 		
 	}
