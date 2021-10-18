@@ -15,8 +15,6 @@
                 <ul class="list-disc pl-6 text-sm">
                     <li class="">81 Bà Triệu, Hai Bà Trưng</li>
                     <li class="">226 Nguyễn Trãi, Nam Từ Liêm (gần ĐH Hà Nội)</li>
-                    <li class="">226 Nguyễn Trãi, Nam Từ Liêm (gần ĐH Hà Nội)</li>
-                    <li class="">81 Bà Triệu, Hai Bà Trưng</li>
                     <li class="">81 Bà Triệu, Hai Bà Trưng</li>
                     <li class="">81 Bà Triệu, Hai Bà Trưng</li>
                 </ul>
@@ -27,15 +25,12 @@
                     <li class="">92 Hồ Tùng Mậu, P.Bến Nghé, Q1</li>
                     <li class="">708 Sư Vạn Hạnh, P.12, Q.10 (đối diện chéo Vạn Hạnh Mall)</li>
                     <li class="">87 Bàu Cát, P.14, Q.Tân Bình (khúc giao Nguyễn Hồng Đào)</li>
-                    <li class="">87 Bàu Cát, P.14, Q.Tân Bình (khúc giao Nguyễn Hồng Đào)</li>
-                    <li class="">92 Hồ Tùng Mậu, P.Bến Nghé, Q1</li>
-                    <li class="">92 Hồ Tùng Mậu, P.Bến Nghé, Q1</li>
                 </ul>
             </div>
 
             <div class="flex flex-col w-32 ml-3">
                 <div class="">
-                    <a href="index.html" class="w-full"><img src="<c:url value='/resources/store/assets/img/logo-f.png'/>"></a>
+                    <a href="${applicationScope.storeIndexPage}" class="w-full"><img src="<c:url value='/resources/store/assets/img/logo-f.png'/>"></a>
                 </div>
                 <span class="mb-1">Hãy kết nối với chúng mình</span>
                 <div class="flex justify-between items-center h-fit mb-2 social">

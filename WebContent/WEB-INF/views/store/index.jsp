@@ -44,7 +44,7 @@
                 </h3>
             </div>
             <div class="new-product__list flex flex-wrap">
-                <div class="item w-1/4 px-3 mb-4">
+                <%-- <div class="item w-1/4 px-3 mb-4">
                     <div class="relative item-menu-container overflow-hidden">
                         <a href="${applicationScope.productDetailPage}" class="block overflow-hidden">
                             <img src="<c:url value='/resources/store/assets/img/sp1.jpeg'/>" alt=""
@@ -277,8 +277,29 @@
                     <button
                         class="px-4 py-2 font-bold bg-pink-300 hover:bg-pink-400 transition-colors text-white rounded-md">Xem
                         thêm</button>
+                </div>--%>
+                <c:forEach var="p" items="${list}">
+            <div class="item w-1/4 px-3 mb-4">
+                    <div class="relative item-menu-container overflow-hidden">
+                        <a href="${applicationScope.productDetailPage}" class="block overflow-hidden">
+                            <img src="<c:url value='/resources/store/assets/img/sp1.jpeg'/>" alt=""
+                                class="transform hover:scale-110 transition-all "></a>
+
+                        <div class="flex justify-center bg-pink-300 items-center py-2 absolute item__menu w-full">
+                            <a href="#"><i
+                                    class="fa text-2xl fa-heart text-white hover:text-pink-400 transition-colors"></i></a>
+                            <div class="border-l-2 border-white h-7 mx-2"></div>
+                            <a href="#"><i
+                                    class="fa text-2xl fa-cart-plus text-white hover:text-pink-400 transition-colors"></i></a>
+                        </div>
+                    </div>
+                    <a href="${applicationScope.productDetailPage}"
+                        class="item__name block hover:text-pink-300 transition-colors font-bold my-2">${p.name}</a>
+                    <span class="item__price font-bold">${p.price}đ</span>
                 </div>
-            </div>
+            </c:forEach>
+            </div> 
+            
             <div class="main__new-topic section mt-16">
                 <div class="section__heading mb-8">
                     <h3><a href="#" class="hover:text-pink-300 transition-colors text-3xl font-bold">Chủ đề

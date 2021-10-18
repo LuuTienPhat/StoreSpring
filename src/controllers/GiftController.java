@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import entities.CartDetailEntity;
 import entities.CustomerEntity;
+import entities.ProductEntity;
 
 @Transactional
 @Controller
@@ -25,7 +26,13 @@ public class GiftController {
 	@Autowired
 	SessionFactory factory;
 	@RequestMapping("")
-	public String product() {
+	public String store(ModelMap model) {
+		model.addAttribute("list", getListProduct());
+		return "store/index";
+	}
+	@RequestMapping("/")
+	public String store2(ModelMap model) {
+		model.addAttribute("list", getListProduct());
 		return "store/index";
 	}
 	@RequestMapping("/product-detail")
@@ -51,13 +58,13 @@ public class GiftController {
 		return "store/shopping-cart";
 	}
 	
-	public List<CartDetailEntity> getListCartDetail(String userId){
+	public List<CartDetailEntity> getListCartDetail(String customerId){
 		/* System.out.println("getListCartDetail"); */
 		Session session = factory.getCurrentSession();
-		String hql="FROM CartDetailEntity c WHERE c.customer.id =:userId";
+		String hql="FROM CartDetailEntity c WHERE c.customer.id =:customerId";
 		Query query = session.createQuery(hql);
 		
-		List<CartDetailEntity> list = query.setParameter("userId", userId).list();
+		List<CartDetailEntity> list = query.setParameter("customerId", customerId).list();
 		return list;
 	}
 	public String getUserIdByUserName(String userName) {
@@ -65,7 +72,17 @@ public class GiftController {
 		Session session = factory.getCurrentSession();
 		String hql="SELECT id FROM CustomerEntity c WHERE c.username =:userName";
 		Query query = session.createQuery(hql);
-		String customer_id = (String) query.setParameter("userName", userName).uniqueResult();
-		return customer_id;
+		String customerId = (String) query.setParameter("userName", userName).uniqueResult();
+		return customerId;
+	}
+	
+	public List<ProductEntity> getListProduct(){
+		/* System.out.println("getListCartDetail"); */
+		Session session = factory.getCurrentSession();
+		String hql="FROM ProductEntity";
+		Query query = session.createQuery(hql);
+		
+		List<ProductEntity> list = query.list();
+		return list;
 	}
 }
