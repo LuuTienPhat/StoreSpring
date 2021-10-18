@@ -24,7 +24,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import entities.ProductEntity;
 import models.UploadFile;
-import ptithcm.entity.UserEntity;
 
 @Transactional
 @Controller
