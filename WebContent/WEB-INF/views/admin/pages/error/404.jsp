@@ -6,18 +6,15 @@
 <html lang="en">
 
 <head> 
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<!-- Primary Meta Tags -->
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>404 Not Found</title>
-<base href="${pageContext.servletContext.contextPath}/">
-<meta name="description" content="404 Error Page">
 
+<%@include file="/WEB-INF/views/admin/includes/header/head.jsp"%>
+
+<title>404 Not Found</title>
 <!-- ========== Favicon linkup ========= -->
-<%@include file="/WEB-INF/views/admin/includes/header/favicon.jsp"%>
+<%@ include file="/WEB-INF/views/admin/includes/header/favicon.jsp"%>
 
 <!-- ========== All CSS files linkup ========= -->
-<%@include file="/WEB-INF/views/admin/includes/header/styles.jsp"%>
+<%@ include file="/WEB-INF/views/admin/includes/header/styles.jsp"%>
 
 <!-- NOTICE: You can use the _analytics.html partial to include production code specific code & trackers -->
 </head>

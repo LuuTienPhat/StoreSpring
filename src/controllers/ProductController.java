@@ -27,13 +27,15 @@ import models.UploadFile;
 
 @Transactional
 @Controller
-@RequestMapping("/admin/")
+@RequestMapping("/admin/products")
 public class ProductController {
 	@Autowired
 	@Qualifier("sessionFactory")
 	SessionFactory factory;
 
-	@RequestMapping("product")
+	String viewsDirectory = "admin/pages/product/";
+	
+	@RequestMapping("")
 	public String renderProductPage(ModelMap model) {
 		Session session = factory.getCurrentSession();
 		String hql = "FROM ProductEntity";
@@ -41,14 +43,14 @@ public class ProductController {
 		List<ProductEntity> products = query.list();
 		System.out.println(products.get(0).getId());
 		model.addAttribute("productList", products);
-		return "admin/pages/product";
+		return viewsDirectory  + "product";
 	}
 
-	@RequestMapping(value = "product/add", method = RequestMethod.GET)
+	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	public String renderAddProductPage(ModelMap model) {
 		Session session = factory.getCurrentSession();
 		model.addAttribute("user", new ProductEntity());
-		return "admin/pages/addProduct";
+		return viewsDirectory  + "addProduct";
 	}
 
 	@RequestMapping(value = "product/add", method = RequestMethod.POST)

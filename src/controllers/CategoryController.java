@@ -61,6 +61,7 @@ public class CategoryController {
 	public String renderAddCategoryPage(ModelMap model) {
 		CategoryEntity category = new CategoryEntity();
 		model.addAttribute("category", category);
+		model.addAttribute("title", "Thêm Danh Mục");
 		return viewsDirectory + "add";
 	}
 
@@ -120,6 +121,7 @@ public class CategoryController {
 		return "redirect:/admin/categories";
 	}
 
+	//VIEW DETAILS OF CATEGORY
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public String categoryDetail(ModelMap model, @PathVariable(value = "id") String id) {
 		System.out.println("Id: " + id);
@@ -132,6 +134,7 @@ public class CategoryController {
 		return viewsDirectory + "detail";
 	}
 
+	//GET CATEGORIES FROM SQL
 	public List<CategoryEntity> getCategory() throws IOException {
 		Session session = factory.getCurrentSession();
 		String hql = "FROM CategoryEntity";
