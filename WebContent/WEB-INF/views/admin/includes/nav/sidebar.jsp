@@ -44,11 +44,13 @@
     <!-- SIDE MENU BAR -->
     <ul class="nav flex-column pt-3 pt-md-0">
       <li class="nav-item">
-        <a href="../../index.html" class="nav-link d-flex align-items-center">
-          <span class="sidebar-icon">
-            <img src="<c:url value='/resources/admin/assets/img/brand/light.svg' />" height="20" width="20" alt="Volt Logo">
+        <a href="${applicationScope.dashboardPage }" class="nav-link d-flex align-items-center">
+          <span class="sidebar-icon text-warning">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-asterisk" viewBox="0 0 16 16">
+			  <path d="M8 0a1 1 0 0 1 1 1v5.268l4.562-2.634a1 1 0 1 1 1 1.732L10 8l4.562 2.634a1 1 0 1 1-1 1.732L9 9.732V15a1 1 0 1 1-2 0V9.732l-4.562 2.634a1 1 0 1 1-1-1.732L6 8 1.438 5.366a1 1 0 0 1 1-1.732L7 6.268V1a1 1 0 0 1 1-1z"/>
+			</svg>
           </span>
-          <span class="mt-1 ms-1 sidebar-text">Volt Overview</span>
+          <span class="mt-1 ms-1 sidebar-text fst-italic text-uppercase fw-bolder">Store Spring 21</span>
         </a>
       </li>
       <li class="nav-item  active ">
@@ -169,7 +171,7 @@
       </li>
       
       <li class="nav-item ">
-        <a href="${applicationScope.MailPage }" class="nav-link">
+        <a href="${applicationScope.mailPage }" class="nav-link">
           <span class="sidebar-icon">
             <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"></path><path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clip-rule="evenodd"></path></svg>
           </span>
