@@ -49,8 +49,8 @@
 
 								</div>
 							</td>
-							<td class="card-list__total font-bold">100000đ</td>
-							<td class="card-list__action"><a href="#"
+							<td class="card-list__total font-bold">${c.quantity*c.product.price}đ</td>
+							<td class="card-list__action"><a href="store/shopping-cart/delete/${c.product.id}"
 								class="hover:text-pink-400">Xóa</a></td>
 						</tr>
 
