@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.Random;
@@ -51,8 +52,18 @@ public class CategoryController {
 	String viewsDirectory = "admin/pages/category/";
 
 	@RequestMapping("")
-	public String renderCategoryPage(ModelMap model) throws IOException {
-		List<CategoryEntity> categories = getCategory();
+	public String renderCategoryPage(ModelMap model, @RequestParam(value = "search", required = false) String search) throws IOException {
+		List<CategoryEntity> categories = new ArrayList<CategoryEntity>();
+		if(search != null) {
+			Session session = factory.getCurrentSession();
+			String hql = "FROM CategoryEntity WHERE id LIKE '%" + search + "%' OR name LIKE '%" + search + "%' OR description LIKE '%" + search + "%'";
+			Query query = session.createQuery(hql);
+			categories = query.list();
+		}
+		else {
+			categories = getCategory();
+		}
+		
 		model.addAttribute("categories", categories);
 		return viewsDirectory + "category";
 	}
@@ -145,13 +156,13 @@ public class CategoryController {
 
 	public static String generateId(int targetStringLength) {
 		int leftLimit = 48; // numeral '0'
-		int rightLimit = 122; // letter 'z'
+		int rightLimit = 57; // letter '9'
 		Random random = new Random();
 
 		String generatedString = random.ints(leftLimit, rightLimit + 1)
-				.filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97)).limit(targetStringLength)
+				.filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97)).limit(targetStringLength - 1)
 				.collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append).toString();
 
-		return generatedString;
+		return "C" + generatedString;
 	}
 }
