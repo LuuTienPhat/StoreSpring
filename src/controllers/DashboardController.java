@@ -12,9 +12,4 @@ public class DashboardController {
 		model.addAttribute("title", "Dashboard");
 		return "admin/pages/dashboard";
 	}
-	
-	@RequestMapping("")
-	public String renderPage() {
-		return "";
-	}
 }
