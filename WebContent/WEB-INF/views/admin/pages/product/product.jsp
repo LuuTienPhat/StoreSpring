@@ -9,7 +9,6 @@
 
 <!-- ========== Meta Tags ========= -->
 <%@include file="/WEB-INF/views/admin/includes/header/head.jsp"%>
-<title>Gifts and Accessories Store Dashboard</title>
 
 <!-- ========== Favicon linkup ========= -->
 <%@include file="/WEB-INF/views/admin/includes/header/favicon.jsp"%>
@@ -83,7 +82,7 @@
                 </div>
             </div>
             
-            <div class="card card-body border-0 shadow table-wrapper table-responsive">
+            <div class="card card-body border-0 shadow table-wrapper table-responsive overflow-hidden">
                 <table class="table table-hover table-responsive">
                     <thead class="thead-dark">
                         <tr>
@@ -99,7 +98,7 @@
                     </thead>
                     <tbody>
                         <!-- Item -->
-                        <c:forEach items="${productList}" var="product" varStatus="i">
+                        <c:forEach items="${productList}" var="product">
                         <tr>
                             <td>
                                 <a href="#" class="fw-bold">
@@ -112,7 +111,7 @@
                             <td><span class="fw-bold text-wrap">${product.quantity}</span></td>                        
                             <td><span class="fw-normal text-wrap">${product.unit}</span></td>
                             <td><span class="fw-bold text-wrap" >${product.price}</span></td>
-                            <td><span class="fw-bold text-wrap">${product.description}</span></td>
+                            <td><span class="fw-normal text-wrap">${product.description}</span></td>
                             <td><span class="fw-bold text-warning text-wrap">${product.category.name}</span></td>
                             <td class = "text-center">
                                 <div class="btn-group">
@@ -122,9 +121,9 @@
                                         <span class="visually-hidden">Toggle Dropdown</span>
                                     </button>
                                     <div class="dropdown-menu py-0">
-                                        <a class="dropdown-item rounded-top" href="#"><span class="fas fa-eye me-2"></span>View Details</a>
-                                        <a class="dropdown-item" href="#"><span class="fas fa-edit me-2"></span>Edit</a>
-                                        <a class="dropdown-item text-danger rounded-bottom" href="#"><span class="fas fa-trash-alt me-2"></span>Remove</a>
+                                        <a class="dropdown-item rounded-top" href="${applicationScope.productPage}/${product.id}"><span class="fas fa-eye me-2"></span>Chi tiết</a>
+                                        <a class="dropdown-item" href="#"><span class="fas fa-edit me-2"></span>Chỉnh sửa</a>
+                                        <a class="dropdown-item text-danger rounded-bottom" href="${applicationScope.productPage}/delete/${product.id}"><span class="fas fa-trash-alt me-2"></span>Xoá</a>
                                     </div>
                                 </div>
                             </td>

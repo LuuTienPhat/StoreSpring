@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c"%>
+<%@ taglib uri="http://www.springframework.org/tags/form"  prefix="form"%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -23,7 +24,6 @@
 <%@include file="/WEB-INF/views/admin/includes/nav/sidebar.jsp"%>
 <main class="content">
 	<%@include file="/WEB-INF/views/admin/includes/nav/navbar.jsp"%>
-	
             <div class="py-4">
                 <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
                     <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
@@ -38,8 +38,8 @@
                 </nav>
                 <div class="d-flex justify-content-between w-100 flex-wrap">
                     <div class="mb-3 mb-lg-0">
-                        <h1 class="h4">Forms</h1>
-                        <p class="mb-0">Dozens of reusable components built to provide buttons, alerts, popovers, and more.</p>
+                        <h1 class="h4">Thêm sản phẩm</h1>
+                        <!-- <p class="mb-0"></p> -->
                     </div>
                     <div>
                         <a href="https://themesberg.com/docs/volt-bootstrap-5-dashboard/components/forms/" class="btn btn-outline-gray"><i class="far fa-question-circle me-1"></i> Forms Docs</a>
@@ -54,43 +54,47 @@
                             <div class="row mb-4">
                             	 <div class="col-lg-12 col-sm-12">
                             	 
-           <form action = "admin/product/add.html" method = "POST" modelAttribute = "product" >
+           <form action = "${applicationScope.productPage }/add" method = "POST" enctype="multipart/form-data">
                 <div class="mb-4">
                   <label class="my-1 me-2" for=category">Loại sản phẩm</label>
-                  <select class="form-select" id=category" aria-label="Default select example" name = "category">
-                    <option selected>Chọn loại sản phẩm</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
+                  <%-- <select path="category.id" class="form-select" id="category" aria-describedby="catgoryHelp">
+                   		<option value="">Chọn loại sản phẩm</option>
+    					<options items="${categories}" itemValue="id" itemLabel="name"></options>
+                  </select> --%>
+                  
+                  <select name = "categoryId" class="form-select" id="category" aria-describedby="catgoryHelp">
+                  	<option value="">Chọn danh mục sản phẩm</option>
+                  	<c:forEach items="${categories}" var="category" varStatus="i">
+                  		<option value="${category.id}">${category.name}</option>
+                  	</c:forEach>
                   </select>
                 </div>
                 <div class="mb-4">
                   <label for="productName">Tên sản phẩm</label>
-                  <input type="productName" class="form-control" name = "name" id="productName" aria-describedby="productNameHelp">
-                  
+                  <input type="productName" class="form-control" name = "name" id="productName" aria-describedby="productNameHelp" />
                 </div>
                 <div class="mb-4">
                   <label for="quantity">Số lượng</label>
-                  <input type="quantity" class="form-control" name = "quantity" id="quantity" aria-describedby="quantityHelp" placeholder="20">
+                  <input value = "20" type="quantity" class="form-control" name = "quantity" id="quantity" aria-describedby="quantityHelp" placeholder="20" />
                   
                 </div>
                 <div class="mb-4">
                   <label for="unit">Đơn vị tính</label>
-                  <input type="unit" class="form-control" name = "unit" id="unit" aria-describedby="unitHelp" placeholder="cái">
+                  <input type="unit" value = "cái" class="form-control" name = "unit" id="unit" aria-describedby="unitHelp" placeholder="cái" />
                   
                 </div>
                 <div class="mb-4">
                   <label for="price">Giá tiền</label>
-                  <input type="price" class="form-control" id="price" aria-describedby="priceHelp" placeholder="50000">
+                  <input value = "10000" type="price" class="form-control" name = "price" id="price" aria-describedby="priceHelp" placeholder="50000" />
                  
                 </div>
                 <div class="my-4">
                   <label for="textarea">Mô tả</label>
-                  <textarea class="form-control" placeholder="Nhập mô tả" id="textarea" rows="4"></textarea>
+                  <textarea class="form-control" placeholder="Nhập mô tả" id="textarea" rows="4" name="description" >Something else</textarea>
                 </div>
                 <div class="mb-3">
                   <label for="formFile" class="form-label">Chọn file hình ảnh</label>
-                  <input class="form-control" type="file" id="formFile">
+                  <input class="form-control" type="file" id="formFile" name = "images" multiple />
                 </div>
                 <div class="mb-3">
                   <button class = "btn btn-primary" type="submit">Submit</button>
