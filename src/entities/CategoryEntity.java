@@ -24,12 +24,6 @@ public class CategoryEntity {
 	@Column(name = "description")
 	private String description;
 
-	/*
-	 * @Lob
-	 * 
-	 * @Column(name = "image_data") private byte[] data;
-	 */
-
 	@OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<ProductEntity> products;
 
