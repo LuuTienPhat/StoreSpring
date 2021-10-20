@@ -22,12 +22,14 @@
 						<th>Thao tác</th>
 					</tr>
 				</thead>
-				<form action="${applicationScope.shoppingCartPage}" modelAttribute="cartItems">
+				
+				<form action="store/shopping-cart/update" modelAttribute="list2" method="post">
 				<tbody>
 
 
 					<c:forEach var="c" items="${listCartDetail}">
 						<tr class="card-list__table-item">
+						<input type="text" name = "productId" value="${c.product.id}" class="hidden"/>
 							<td class="card-list__table-image"><a
 								href="${applicationScope.productDetailPage}"
 								class="table-image__container"> <img
@@ -57,6 +59,7 @@
 					</c:forEach>
 
 				</tbody>
+				<button class="px-4 py-2 font-bold bg-pink-300 hover:bg-pink-400 transition-colors text-white rounded-md" type="submit">Cập nhật</button>
 				</form>
 
 			</table>
