@@ -1,11 +1,13 @@
 package controllers;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
 import org.hibernate.Query;
@@ -16,119 +18,158 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import entities.CategoryEntity;
+import entities.ImageEntity;
 import entities.ProductEntity;
 import models.UploadFile;
+import models.Generate;
 
 @Transactional
 @Controller
 @RequestMapping("/admin/products")
 public class ProductController {
 	@Autowired
-	@Qualifier("sessionFactory")
-	SessionFactory factory;
-
-	String viewsDirectory = "admin/pages/product/";
-	
-	@RequestMapping("")
-	public String renderProductPage(ModelMap model) {
-		Session session = factory.getCurrentSession();
-		String hql = "FROM ProductEntity";
-		Query query = session.createQuery(hql);
-		List<ProductEntity> products = query.list();
-		System.out.println(products.get(0).getId());
-		model.addAttribute("productList", products);
-		return viewsDirectory  + "product";
-	}
-
-	@RequestMapping(value = "/add", method = RequestMethod.GET)
-	public String renderAddProductPage(ModelMap model) {
-		Session session = factory.getCurrentSession();
-		model.addAttribute("user", new ProductEntity());
-		return viewsDirectory  + "addProduct";
-	}
-
-	@RequestMapping(value = "product/add", method = RequestMethod.POST)
-	public String addProduct(ModelMap model, @ModelAttribute("product") ProductEntity product) {
-		String id = generateId(10);
-		System.out.println(product.getName());
-		/*
-		 * Session session = factory.openSession(); Transaction t =
-		 * session.beginTransaction(); try { session.save(product); t.commit();
-		 * model.addAttribute("message", "Thêm thành công!");
-		 * 
-		 * } catch (Exception ex) { t.rollback(); model.addAttribute("message",
-		 * "Thêm thất bại!"); } finally { session.close(); }
-		 */
-
-		return "admin/pages/addProduct";
-	}
-
-	@RequestMapping("form")
-	public String form() {
-		return "job/form";
-	}
+	ServletContext context;
 
 	@Autowired
-	ServletContext context;
+	@Qualifier("sessionFactory")
+	SessionFactory factory;
 
 	@Autowired
 	@Qualifier("uploadFile")
 	UploadFile uploadFile;
 
-	public static String generateId(int targetStringLength) {
-		int leftLimit = 48; // numeral '0'
-		int rightLimit = 122; // letter 'z'
-		Random random = new Random();
+	String viewsDirectory = "admin/pages/product/";
 
-		String generatedString = random.ints(leftLimit, rightLimit + 1)
-				.filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97)).limit(targetStringLength)
-				.collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append).toString();
-
-		return generatedString;
+	@RequestMapping("")
+	public String renderProductPage(ModelMap model) throws IOException {
+		model.addAttribute("title", "Quản lý sản phẩm");	
+		model.addAttribute("productList", getProducts());
+		return viewsDirectory + "product";
 	}
 
-	/*
-	 * @RequestMapping(value = "product", method = RequestMethod.POST) public String
-	 * addProduct(ModelMap model, @ModelAttribute("product") ProductEntity product)
-	 * {
-	 * 
-	 * String id = generateId(10); Session session = factory.openSession();
-	 * Transaction t = session.beginTransaction(); try { session.save(product);
-	 * t.commit(); model.addAttribute("message", "Thêm thành công!");
-	 * 
-	 * } catch (Exception ex) { t.rollback(); model.addAttribute("message",
-	 * "Thêm thất bại!"); } finally { session.close(); }
-	 * 
-	 * 
-	 * 
-	 * if (image.isEmpty()) { model.addAttribute("message", "Vui lòng chọn file"); }
-	 * else { try { String date =
-	 * LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss-"));
-	 * String photoName = date + photo.getOriginalFilename(); String photoPath =
-	 * uploadFile.getBasePath() + File.separator + photoName; // String photoPath =
-	 * context.getRealPath("/files/" + // photo.getOriginalFilename());
-	 * photo.transferTo(new File(photoPath)); System.out.println(photoPath);
-	 * 
-	 * String cvName = date + fullname + "-" + cv.getOriginalFilename(); String
-	 * cvPath = uploadFile.getBasePath() + File.separator + cvName; // String cvPath
-	 * = context.getRealPath("/files/" + cv.getOriginalFilename());
-	 * cv.transferTo(new File(cvPath)); Thread.sleep(2500);
-	 * 
-	 * model.addAttribute("fullname", fullname); model.addAttribute("photo_name",
-	 * photo.getOriginalFilename()); model.addAttribute("cv_name",
-	 * cv.getOriginalFilename()); model.addAttribute("cv_type",
-	 * cv.getContentType()); model.addAttribute("cv_size", cv.getSize());
-	 * 
-	 * return "job/apply"; } catch (Exception e) { // TODO: handle exception
-	 * model.addAttribute("message", "Lỗi lưu file"); } }
-	 * 
-	 * 
-	 * return "redirect:/admin/dashboard.html"; }
-	 */
+	@RequestMapping(value = "/add", method = RequestMethod.GET)
+	public String renderAddProductPage(ModelMap model) throws IOException {
+		model.addAttribute("title", "Thêm sản phẩm");
+		model.addAttribute("categories", getCategory());
+		// model.addAttribute("product", new ProductEntity());
+		return viewsDirectory + "addProduct";
+	}
+
+	@RequestMapping(value = "/add", method = RequestMethod.POST)
+	public String addProduct(ModelMap model, HttpServletRequest request, @RequestParam("images") MultipartFile[] files)
+			throws IOException {
+
+		CategoryEntity category = new CategoryEntity();
+		category.setId(request.getParameter("categoryId"));
+
+		ProductEntity product = new ProductEntity();
+		product.setId(Generate.generateProductId(5));
+		product.setName(request.getParameter("name"));
+		product.setQuantity(Integer.parseInt(request.getParameter("quantity")));
+		product.setUnit(request.getParameter("unit"));
+		product.setPrice(Float.parseFloat(request.getParameter("price")));
+		product.setDescription(request.getParameter("description"));
+		product.setDateAdded(new Date());
+		product.setCategory(category);
+
+		List<ImageEntity> images = new ArrayList<ImageEntity>();
+		for (MultipartFile image : files) {
+			ImageEntity i = new ImageEntity();
+			i.setId(Generate.generateImageId(5));
+			i.setProduct(product);
+			i.setImage(Base64.getEncoder().encodeToString(image.getBytes()));
+			images.add(i);
+		}
+
+		product.setImages(images);
+
+		Session session = factory.openSession();
+		Transaction t = session.beginTransaction();
+		try {
+			session.save(product);
+			t.commit();
+			System.out.println("Added");
+
+		} catch (Exception e) {
+			t.rollback();
+			System.out.println("Error");
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+
+		return "redirect:/admin/products/add";
+	}
+	
+	@RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
+	public String deleteProduct(ModelMap model, @PathVariable("id") String id) throws IOException {
+		ProductEntity product = new ProductEntity();
+		product.setId(id);
+
+		Session session = factory.openSession();
+		Transaction t = session.beginTransaction();
+		try {
+			session.delete(product);
+			t.commit();
+			System.out.println("Deleted");
+
+		} catch (Exception e) {
+			t.rollback();
+			System.out.println("Error");
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+
+		return "redirect:/admin/products";
+	}
+	
+	@RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
+	public String editProduct(ModelMap model, @PathVariable("id") String id) throws IOException {
+		Session session = factory.getCurrentSession();
+		String hql = "FROM CategoryEntity WHERE id = '" + id + "'";
+		Query query = session.createQuery(hql);
+
+		ProductEntity product = (ProductEntity) query.list().get(0);
+		model.addAttribute("product", product);
+
+		model.addAttribute("title", "Chi tiết sản phẩm");
+		return viewsDirectory + "detail";
+	}
+
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	public String productDetail(ModelMap model, @PathVariable("id") String id) throws IOException {
+		Session session = factory.getCurrentSession();
+		String hql = "FROM ProductEntity WHERE id = '" + id + "'";
+		Query query = session.createQuery(hql);
+
+		ProductEntity product = (ProductEntity) query.list().get(0);
+		model.addAttribute("product", product);
+
+		model.addAttribute("title", "Chi tiết sản phẩm");
+		return viewsDirectory + "detail";
+	}
+
+	public List<CategoryEntity> getCategory() throws IOException {
+		Session session = factory.getCurrentSession();
+		String hql = "FROM CategoryEntity";
+		Query query = session.createQuery(hql);
+		List<CategoryEntity> categories = query.list();
+		return categories;
+	}
+
+	public List<ProductEntity> getProducts() throws IOException {
+		Session session = factory.getCurrentSession();
+		String hql = "FROM ProductEntity";
+		Query query = session.createQuery(hql);
+		List<ProductEntity> products = query.list();
+		return products;
+	}
 }

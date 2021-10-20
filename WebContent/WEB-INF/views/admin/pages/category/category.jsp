@@ -116,9 +116,9 @@
                                         <span class="visually-hidden">Toggle Dropdown</span>
                                     </button>
                                     <div class="dropdown-menu py-0">
-                                        <a class="dropdown-item rounded-top" href="${applicationScope.categoryPage}/${category.id}"><span class="fas fa-eye me-2"></span>View Details</a>
-                                        <a class="dropdown-item" href="${applicationScope.categoryPage}/edit/${category.id}"><span class="fas fa-edit me-2"></span>Edit</a>
-                                        <a class="dropdown-item text-danger rounded-bottom" href="${applicationScope.categoryPage}/delete/${category.id}"><span class="fas fa-trash-alt me-2"></span>Remove</a>
+                                        <a class="dropdown-item rounded-top" href="${applicationScope.categoryPage}/${category.id}"><span class="fas fa-eye me-2"></span>Chi tiết</a>
+                                        <a class="dropdown-item" href="${applicationScope.categoryPage}/edit/${category.id}"><span class="fas fa-edit me-2"></span>Chỉnh sửa</a>
+                                        <a class="dropdown-item text-danger rounded-bottom" href="${applicationScope.categoryPage}/delete/${category.id}"><span class="fas fa-trash-alt me-2"></span>Xoá</a>
                                     </div>
                                 </div>
                             </td>
