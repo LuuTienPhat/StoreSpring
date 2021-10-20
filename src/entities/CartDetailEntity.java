@@ -64,6 +64,7 @@ public class CartDetailEntity {
 		super();
 	}
 }
+
 @Embeddable
 class CompositeKey implements Serializable {
     private String customer_id;
