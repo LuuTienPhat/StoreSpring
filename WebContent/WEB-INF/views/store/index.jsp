@@ -289,7 +289,7 @@
                             <a href="#"><i
                                     class="fa text-2xl fa-heart text-white hover:text-pink-400 transition-colors"></i></a>
                             <div class="border-l-2 border-white h-7 mx-2"></div>
-                            <a href="#"><i
+                            <a href="store/shopping-cart/insert-into-cart/${p.id}"><i
                                     class="fa text-2xl fa-cart-plus text-white hover:text-pink-400 transition-colors"></i></a>
                         </div>
                     </div>
