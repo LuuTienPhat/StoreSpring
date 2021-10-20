@@ -120,4 +120,20 @@ public class GiftController {
 		
 		return query.executeUpdate() > 0;
 	}
+	
+	@RequestMapping(value = "/shopping-cart/update", method=RequestMethod.POST)
+	public String update(HttpServletRequest request, @ModelAttribute("list2") List<ProductEntity> list) {
+		
+		String []  quantity = request.getParameterValues("quantity");
+		String []  id = request.getParameterValues("productId");
+		for(String id1:id) {
+			System.out.println(id1);
+		}
+//		model.addAttribute("listCartDetail", getListCartDetail(getUserIdByUserName((String) httpSession.getAttribute("customer"))));
+		
+		for(CartDetailEntity  c : getListCartDetail(getUserIdByUserName((String) httpSession.getAttribute("customer")))) {
+			System.out.println("user_id: " + c.getCustomer().getId() +"; product_id: "+c.getProduct().getId()+"; quantity= "+c.getQuantity());
+		}
+		return "redirect:/store/shopping-cart";
+	}
 }
