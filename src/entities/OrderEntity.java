@@ -33,8 +33,8 @@ public class OrderEntity {
 	private String shipAddress;
 	@Column(name = "ship_city")
 	private String shipCity;
-	@Column(name = "admin_aprove")
-	private byte adminAprove;
+	@Column(name = "admin_approved")
+	private byte adminApproved;
 
 	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<OrderDetailEntity> orderDetails;
