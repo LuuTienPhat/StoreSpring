@@ -1,5 +1,6 @@
 package entities;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -11,6 +12,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "Product")
@@ -24,24 +29,20 @@ public class ProductEntity {
 
 	@Column(name = "quantity")
 	private int quantity;
-	
+
 	@Column(name = "unit")
 	private String unit;
 
 	@Column(name = "price")
 	private float price;
 
-	@Column(name = "image")
-	private String image;
-	@Column(name = "image2")
-	private String image2;
-	@Column(name = "image3")
-	private String image3;
-	@Column(name = "image4")
-	private String image4;
-
-	@Column(name = "description")
+	@Column(name = "description", nullable = true)
 	private String description;
+
+	@Column(name = "date_added")
+	@Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
+	private Date dateAdded;
 
 	@ManyToOne
 	@JoinColumn(name = "category_id")
@@ -49,7 +50,13 @@ public class ProductEntity {
 
 	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<CartDetailEntity> cartDetails;
-	
+
+	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+	private List<OrderDetailEntity> orderDetails;
+
+	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+	private List<ImageEntity> images;
+
 	public String getId() {
 		return id;
 	}
@@ -90,46 +97,6 @@ public class ProductEntity {
 		this.price = price;
 	}
 
-	public String getImage() {
-		return image;
-	}
-
-	public void setImage(String image) {
-		this.image = image;
-	}
-
-	public String getImage2() {
-		return image2;
-	}
-
-	public void setImage2(String image2) {
-		this.image2 = image2;
-	}
-
-	public String getImage3() {
-		return image3;
-	}
-
-	public void setImage3(String image3) {
-		this.image3 = image3;
-	}
-
-	public String getImage4() {
-		return image4;
-	}
-
-	public void setImage4(String image4) {
-		this.image4 = image4;
-	}
-
-	public List<CartDetailEntity> getCartDetails() {
-		return cartDetails;
-	}
-
-	public void setCartDetails(List<CartDetailEntity> cartDetails) {
-		this.cartDetails = cartDetails;
-	}
-
 	public String getDescription() {
 		return description;
 	}
@@ -138,11 +105,35 @@ public class ProductEntity {
 		this.description = description;
 	}
 
+	public Date getDateAdded() {
+		return dateAdded;
+	}
+
+	public void setDateAdded(Date dateAdded) {
+		this.dateAdded = dateAdded;
+	}
+
 	public CategoryEntity getCategory() {
 		return category;
 	}
 
 	public void setCategory(CategoryEntity category) {
 		this.category = category;
+	}
+
+	public List<ImageEntity> getImages() {
+		return images;
+	}
+
+	public void setImages(List<ImageEntity> images) {
+		this.images = images;
+	}
+
+	public List<CartDetailEntity> getCartDetails() {
+		return cartDetails;
+	}
+
+	public void setCartDetails(List<CartDetailEntity> cartDetails) {
+		this.cartDetails = cartDetails;
 	}
 }
