@@ -18,7 +18,7 @@ public class CartDetailEntity {
 	@EmbeddedId CompositeKey id;
 	
 	@Column(name = "quantity")
-	private String quantity;
+	private int quantity;
 	
 	@ManyToOne
 	@JoinColumn(name = "customer_id", referencedColumnName = "id", insertable = false, updatable = false)
@@ -36,11 +36,11 @@ public class CartDetailEntity {
 		this.id = id;
 	}
 
-	public String getQuantity() {
+	public int getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(String quantity) {
+	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
 
@@ -61,25 +61,35 @@ public class CartDetailEntity {
 	}
 
 	public CartDetailEntity() {
-		super();
+		
+	}
+	public CartDetailEntity(String customer_id, String product_id) {
+		this.id = new CompositeKey(customer_id, product_id);
+	}
+	@Embeddable
+	static class CompositeKey implements Serializable {
+	    private String customer_id;
+	    private String product_id;
+		public String getCustomer_id() {
+			return customer_id;
+		}
+		public void setCustomer_id(String customer_id) {
+			this.customer_id = customer_id;
+		}
+		public String getProduct_id() {
+			return product_id;
+		}
+		public void setProduct_id(String product_id) {
+			this.product_id = product_id;
+		}
+		public CompositeKey(String customer_id, String product_id) {
+			this.customer_id = customer_id;
+			this.product_id = product_id;
+		}
+		public CompositeKey(){
+			
+		}
 	}
 }
 
-@Embeddable
-class CompositeKey implements Serializable {
-    private String customer_id;
-    private String product_id;
-	public String getCustomer_id() {
-		return customer_id;
-	}
-	public void setCustomer_id(String customer_id) {
-		this.customer_id = customer_id;
-	}
-	public String getProduct_id() {
-		return product_id;
-	}
-	public void setProduct_id(String product_id) {
-		this.product_id = product_id;
-	}
-	
-}
+
