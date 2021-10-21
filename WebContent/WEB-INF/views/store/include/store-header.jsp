@@ -5,7 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-
+<%@taglib uri="http://java.sun.com/jstl/core_rt" prefix="c"%>
 </head>
 <body>
 <div class="overcoat">
@@ -46,13 +46,16 @@
                                 class="fa fa-search p-2 bg-pink-300 hover:bg-pink-500 text-white rounded-r-md hover:text-white"></i></button>
                     </form>
                     <ul class="flex">
-                        <li><a href="#" class="pr-2 py-1 block hover:text-pink-300 transition-colors">Gấu bông</a></li>
+                        <!-- <li><a href="#" class="pr-2 py-1 block hover:text-pink-300 transition-colors">Gấu bông</a></li>
                         <li><a href="#" class="px-2 py-1 block hover:text-pink-300 transition-colors">Văn phòng phẩm</a>
                         </li>
                         <li><a href="#" class="px-2 py-1 block hover:text-pink-300 transition-colors">Vòng tay</a></li>
                         <li><a href="#" class="px-2 py-1 block hover:text-pink-300 transition-colors">Kẹp tóc</a></li>
                         <li><a href="#" class="px-2 py-1 block hover:text-pink-300 transition-colors">Ví</a></li>
-                        <li><a href="#" class="px-2 py-1 block hover:text-pink-300 transition-colors">Idol</a></li>
+                        <li><a href="#" class="px-2 py-1 block hover:text-pink-300 transition-colors">Idol</a></li> -->
+                        <c:forEach var = "category" begin = "2" end = "4" step="1" items="${applicationScope.listCategory}">
+         							<li><a href="store/category/${category.id}" class="px-2 py-1 block hover:text-pink-300 transition-colors">${category.name}</a></li>
+      					</c:forEach>
                     </ul>
                 </div>
                 <div class="nav__log-in flex justify-between items-center">
@@ -81,7 +84,7 @@
 
             </div>
             <ul class="flex items-center">
-                <li class="nav__submenu-container relative">
+                <!-- <li class="nav__submenu-container relative">
                     <div class="cursor-pointer px-2 py-3 flex justify-between border-b-2 border-white">
                         <a href="#" class="block font-bold text-sm hover:text-pink-400 transition-colors">Tất cả</a>
                         <i class="fa fa-chevron-down flex-1 nav__submenu-container pr-2 hidden"></i>
@@ -307,6 +310,27 @@
                         <a href="#" class="block font-bold text-sm hover:text-pink-400 transition-colors">Idol</a>
                         <i class="fa fa-chevron-down flex-1 nav__submenu-container pr-2 hidden"></i>
                     </div>
+                    <div class="submenu absolute">
+                        <ul class="bg-pink-200 w-44">
+                            <li><a href="#" class="py-1 px-3 block font-bold border-b-2 border-white text-sm">Sub hover:text-pink-400 menu item</a></li>
+                            <li><a href="#" class="py-1 px-3 block font-bold border-b-2 border-white text-sm">Su hover:text-pink-400b menu item</a></li>
+                            <li><a href="#" class="py-1 px-3 block font-bold border-b-2 border-white text-sm">Su hover:text-pink-400b menu item</a></li>
+                            <li><a href="#" class="py-1 px-3 block font-bold">Su hover:text-pink-400b menu item</a></li>
+                        </ul>
+                    </div>
+                </li> -->
+                <li class="nav__submenu-container relative">
+                    <div class="cursor-pointer px-2 py-3 flex justify-between border-b-2 border-white">
+                        <a href="store/all" class="block font-bold text-sm hover:text-pink-400 transition-colors">Tất cả</a>
+                        <i class="fa fa-chevron-down flex-1 nav__submenu-container pr-2 hidden"></i>
+                    </div>
+                </li>
+                <c:forEach var="category" items="${applicationScope.listCategory}">
+                	<li class="nav__submenu-container relative">
+                    <div class="cursor-pointer px-2 py-3 flex justify-between border-b-2 border-white">
+                        <a href="store/category/${category.id}" class="block font-bold text-sm hover:text-pink-400 transition-colors">${category.name}</a>
+                        <i class="fa fa-chevron-down flex-1 nav__submenu-container pr-2 hidden"></i>
+                    </div>
                     <!-- <div class="submenu absolute">
                         <ul class="bg-pink-200 w-44">
                             <li><a href="#" class="py-1 px-3 block font-bold border-b-2 border-white text-sm">Sub hover:text-pink-400 menu item</a></li>
@@ -316,6 +340,7 @@
                         </ul>
                     </div> -->
                 </li>
+                </c:forEach>
             </ul>
         </div>
     </header>
