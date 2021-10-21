@@ -13,17 +13,19 @@
 	<main class="main">
 		<div class="section px-32 my-5 product__detail">
 			<div class="product-navigation font-bold mb-5">
-				Trang chủ > Đồ chơi > <span class="text-pink-300">Đồ chơi</span>
+				<a href="store/all"
+					class="inline-block font-bold text-sm hover:text-pink-400 transition-colors">Tất
+					cả</a> > <a href="store/category/${product.category.id}"
+					class="inline-block font-bold text-sm text-pink-500 hover:text-pink-400 transition-colors">${product.category.name}</a>
 			</div>
 			<div class="flex detail__wrapper">
-				<a href="#" class="product-detail__img-container"><img
+				<a href="${applicationScope.productDetailPage}/${product.id}"
+					class="product-detail__img-container"><img
 					src="<c:url value='/resources/store/assets/img/sp1.jpeg'/>" alt=""></a>
 				<div class="ml-5 flex-1 detail__desc">
-					<h3 class="text-3xl font-bold mb-2">Squishy MJ Momo duck nháy
-						mắt 7cm - Vàng</h3>
+					<h3 class="text-3xl font-bold mb-2">${product.name}</h3>
 					<div class="flex justify-between">
-						<h6 class="mb-2 text-gray-500">Mã sản phẩm:
-							M.D100.NO.21071018-YL</h6>
+						<h6 class="mb-2 text-gray-500">Mã sản phẩm: ${product.id}</h6>
 						<div class="flex">
 							<i
 								class="fa fa-share-alt text-2xl hover:text-pink-400 text-2xl mr-2 cursor-pointer"></i>
@@ -31,32 +33,38 @@
 								class="fa fa-heart hover:text-pink-400 text-2xl cursor-pointer"></i>
 						</div>
 					</div>
-					<h2 class="price my-4 text-3xl font-bold">50,000đ</h2>
+					<h2 class="price my-4 text-3xl font-bold">${product.price}đ</h2>
 					<div class="flex my-4 items-center">
 						<h6 class="color mr-4">Màu sắc</h6>
 						<div
 							class="color-visual border-2 border-blue-400 rounded-full w-9 h-9 bg-yellow-300 cursor-pointer">
 						</div>
 					</div>
-					<div class="flex my-4">
-						<h6 class="mr-4">Số lượng</h6>
-						<div class="input-group flex align-items-center">
-							<button class="button-minus">-</button>
-							<input type="number" step="1" max="" min="1" value="1"
-								name="quantity" class="quantity-field">
+					<form>
+					<!--  chưa cập nhật thêm vào giỏ -->
+						<div class="flex my-4">
+							<input type="text" value="${product.quantity}"
+									name="product_id" class="hidden">
+							<h6 class="mr-4">Số lượng</h6>
+							<div class="input-group flex align-items-center">
+								<button class="button-minus">-</button>
+								<input type="number" step="1" max="${product.quantity}" min="1"
+									value="1" name="quantity" class="quantity-field">
 
-							<button class="button-plus">+</button>
+								<button class="button-plus">+</button>
+
+							</div>
 
 						</div>
-					</div>
-					<div class="flex my-4 border-gray-300 border-b-2 pb-5">
-						<button
-							class="w-full text-center py-2 font-bold bg-pink-300 hover:bg-pink-400 transition-colors text-white rounded-md mr-4 add-to-cart">THÊM
-							VÀO GIỎ HÀNG</button>
-						<button
-							class="w-full text-center py-2 font-bold bg-pink-300 hover:bg-pink-400 transition-colors text-white rounded-md buy-now">MUA
-							NGAY</button>
-					</div>
+						<div class="flex my-4 border-gray-300 border-b-2 pb-5">
+							<button
+								class="w-full text-center py-2 font-bold bg-pink-300 hover:bg-pink-400 transition-colors text-white rounded-md mr-4 add-to-cart">THÊM
+								VÀO GIỎ HÀNG</button>
+							<button
+								class="w-full text-center py-2 font-bold bg-pink-300 hover:bg-pink-400 transition-colors text-white rounded-md buy-now">MUA
+								NGAY</button>
+						</div>
+					</form>
 					<div class="delivery-policy">
 						<div class="flex my-2">
 							<div class="flex w-100 items-center mr-2">
@@ -95,8 +103,8 @@
 				<div class="item w-1/5 px-3 mb-4">
 					<div class="relative item-menu-container overflow-hidden">
 						<a href="#" class="block overflow-hidden"> <img
-							src="<c:url value='/resources/store/assets/img/sp1.jpeg'/>" alt=""
-							class="transform hover:scale-110 transition-all "></a>
+							src="<c:url value='/resources/store/assets/img/sp1.jpeg'/>"
+							alt="" class="transform hover:scale-110 transition-all "></a>
 
 						<div
 							class="flex justify-center bg-pink-300 items-center py-2 absolute item__menu w-full">
@@ -114,8 +122,8 @@
 				<div class="item w-1/5 px-3 mb-4">
 					<div class="relative item-menu-container overflow-hidden">
 						<a href="#" class="block overflow-hidden"> <img
-							src="<c:url value='/resources/store/assets/img/sp1.jpeg'/>" alt=""
-							class="transform hover:scale-110 transition-all "></a>
+							src="<c:url value='/resources/store/assets/img/sp1.jpeg'/>"
+							alt="" class="transform hover:scale-110 transition-all "></a>
 
 						<div
 							class="flex justify-center bg-pink-300 items-center py-2 absolute item__menu w-full">
@@ -133,8 +141,8 @@
 				<div class="item w-1/5 px-3 mb-4">
 					<div class="relative item-menu-container overflow-hidden">
 						<a href="#" class="block overflow-hidden"> <img
-							src="<c:url value='/resources/store/assets/img/sp1.jpeg'/>" alt=""
-							class="transform hover:scale-110 transition-all "></a>
+							src="<c:url value='/resources/store/assets/img/sp1.jpeg'/>"
+							alt="" class="transform hover:scale-110 transition-all "></a>
 
 						<div
 							class="flex justify-center bg-pink-300 items-center py-2 absolute item__menu w-full">
@@ -152,8 +160,8 @@
 				<div class="item w-1/5 px-3 mb-4">
 					<div class="relative item-menu-container overflow-hidden">
 						<a href="#" class="block overflow-hidden"> <img
-							src="<c:url value='/resources/store/assets/img/sp1.jpeg'/>" alt=""
-							class="transform hover:scale-110 transition-all "></a>
+							src="<c:url value='/resources/store/assets/img/sp1.jpeg'/>"
+							alt="" class="transform hover:scale-110 transition-all "></a>
 
 						<div
 							class="flex justify-center bg-pink-300 items-center py-2 absolute item__menu w-full">

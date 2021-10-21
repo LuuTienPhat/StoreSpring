@@ -37,7 +37,7 @@ public class GiftController {
 		model.addAttribute("list", getListProduct());
 		return "store/index";
 	}
-
+	
 	@RequestMapping("/")
 	public String store2(ModelMap model) {
 		model.addAttribute("list", getListProduct());
@@ -48,7 +48,12 @@ public class GiftController {
 	public String productDetail() {
 		return "store/product-detail";
 	}
-
+	@RequestMapping("/product-detail/{productId}")
+	public String productDetail2(@PathVariable("productId") String productId, ModelMap model) {
+		model.addAttribute("product", getProduct(productId));
+		System.out.println(productId+"; "+getProduct(productId).getName());
+		return "store/product-detail";
+	}
 	@RequestMapping("/sign-in")
 	public String signIn() {
 		return "store/sign-in";
@@ -216,5 +221,14 @@ public class GiftController {
 		int quantityOfProduct = (int) query.uniqueResult();
 		System.out.println("quantity from product: " + quantityOfProduct);
 		return quantityOfCart>=quantityOfProduct;
+	}
+	
+	public ProductEntity getProduct(String productId) {
+		Session session = factory.getCurrentSession();
+		String hql = "FROM ProductEntity p WHERE p.id =:productId";
+		Query query = session.createQuery(hql);
+
+		ProductEntity product = (ProductEntity) query.setParameter("productId", productId).uniqueResult();
+		return product;
 	}
 }

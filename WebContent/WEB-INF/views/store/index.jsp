@@ -279,9 +279,10 @@
                         thêm</button>
                 </div>--%>
                 <c:forEach var="p" items="${list}">
-            <div class="item w-1/4 px-3 mb-4">
+            <div class="item w-1/4 px-3 mb-4 flex flex-col justify-between">
+            	<div>
                     <div class="relative item-menu-container overflow-hidden">
-                        <a href="${applicationScope.productDetailPage}" class="block overflow-hidden">
+                        <a href="${applicationScope.productDetailPage}/${p.id}" class="block overflow-hidden">
                             <img src="<c:url value='/resources/store/assets/img/sp1.jpeg'/>" alt=""
                                 class="transform hover:scale-110 transition-all "></a>
 
@@ -293,8 +294,9 @@
                                     class="fa text-2xl fa-cart-plus text-white hover:text-pink-400 transition-colors"></i></a>
                         </div>
                     </div>
-                    <a href="${applicationScope.productDetailPage}"
+                    <a href="${applicationScope.productDetailPage}/${p.id}"
                         class="item__name block hover:text-pink-300 transition-colors font-bold my-2">${p.name}</a>
+				</div>
                     <span class="item__price font-bold">${p.price}đ</span>
                 </div>
             </c:forEach>
