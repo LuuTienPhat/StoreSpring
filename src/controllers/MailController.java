@@ -12,7 +12,6 @@ import models.UploadFile;
 import java.io.File;
 import java.nio.file.FileSystem;
 
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -33,44 +32,45 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 
 @Controller
-@RequestMapping("/admin/")
+@RequestMapping("/admin/mail")
 public class MailController {
 	@Autowired
 	JavaMailSender mailer;
 
 	@Autowired
 	UploadFile uploadFile;
-	
+
 	String viewsDirectory = "admin/pages/mail/";
 
-	@RequestMapping("mail")
+	@RequestMapping("")
 	public String renderMailPage(ModelMap model) {
 		model.addAttribute("title", "Gửi mail");
 		return viewsDirectory + "mail";
 	}
 
-	@RequestMapping(value = "send", method = RequestMethod.POST)
-	public String send(ModelMap model, @RequestParam("name") String name, @RequestParam("email") String email,
-			@RequestParam("subject") String subject, @RequestParam("body") String body) {
-		
+	@RequestMapping(value = "/send", method = RequestMethod.POST)
+	public String send(ModelMap model, @RequestParam("email") String email, @RequestParam("subject") String subject,
+			@RequestParam("body") String body) {
+
 		try {
 
 			MimeMessage mail = mailer.createMimeMessage();
 			MimeMessageHelper helper = new MimeMessageHelper(mail);
-			helper.setFrom("luutienphat10@gmail.com", "luutienphat10@gmail.com");
+			//helper.setFrom("");
 			helper.setTo(email);
-			helper.setReplyTo("luutienphat10@gmail.com", "luutienphat10@gmail.com");
+			//helper.setReplyTo("");
 			helper.setSubject(subject);
 			helper.setText(body, true);
 
 			mailer.send(mail);
-			model.addAttribute("message", "Gửi Email thành công");
+			model.addAttribute("message", "Email sent successfully!");
 
 		} catch (Exception e) {
 			// TODO: handle exception
-			model.addAttribute("message", "Gửi Email thất bại");
+			model.addAttribute("message", "Unable to send email");
+			e.printStackTrace();
 		}
 
-		return "mailer/form";
+		return "redirect:/admin/mail";
 	}
 }
