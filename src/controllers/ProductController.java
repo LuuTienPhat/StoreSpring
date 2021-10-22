@@ -48,9 +48,25 @@ public class ProductController {
 	String viewsDirectory = "admin/pages/product/";
 
 	@RequestMapping("")
-	public String renderProductPage(ModelMap model) throws IOException {
-		model.addAttribute("title", "Quản lý sản phẩm");	
-		model.addAttribute("productList", getProducts());
+	public String renderProductPage(ModelMap model, HttpServletRequest request,
+			@RequestParam(value = "search", required = false) String search) throws IOException {
+
+		List<ProductEntity> products = new ArrayList<ProductEntity>();
+		if (search != null) {
+			Session session = factory.getCurrentSession();
+			String hql = "FROM ProductEntity WHERE id LIKE '%" + search + "%' OR name LIKE '%" + search
+					+ "%' OR description LIKE '%" + search + "%' OR quantity LIKE '%" + search + "%' OR unit LIKE '%"
+					+ search + "%' OR price LIKE '%" + search + "%' OR category_id LIKE '%" + search + "%'";
+
+			Query query = session.createQuery(hql);
+			products = query.list();
+			
+		} else {
+			products = getProducts();
+		}
+
+		model.addAttribute("products", products);
+		model.addAttribute("title", "Quản lý sản phẩm");
 		return viewsDirectory + "product";
 	}
 
@@ -107,7 +123,7 @@ public class ProductController {
 
 		return "redirect:/admin/products/add";
 	}
-	
+
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
 	public String deleteProduct(ModelMap model, @PathVariable("id") String id) throws IOException {
 		ProductEntity product = new ProductEntity();
@@ -130,7 +146,7 @@ public class ProductController {
 
 		return "redirect:/admin/products";
 	}
-	
+
 	@RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
 	public String editProduct(ModelMap model, @PathVariable("id") String id) throws IOException {
 		Session session = factory.getCurrentSession();
