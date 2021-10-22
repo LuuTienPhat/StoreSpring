@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -19,8 +20,10 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.support.PagedListHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +34,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import entities.CategoryEntity;
+import models.Generate;
 import models.UploadFile;
 
 @Controller
@@ -52,22 +56,31 @@ public class CategoryController {
 	String viewsDirectory = "admin/pages/category/";
 
 	@RequestMapping("")
-	public String renderCategoryPage(ModelMap model, @RequestParam(value = "search", required = false) String search) throws IOException {
+	public String renderCategoryPage(ModelMap model, HttpServletRequest request,
+			@RequestParam(value = "search", required = false) String search) throws IOException {
 		List<CategoryEntity> categories = new ArrayList<CategoryEntity>();
-		if(search != null) {
+		if (search != null) {
 			Session session = factory.getCurrentSession();
-			String hql = "FROM CategoryEntity WHERE id LIKE '%" + search + "%' OR name LIKE '%" + search + "%' OR description LIKE '%" + search + "%'";
+			String hql = "FROM CategoryEntity WHERE id LIKE '%" + search + "%' OR name LIKE '%" + search
+					+ "%' OR description LIKE '%" + search + "%'";
 			Query query = session.createQuery(hql);
 			categories = query.list();
+		} else {
+			categories = getCategories();
 		}
-		else {
-			categories = getCategory();
-		}
-		
-		model.addAttribute("categories", categories);
+
+		PagedListHolder pagedListHolder = new PagedListHolder(categories);
+		int page = ServletRequestUtils.getIntParameter(request, "p", 0);
+		pagedListHolder.setPage(page);
+		pagedListHolder.setMaxLinkedPages(5);
+		pagedListHolder.setPageSize(10);
+
+		// model.addAttribute("categories", categories);
+		model.addAttribute("pagedListHolder", pagedListHolder);
 		return viewsDirectory + "category";
 	}
 
+	//ADD CATEGORY
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	public String renderAddCategoryPage(ModelMap model) {
 		CategoryEntity category = new CategoryEntity();
@@ -81,12 +94,11 @@ public class CategoryController {
 			@RequestParam("description") String description, @RequestParam("image") MultipartFile image)
 			throws IllegalStateException, IOException, InterruptedException {
 
-		String id = generateId(10);
 		CategoryEntity category = new CategoryEntity();
-
-		category.setId(id);
+		category.setId(Generate.generateCategoryId(5));
 		category.setName(name);
 		category.setDescription(description);
+		category.setDateAdded(new Date());
 		category.setImage(Base64.getEncoder().encodeToString(image.getBytes()));
 
 		Session session = factory.openSession();
@@ -95,19 +107,18 @@ public class CategoryController {
 			session.save(category);
 			t.commit();
 			System.out.println("Added");
-			// model.addAttribute("message", "Thêm thành công!");
 
 		} catch (Exception e) {
 			t.rollback();
 			System.out.println("Error");
 			System.err.println(e.getMessage());
-			// model.addAttribute("message", "Thêm thất bại!");
 		} finally {
 			session.close();
 		}
 		return "redirect:/admin/categories";
 	}
-
+	
+	//DELETE CATEGORY
 	@RequestMapping(value = "/delete/{id}")
 	public String deleteCategory(ModelMap model, @PathVariable("id") String id) {
 		Session session = factory.openSession();
@@ -119,50 +130,86 @@ public class CategoryController {
 			session.delete(category);
 			t.commit();
 			System.out.println("Deleted");
-			// model.addAttribute("message", "Thêm thành công!");
 
 		} catch (Exception e) {
 			t.rollback();
 			System.out.println("Error");
 			System.err.println(e.getMessage());
-			// model.addAttribute("message", "Thêm thất bại!");
 		} finally {
 			session.close();
 		}
 		return "redirect:/admin/categories";
 	}
 
-	//VIEW DETAILS OF CATEGORY
+	// VIEW DETAILS OF CATEGORY
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public String categoryDetail(ModelMap model, @PathVariable(value = "id") String id) {
+		System.out.println("Id: " + id);
+
+		CategoryEntity category = getCategory(id);
+		model.addAttribute("category", category);
+		return viewsDirectory + "detail";
+	}
+
+	// EDIT CATEGORY
+	@RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
+	public String renderEditCategoryPage(ModelMap model, @PathVariable(value = "id") String id) {
 		System.out.println("Id: " + id);
 
 		Session session = factory.getCurrentSession();
 		String hql = "FROM CategoryEntity WHERE id = '" + id + "'";
 		Query query = session.createQuery(hql);
 		CategoryEntity category = (CategoryEntity) query.list().get(0);
+		System.out.println(category.getDateAdded());
+
 		model.addAttribute("category", category);
-		return viewsDirectory + "detail";
+		model.addAttribute("title", "Sửa danh mục");
+		return viewsDirectory + "edit";
 	}
 
-	//GET CATEGORIES FROM SQL
-	public List<CategoryEntity> getCategory() throws IOException {
+	@RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
+	public String editCategory(ModelMap model, HttpServletRequest request, @PathVariable(value = "id") String id,
+			@RequestParam("image") MultipartFile image) throws IOException {
+		System.out.println("Id: " + id);
+
+		CategoryEntity category = new CategoryEntity();
+		category.setId(id);
+		category.setName(request.getParameter("name"));
+		category.setDescription(request.getParameter("description"));
+		category.setImage(Base64.getEncoder().encodeToString(image.getBytes()));
+
+		Session session = factory.openSession();
+		Transaction t = session.beginTransaction();
+		try {
+			session.update(category);
+			t.commit();
+			System.out.println("Deleted");
+
+		} catch (Exception e) {
+			t.rollback();
+			System.out.println("Error");
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return "redirect:/admin/categories";
+	}
+
+	// GET CATEGORIES FROM SQL
+	public List<CategoryEntity> getCategories() throws IOException {
 		Session session = factory.getCurrentSession();
 		String hql = "FROM CategoryEntity";
 		Query query = session.createQuery(hql);
 		List<CategoryEntity> categories = query.list();
 		return categories;
 	}
-
-	public static String generateId(int targetStringLength) {
-		int leftLimit = 48; // numeral '0'
-		int rightLimit = 57; // letter '9'
-		Random random = new Random();
-
-		String generatedString = random.ints(leftLimit, rightLimit + 1)
-				.filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97)).limit(targetStringLength - 1)
-				.collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append).toString();
-
-		return "C" + generatedString;
+	
+	//GET SINGLE CATEGORY
+	public CategoryEntity getCategory(String id) {
+		Session session = factory.getCurrentSession();
+		String hql = "FROM CategoryEntity WHERE id = '" + id + "'";
+		Query query = session.createQuery(hql);
+		CategoryEntity category = (CategoryEntity) query.list().get(0);
+		return category;
 	}
 }
