@@ -31,7 +31,7 @@ public class Generate {
 		return null;
 	}
 	
-	public static String generateProduct(int targetStringLength) {
+	public static String generateProductId(int targetStringLength) {
 		return "P" + generateId(5);
 	}
 	
