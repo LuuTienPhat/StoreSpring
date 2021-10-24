@@ -21,7 +21,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Table(name = "Product")
 public class ProductEntity {
 	@Id
-	@Column(name = "id")
+	@Column(name = "id", updatable = false)
 	private String id;
 
 	@Column(name = "name")
@@ -39,7 +39,7 @@ public class ProductEntity {
 	@Column(name = "description", nullable = true)
 	private String description;
 
-	@Column(name = "date_added")
+	@Column(name = "date_added", updatable = false)
 	@Temporal(TemporalType.DATE)
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date dateAdded;
@@ -48,7 +48,7 @@ public class ProductEntity {
 	@JoinColumn(name = "category_id")
 	private CategoryEntity category;
 
-	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	private List<CartDetailEntity> cartDetails;
 
 	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
