@@ -1,112 +1,186 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <title>Đăng ký</title>
-    <%@include file="/WEB-INF/views/store/include/store-head.jsp"%>
+<title>Đăng ký</title>
+<%@include file="/WEB-INF/views/store/include/store-head.jsp"%>
+<style type="text/css">
+.error::before {
+	content: '';
+	display: block;
+	width: 0;
+	height: 0;
+	border-left: 8px solid transparent;
+	border-right: 8px solid transparent;
+	border-bottom: 8px solid #FB3F3F;
+	position: absolute;
+	top: -8px;
+	left: 10px;
+}
+
+.error {
+	cursor: pointer;
+	position: relative;
+	background-color: #FB3F3F;
+	padding: 2px 8px;
+	width: fit-content;
+	border-radius: 4px;
+	transform: translateY(-8px);
+	color: white;
+}
+</style>
 </head>
 
 <body>
-    <%@include file="/WEB-INF/views/store/include/store-header.jsp"%>
-    <main class="main">
-        <div class="sign-up-form-container mx-auto my-10 border-2 border-gray-100 rounded-md">
-            <div class="flex"><a href="${applicationScope.signInPage}"
-                    class="switch-to-sign-in w-full py-2 relative text-xl text-pink-300 text-center">ĐĂNG
-                    NHẬP</a><a href="#"
-                    class="switch-to-sign-up w-full py-2 relative text-xl text-pink-300 text-center active-show-after">ĐĂNG KÝ</a>
-            </div>
-            <form action="" class="w-full p-4">
-                <input type="text" name="username" id="" class="w-full p-2 border-2 border-gray-300 rounded-md mb-3" placeholder="Tên đăng nhập (*)">
-                <input type="text" name="fullname" id="" class="w-full p-2 border-2 border-gray-300 rounded-md mb-3" placeholder="Họ tên (*)">
-                <input type="text" name="dateofbirth" id="" class="w-full p-2 border-2 border-gray-300 rounded-md mb-3" placeholder="Ngày sinh (*)">
-                <input type="text" name="phonenumber" id="" class="w-full p-2 border-2 border-gray-300 rounded-md mb-3" placeholder="Điện thoại (*)">
-                <input type="text" name="email" id="" class="w-full p-2 border-2 border-gray-300 rounded-md mb-3" placeholder="Email (*)">
-                <select id="cityId" name="cityId" class="w-full p-2 border-2 border-gray-300 rounded-md mb-3">
-                    <option value="">Tỉnh/Thành phố *</option>
-                    <option value="254">Hà Nội</option>
-                    <option value="255">Hồ Chí Minh</option>
-                    <option value="256">An Giang</option>
-                    <option value="257">Bà Rịa - Vũng Tàu</option>
-                    <option value="258">Bắc Ninh</option>
-                    <option value="259">Bắc Giang</option>
-                    <option value="260">Bình Dương</option>
-                    <option value="261">Bình Định</option>
-                    <option value="262">Bình Phước</option>
-                    <option value="263">Bình Thuận</option>
-                    <option value="264">Bến Tre</option>
-                    <option value="265">Bắc Cạn</option>
-                    <option value="266">Cần Thơ</option>
-                    <option value="267">Khánh Hòa</option>
-                    <option value="268">Thừa Thiên Huế</option>
-                    <option value="269">Lào Cai</option>
-                    <option value="270">Quảng Ninh</option>
-                    <option value="271">Đồng Nai</option>
-                    <option value="272">Nam Định</option>
-                    <option value="273">Cà Mau</option>
-                    <option value="274">Cao Bằng</option>
-                    <option value="275">Gia Lai</option>
-                    <option value="276">Hà Giang</option>
-                    <option value="277">Hà Nam</option>
-                    <option value="278">Hà Tĩnh</option>
-                    <option value="279">Hải Dương</option>
-                    <option value="280">Hải Phòng</option>
-                    <option value="281">Hòa Bình</option>
-                    <option value="282">Hưng Yên</option>
-                    <option value="283">Kiên Giang</option>
-                    <option value="284">Kon Tum</option>
-                    <option value="285">Lai Châu</option>
-                    <option value="286">Lâm Đồng</option>
-                    <option value="287">Lạng Sơn</option>
-                    <option value="288">Long An</option>
-                    <option value="289">Nghệ An</option>
-                    <option value="290">Ninh Bình</option>
-                    <option value="291">Ninh Thuận</option>
-                    <option value="292">Phú Thọ</option>
-                    <option value="293">Phú Yên</option>
-                    <option value="294">Quảng Bình</option>
-                    <option value="295">Quảng Nam</option>
-                    <option value="296">Quảng Ngãi</option>
-                    <option value="297">Quảng Trị</option>
-                    <option value="298">Sóc Trăng</option>
-                    <option value="299">Sơn La</option>
-                    <option value="300">Tây Ninh</option>
-                    <option value="301">Thái Bình</option>
-                    <option value="302">Thái Nguyên</option>
-                    <option value="303">Thanh Hóa</option>
-                    <option value="304">Tiền Giang</option>
-                    <option value="305">Trà Vinh</option>
-                    <option value="306">Tuyên Quang</option>
-                    <option value="307">Vĩnh Long</option>
-                    <option value="308">Vĩnh Phúc</option>
-                    <option value="309">Yên Bái</option>
-                    <option value="310">Đắk Lắk</option>
-                    <option value="311">Đồng Tháp</option>
-                    <option value="312">Đà Nẵng</option>
-                    <option value="313">Đắc Nông</option>
-                    <option value="314">Hậu Giang</option>
-                    <option value="315">Bạc Liêu</option>
-                    <option value="316">Điện Biên</option>
-                </select>
-                <select id="districtId" name="districtId" class="w-full p-2 border-2 border-gray-300 rounded-md mb-3">
-                    <option value="">Quận/ Huyện *</option>
-                </select>
-                <input type="text" name="username" id="" class="w-full p-2 border-2 border-gray-300 rounded-md mb-3" placeholder="Địa chỉ chi tiết (*)">
-                <input type="text" name="password" id="" class="w-full p-2 border-2 border-gray-300 rounded-md mb-3" placeholder="Mật khẩu của bạn (*)">
-                <input type="text" name="password" id="" class="w-full p-2 border-2 border-gray-300 rounded-md mb-3" placeholder="Nhập lại mật khẩu (*)">
-                <button class="w-full px-4 py-2 font-bold bg-pink-300 hover:bg-pink-400 transition-colors text-white rounded-md">ĐĂNG KÝ</button>
-            </form>
-        </div>
+	<%@include file="/WEB-INF/views/store/include/store-header.jsp"%>
+	<main class="main">
+		<div
+			class="sign-up-form-container mx-auto my-10 border-2 border-gray-100 rounded-md">
+			<div class="flex">
+				<a href="${applicationScope.signInPage}"
+					class="switch-to-sign-in w-full py-2 relative text-xl text-pink-300 text-center">ĐĂNG
+					NHẬP</a><a href="#"
+					class="switch-to-sign-up w-full py-2 relative text-xl text-pink-300 text-center active-show-after">ĐĂNG
+					KÝ</a>
+			</div>
 
-    </main>
-    <%@include file="/WEB-INF/views/store/include/store-footer.jsp"%>
 
-    <script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
-    <!-- <script src="./assets/js/main.js"></script> -->
-    <script src="<c:url value='/resources/store/assets/js/main.js'/>"></script>
-    <!-- <script src="./assets/js/sign-up.js"></script> -->
-    <script src="<c:url value='/resources/store/assets/js/sign-up.js'/>"></script>
+
+			<f:form action="store/sign-up" class="w-full p-4" method="post"
+				modelAttribute="customer">
+				<f:input type="text" path="username" id=""
+					class="w-full p-2 border-2 border-gray-300 rounded-md mb-3"
+					placeholder="Tên đăng nhập (*)" />
+				<f:errors path="username" cssClass="error" element="div" />
+				<f:input type="text" path="firstName" id=""
+					class="w-full p-2 border-2 border-gray-300 rounded-md mb-3"
+					placeholder="Họ (*)" />
+				<f:errors path="firstName" cssClass="error" element="div" />
+				<f:input type="text" path="lastName" id=""
+					class="w-full p-2 border-2 border-gray-300 rounded-md mb-3"
+					placeholder="Tên (*)" />
+				<f:errors path="lastName" cssClass="error" element="div" />
+				<%-- <f:input type="date" path="dateofbirth" id="datePicker"
+					class="w-full p-2 border-2 border-gray-300 rounded-md mb-3"
+					placeholder="Ngày sinh (*)" />
+				<f:errors path="dateofbirth" cssClass="error" element="div" /> --%>
+				<f:input type="text" path="telephone" id=""
+					class="w-full p-2 border-2 border-gray-300 rounded-md mb-3"
+					placeholder="Điện thoại (*)" />
+				<f:errors path="telephone" cssClass="error" element="div" />
+				<f:input type="text" path="email" id=""
+					class="w-full p-2 border-2 border-gray-300 rounded-md mb-3"
+					placeholder="Email (*)" />
+				<f:errors path="email" cssClass="error" element="div" />
+				<f:select id="cityId" path="city"
+					class="w-full p-2 border-2 border-gray-300 rounded-md mb-3">
+					<f:option value="NONE" label="Tỉnh/Thành phố *" />
+					<f:option value="254" label="Hà Nội" />
+					<f:option value="255" label="Hồ Chí Minh" />
+					<f:option value="256" label="An Giang" />
+					<f:option value="257" label="Bà Rịa - Vũng Tàu" />
+					<f:option value="258" label="Bắc Ninh" />
+					<f:option value="259" label="Bắc Giang" />
+					<f:option value="260" label="Bình Dương" />
+					<f:option value="261" label="Bình Định" />
+					<f:option value="262" label="Bình Phước" />
+					<f:option value="263" label="Bình Thuận" />
+					<f:option value="264" label="Bến Tre" />
+					<f:option value="265" label="Bắc Cạn" />
+					<f:option value="266" label="Cần Thơ" />
+					<f:option value="267" label="Khánh Hòa" />
+					<f:option value="268" label="Thừa Thiên Huế" />
+					<f:option value="269" label="Lào Cai" />
+					<f:option value="270" label="Quảng Ninh" />
+					<f:option value="271" label="Đồng Nai" />
+					<f:option value="272" label="Nam Định" />
+					<f:option value="273" label="Cà Mau" />
+					<f:option value="274" label="Cao Bằng" />
+					<f:option value="275" label="Gia Lai" />
+					<f:option value="276" label="Hà Giang" />
+					<f:option value="277" label="Hà Nam" />
+					<f:option value="278" label="Hà Tĩnh" />
+					<f:option value="279" label="Hải Dương" />
+					<f:option value="280" label="Hải Phòng" />
+					<f:option value="281" label="Hòa Bình" />
+					<f:option value="282" label="Hưng Yên" />
+					<f:option value="283" label="Kiên Giang" />
+					<f:option value="284" label="Kon Tum" />
+					<f:option value="285" label="Lai Châu" />
+					<f:option value="286" label="Lâm Đồng" />
+					<f:option value="287" label="Lạng Sơn" />
+					<f:option value="288" label="Long An" />
+					<f:option value="289" label="Nghệ An" />
+					<f:option value="290" label="Ninh Bình" />
+					<f:option value="291" label="Ninh Thuận" />
+					<f:option value="292" label="Phú Thọ" />
+					<f:option value="293" label="Phú Yên" />
+					<f:option value="294" label="Quảng Bình" />
+					<f:option value="295" label="Quảng Nam" />
+					<f:option value="296" label="Quảng Ngãi" />
+					<f:option value="297" label="Quảng Trị" />
+					<f:option value="298" label="Sóc Trăng" />
+					<f:option value="299" label="Sơn La" />
+					<f:option value="300" label="Tây Ninh" />
+					<f:option value="301" label="Thái Bình" />
+					<f:option value="302" label="Thái Nguyên" />
+					<f:option value="303" label="Thanh Hóa" />
+					<f:option value="304" label="Tiền Giang" />
+					<f:option value="305" label="Trà Vinh" />
+					<f:option value="306" label="Tuyên Quang" />
+					<f:option value="307" label="Vĩnh Long" />
+					<f:option value="308" label="Vĩnh Phúc" />
+					<f:option value="309" label="Yên Bái" />
+					<f:option value="310" label="Đắk Lắk" />
+					<f:option value="311" label="Đồng Tháp" />
+					<f:option value="312" label="Đà Nẵng" />
+					<f:option value="313" label="Đắc Nông" />
+					<f:option value="314" label="Hậu Giang" />
+					<f:option value="315" label="Bạc Liêu" />
+					<f:option value="316" label="Điện Biên" />
+				</f:select>
+				<f:errors path="city" cssClass="error" element="div" />
+				<f:select id="districtId" path="district"
+					class="w-full p-2 border-2 border-gray-300 rounded-md mb-3">
+					<f:option value="None" label="Quận/ Huyện*" />
+				</f:select>
+				<f:errors path="district" cssClass="error" element="div" />
+				<f:input type="text" path="specificAddress" id=""
+					class="w-full p-2 border-2 border-gray-300 rounded-md mb-3"
+					placeholder="Địa chỉ chi tiết (*)" />
+				<f:errors path="specificAddress" cssClass="error" element="div" />
+				<f:input type="password" path="password" id=""
+					class="w-full p-2 border-2 border-gray-300 rounded-md mb-3"
+					placeholder="Mật khẩu của bạn (*)" />
+				<f:errors path="password" cssClass="error" element="div" />
+				<f:input type="password" path="confirmPassword" id=""
+					class="w-full p-2 border-2 border-gray-300 rounded-md mb-3"
+					placeholder="Nhập lại mật khẩu (*)" />
+				<f:errors path="confirmPassword" cssClass="error" element="div" />
+				<button
+					class="w-full px-4 py-2 font-bold bg-pink-300 hover:bg-pink-400 transition-colors text-white rounded-md">ĐĂNG
+					KÝ</button>
+			</f:form>
+		</div>
+
+	</main>
+	<%@include file="/WEB-INF/views/store/include/store-footer.jsp"%>
+
+	<script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
+	<!-- <script src="./assets/js/main.js"></script> -->
+	<script src="<c:url value='/resources/store/assets/js/main.js'/>"></script>
+	<!-- <script src="./assets/js/sign-up.js"></script> -->
+	<script src="<c:url value='/resources/store/assets/js/sign-up.js'/>"></script>
+	<script type="text/javascript">
+		var a = document.getElementsByClassName("error");
+		for (var i = 0; i < a.length; i++) {
+			a[i].addEventListener("click", function(e) {
+				e.target.style.display = "none";
+			})
+		}
+	</script>
 </body>
 
 </html>

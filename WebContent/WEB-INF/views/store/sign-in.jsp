@@ -24,7 +24,7 @@
                 <button class="w-full px-4 py-2 font-bold bg-pink-300 hover:bg-pink-400 transition-colors text-white rounded-md mb-3">ĐĂNG KÝ</button>
                 <a href="#" class="pr-2 py-1 block hover:text-pink-300 transition-colors w-full text-center mb-3">Quên mật khẩu?</a>
                 <h4 class="text-center mb-3">Hoặc đăng nhập với</h4>
-                <button class="w-full px-4 py-2 font-bold bg-blue-700 hover:bg-blue-500 transition-colors text-white rounded-md mb-3"><i class="fab fa-facebook-f mr-1"></i>Đăng nhập bằng Facebook</button>
+                <button class="w-full px-4 py-2 font-bold bg-pink-700 hover:bg-pink-500 transition-colors text-white rounded-md mb-3"><i class="fab fa-facebook-f mr-1"></i>Đăng nhập bằng Facebook</button>
                 <button class="w-full px-4 py-2 font-bold bg-red-700 hover:bg-red-500 transition-colors text-white rounded-md"><i class="fab fa-google mr-1"></i>Đăng nhập bằng Google</button>
             </form>
         </div>

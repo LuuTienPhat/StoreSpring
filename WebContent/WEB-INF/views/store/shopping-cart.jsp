@@ -32,8 +32,9 @@
 								<td class="card-list__table-image"><a
 									href="${applicationScope.productDetailPage}"
 									class="table-image__container"> <img
-										src="<c:url value='/resources/store/assets/img/sp1.jpeg'/>"
-										alt="">
+										<%-- src="<c:url value='/resources/store/assets/img/sp1.jpeg'/>" --%>
+										src="data:image/png;base64,${c.product.images[0].image}" alt="${c.product.id}"/>
+										<!-- alt=""> -->
 								</a></td>
 								<!-- desc = tên sản phẩm + màu sắc + kích cỡ (nếu có) -->
 								<td class="card-list__table-desc"><a

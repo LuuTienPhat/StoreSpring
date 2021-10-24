@@ -43,7 +43,7 @@
                         <input type="text" name="" id="" placeholder="Tìm kiếm sản phẩm"
                             class="flex-1 outline-none px-3 py-1">
                         <button><i
-                                class="fa fa-search p-2 bg-pink-300 hover:bg-pink-500 text-white rounded-r-md hover:text-white"></i></button>
+                                class="fa fa-search p-2 bg-pink-300 hover:bg-pink-400 text-white rounded-r-md hover:text-white"></i></button>
                     </form>
                     <ul class="flex">
                         <!-- <li><a href="#" class="pr-2 py-1 block hover:text-pink-300 transition-colors">Gấu bông</a></li>
@@ -322,14 +322,14 @@
                 <li class="nav__submenu-container relative">
                     <div class="cursor-pointer px-2 py-3 flex justify-between border-b-2 border-white">
                         <a href="store/all" class="block font-bold text-sm hover:text-pink-400 transition-colors">Tất cả</a>
-                        <i class="fa fa-chevron-down flex-1 nav__submenu-container pr-2 hidden"></i>
+                        <!-- <i class="fa fa-chevron-down flex-1 nav__submenu-container pr-2 hidden"></i> -->
                     </div>
                 </li>
                 <c:forEach var="category" items="${applicationScope.listCategory}">
                 	<li class="nav__submenu-container relative">
                     <div class="cursor-pointer px-2 py-3 flex justify-between border-b-2 border-white">
-                        <a href="store/category/${category.id}" class="block font-bold text-sm hover:text-pink-400 transition-colors">${category.name}</a>
-                        <i class="fa fa-chevron-down flex-1 nav__submenu-container pr-2 hidden"></i>
+                        <a href="store/category/${category.id}" class="block font-bold text-sm hover:text-pink-400 transition-colors w-full">${category.name}</a>
+                        <!-- <i class="fa fa-chevron-down flex-1 nav__submenu-container pr-2 hidden"></i> -->
                     </div>
                     <!-- <div class="submenu absolute">
                         <ul class="bg-pink-200 w-44">
