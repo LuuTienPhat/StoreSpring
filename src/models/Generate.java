@@ -24,20 +24,22 @@ public class Generate {
 	
 	
 	//GENERATE AND CHECK RPODUCT ID
-	public static String generateProductId(int targetStringLength) {
+	public static ProductEntity searchProduct(List<ProductEntity> products, String id) {
+		for (ProductEntity product : products) {
+			if(product.getId().equals(id)) return product;
+		}
+		return null;
+	}
+	
+	public static String generateProduct(int targetStringLength) {
 		return "P" + generateId(5);
 	}
 	
 	public static String generateProductId2(List<ProductEntity> products) {
-		boolean flag = true;
 		String generatedString = null;
-		while(flag) {
+		do {
 			generatedString = "P" + generateId(5);
-			for (ProductEntity product : products) {
-				if(product.getId().equals(generatedString)) break;
-			}
-			flag = false;
-		}
+		} while (searchProduct(products, generatedString) != null);
 		
 		return generatedString;
 	}
