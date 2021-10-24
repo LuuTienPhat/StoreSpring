@@ -42,7 +42,7 @@
                     <!-- <p class="mb-0">Trang sản phẩm</p> -->
                 </div>
                 <div class="btn-toolbar mb-2 mb-md-0">
-                    <a href="#" class="btn btn-sm btn-gray-800 d-inline-flex align-items-center">
+                    <a href="${applicationScope.productPage }/add" class="btn btn-sm btn-gray-800 d-inline-flex align-items-center">
                         <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
                         Thêm sản phẩm
                     </a>
@@ -55,14 +55,23 @@
             <div class="table-settings mb-4">
                 <div class="row align-items-center justify-content-between">
                     <div class="col col-md-6 col-lg-3 col-xl-4 ">
+                        <form action = "${applicationScope.productPage }" method="get">
                         <div class="input-group me-2 me-lg-3 fmxw-300">
-                            <span class="input-group-text">
-                                <svg class="icon icon-xs" x-description="Heroicon name: solid/search" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                    <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path>
-                                </svg>
-                            </span>
-                            <input type="text" class="form-control" placeholder="Tìm kiếm sản phẩm">
+                            <input type="text" class="form-control" placeholder="Tìm kiếm" name = "search"/>
+                        	<a class="input-group-text" href = "${applicationScope.productPage}">
+                        		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
+								  <path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2v1z"/>
+								  <path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466z"/>
+								</svg>
+                        	</a>
+                        	
+                        	<button class="input-group-text" type = "submit" >
+                               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+								  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+								</svg>
+                            </button>
                         </div>
+                     </form>
                       
                     </div>
                     <div class="col-4 col-md-2 col-xl-1 ps-md-0 text-end">
@@ -83,36 +92,48 @@
             </div>
             
             <div class="card card-body border-0 shadow table-wrapper table-responsive overflow-hidden">
-                <table class="table table-hover table-responsive">
+                <table class="table table-hover table-responsive" id = "datatable">
                     <thead class="thead-dark">
                         <tr>
-                            <th class="border-gray-200">#</th>
+                            <th class="border-gray-200 rounded-start">#</th>
                             <th class="border-gray-200">Tên sản phẩm</th>						
                             <th class="border-gray-200">Số lượng</th>
                             <th class="border-gray-200">Đơn vị tính</th>
                             <th class="border-gray-200">Giá</th>
                             <th class="border-gray-200">Mô tả</th>
                             <th class="border-gray-200">Loại</th>
-                            <th class="border-gray-200"></th>
+                            <th class="border-gray-200">Ngày thêm</th>
+                            <th class="border-gray-200">Hình ảnh</th>
+                            <th class="border-gray-200 rounded-end"></th>
                         </tr>
                     </thead>
                     <tbody>
                         <!-- Item -->
-                        <c:forEach items="${productList}" var="product">
+                        <c:forEach items="${products}" var="product">
                         <tr>
                             <td>
                                 <a href="#" class="fw-bold">
                                     ${product.id}
                                 </a>
                             </td>
-                            <td>
-                                <span class="fw-normal text-wrap">${product.name}</span>
-                            </td>
+                            <td><span class="fw-normal text-wrap">${product.name}</span></td>
                             <td><span class="fw-bold text-wrap">${product.quantity}</span></td>                        
                             <td><span class="fw-normal text-wrap">${product.unit}</span></td>
                             <td><span class="fw-bold text-wrap" >${product.price}</span></td>
                             <td><span class="fw-normal text-wrap">${product.description}</span></td>
+                            
                             <td><span class="fw-bold text-warning text-wrap">${product.category.name}</span></td>
+                            <td><span class="fw-normal text-wrap">${product.dateAdded}</span></td>
+                            <c:choose>
+							    <c:when test="${!product.images.isEmpty()}">
+							        <td><img src="data:image/png;base64,${product.images.get(0).image}" width=100 height=100 alt="${product.name}"/></td>
+							    </c:when>    
+							    <c:otherwise>
+							       <td><span class="text-wrap"><img src="data:image/png;base64" alt="${product.id}"/></span></td>
+							    </c:otherwise>
+							</c:choose>
+                            
+                            
                             <td class = "text-center">
                                 <div class="btn-group">
                                     <button class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-0" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -122,7 +143,7 @@
                                     </button>
                                     <div class="dropdown-menu py-0">
                                         <a class="dropdown-item rounded-top" href="${applicationScope.productPage}/${product.id}"><span class="fas fa-eye me-2"></span>Chi tiết</a>
-                                        <a class="dropdown-item" href="#"><span class="fas fa-edit me-2"></span>Chỉnh sửa</a>
+                                        <a class="dropdown-item" href="${applicationScope.productPage}/edit/${product.id}"><span class="fas fa-edit me-2"></span>Chỉnh sửa</a>
                                         <a class="dropdown-item text-danger rounded-bottom" href="${applicationScope.productPage}/delete/${product.id}"><span class="fas fa-trash-alt me-2"></span>Xoá</a>
                                     </div>
                                 </div>
@@ -167,6 +188,17 @@
 
 <!-- ========== All JS files linkup ========= -->
 <%@include file="/WEB-INF/views/admin/includes/footer/script.jsp"%>
+
+<!-- <script type="text/javascript">
+	var dataTableEl = d.getElementById('datatable');
+	if(dataTableEl) {
+	    const dataTable = new simpleDatatables.DataTable(dataTableEl, {
+	    	paging: false,
+	    	searchable:false,
+	    	
+	    });
+	}
+</script> -->
 
 </body>
 </html>
