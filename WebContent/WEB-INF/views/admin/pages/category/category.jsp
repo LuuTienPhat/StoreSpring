@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c"%>
+<%@ taglib uri = "http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib prefix="tg" tagdir="/WEB-INF/tags"%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -17,15 +19,20 @@
 <!-- ========== All CSS files linkup ========= -->
 <%@include file="/WEB-INF/views/admin/includes/header/styles.jsp"%>
 
+<script
+	src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
 </head>
 
 <body>
+
+
 <%@include file="/WEB-INF/views/admin/includes/nav/sidebar.jsp"%>
     
 <main class="content">
 	<%@include file="/WEB-INF/views/admin/includes/nav/navbar.jsp"%>
-            
-
+	
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
                 <div class="d-block mb-4 mb-md-0">
                     <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
@@ -38,14 +45,14 @@
                                 </a>
                             </li>
                             <li class="breadcrumb-item"><a href="#">Volt</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">Transactions</li>
+                            <li class="breadcrumb-item active" aria-current="page">Quản lý danh mục sản phẩm</li>
                         </ol>
                     </nav>
                     <h2 class="h4">Danh mục sản phẩm</h2>
                     <!-- <p class="mb-0">Trang sản phẩm</p> -->
                 </div>
                 <div class="btn-toolbar mb-2 mb-md-0">
-                    <a href="${applicationScope.addCategoryPage }" class="btn btn-sm btn-gray-800 d-inline-flex align-items-center">
+                    <a href="${applicationScope.addCategoryPage }" class="btn btn-sm btn-secondary d-inline-flex align-items-center">
                         <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
                         Thêm danh mục
                     </a>
@@ -58,14 +65,23 @@
             <div class="table-settings mb-4">
                 <div class="row align-items-center justify-content-between">
                     <div class="col col-md-6 col-lg-3 col-xl-4 ">
+                    <form action = "${applicationScope.categoryPage }" method="get">
                         <div class="input-group me-2 me-lg-3 fmxw-300">
-                            <span class="input-group-text">
-                                <svg class="icon icon-xs" x-description="Heroicon name: solid/search" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                    <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path>
-                                </svg>
-                            </span>
-                            <input type="text" class="form-control" placeholder="Tìm kiếm sản phẩm">
+                            <input type="text" class="form-control" placeholder="Tìm kiếm" name = "search"/>
+                        	<a class="input-group-text" href = "${applicationScope.categoryPage}">
+                        		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
+								  <path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2v1z"/>
+								  <path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466z"/>
+								</svg>
+                        	</a>
+                        	
+                        	<button class="input-group-text" type = "submit" >
+                               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+								  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+								</svg>
+                            </button>
                         </div>
+                     </form>
                       
                     </div>
                     <div class="col-4 col-md-2 col-xl-1 ps-md-0 text-end">
@@ -85,20 +101,29 @@
                 </div>
             </div>
             
+           	<div id="pagination">
+           	<jsp:useBean id="pagedListHolder" scope="request" type="org.springframework.beans.support.PagedListHolder" />
+				<c:url value="admin/categories" var="pagedLink">
+					<c:param name="p" value="~" />
+				</c:url>
+			<tg:paging pagedListHolder="${pagedListHolder}"
+				pagedLink="${pagedLink}" />
+				</div>
+				
             <div class="card card-body border-0 shadow table-wrapper table-responsive overflow-hidden">
                 <table class="table table-hover">
                     <thead class="thead-dark">
                         <tr>
-                            <th class="border-gray-200">#</th>
+                            <th class="border-gray-200 rounded-start">#</th>
                             <th class="border-gray-200">Tên danh mục</th>
                             <th class="border-gray-200">Hình ảnh</th>						
                             <th class="border-gray-200">Mô tả</th>
-                            <th class="border-gray-200"></th>
+                            <th class="border-gray-200 rounded-end"></th>
                         </tr>
                     </thead>
                     <tbody>
                         <!-- Item -->
-                        <c:forEach items="${categories}" var="category" varStatus="i">
+                        <c:forEach items="${pagedListHolder.pageList}" var="category" varStatus="i">
                         <tr>
                             <td>
                                 <a href="#" class="fw-bold">

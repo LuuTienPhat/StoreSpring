@@ -60,7 +60,7 @@ public class ProductController {
 
 			Query query = session.createQuery(hql);
 			products = query.list();
-			
+
 		} else {
 			products = getProducts();
 		}
@@ -147,30 +147,55 @@ public class ProductController {
 		return "redirect:/admin/products";
 	}
 
-	@RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
-	public String editProduct(ModelMap model, @PathVariable("id") String id) throws IOException {
-		Session session = factory.getCurrentSession();
-		String hql = "FROM CategoryEntity WHERE id = '" + id + "'";
-		Query query = session.createQuery(hql);
-
-		ProductEntity product = (ProductEntity) query.list().get(0);
-		model.addAttribute("product", product);
-
-		model.addAttribute("title", "Chi tiết sản phẩm");
-		return viewsDirectory + "detail";
-	}
-
+	// VIEW PRODUCT
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public String productDetail(ModelMap model, @PathVariable("id") String id) throws IOException {
-		Session session = factory.getCurrentSession();
-		String hql = "FROM ProductEntity WHERE id = '" + id + "'";
-		Query query = session.createQuery(hql);
-
-		ProductEntity product = (ProductEntity) query.list().get(0);
-		model.addAttribute("product", product);
-
+		model.addAttribute("product", getProduct(id));
 		model.addAttribute("title", "Chi tiết sản phẩm");
-		return viewsDirectory + "detail";
+		return viewsDirectory + "viewProduct";
+	}
+
+	// EDIT PRODUCT
+	@RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
+	public String renderEditProductPage(ModelMap model, @PathVariable("id") String id) throws IOException {
+		model.addAttribute("product", getProduct(id));
+		model.addAttribute("categories", getCategory());
+		model.addAttribute("title", "Chi tiết sản phẩm");
+		return viewsDirectory + "editProduct";
+	}
+
+	@RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
+	public String editProduct(ModelMap model, HttpServletRequest request,
+			@RequestParam(value = "image", required = false) MultipartFile images, @PathVariable("id") String id)
+			throws IOException {
+
+		CategoryEntity category = new CategoryEntity();
+		category.setId(request.getParameter("categoryId"));
+
+		ProductEntity product = getProduct(id);
+		product.setName(request.getParameter("name"));
+		product.setQuantity(Integer.parseInt(request.getParameter("quantity")));
+		product.setUnit(request.getParameter("unit"));
+		product.setPrice(Float.parseFloat(request.getParameter("price")));
+		product.setDescription(request.getParameter("description"));
+		product.setCategory(category);
+
+		Session session = factory.openSession();
+		Transaction t = session.beginTransaction();
+		try {
+			session.merge(product);
+			t.commit();
+			System.out.println("Updated");
+
+		} catch (Exception e) {
+			t.rollback();
+			System.out.println("Error");
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+
+		return "redirect:/admin/products";
 	}
 
 	public List<CategoryEntity> getCategory() throws IOException {
@@ -187,5 +212,14 @@ public class ProductController {
 		Query query = session.createQuery(hql);
 		List<ProductEntity> products = query.list();
 		return products;
+	}
+
+	public ProductEntity getProduct(String id) throws IOException {
+		Session session = factory.getCurrentSession();
+		String hql = "FROM ProductEntity WHERE id = '" + id + "'";
+		Query query = session.createQuery(hql);
+
+		ProductEntity product = (ProductEntity) query.list().get(0);
+		return product;
 	}
 }

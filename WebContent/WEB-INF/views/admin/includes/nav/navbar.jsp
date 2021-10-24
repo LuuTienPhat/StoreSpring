@@ -3,12 +3,14 @@
 
 <%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c"%>
 
+<%@ taglib uri="http://java.sun.com/jstl/fmt_rt" prefix="f" %>
+
 <nav class="navbar navbar-top navbar-expand navbar-dashboard navbar-dark ps-0 pe-2 pb-0">
   <div class="container-fluid px-0">
     <div class="d-flex justify-content-between w-100" id="navbarSupportedContent">
       <div class="d-flex align-items-center">
         <!-- Search form -->
-        <form class="navbar-search form-inline" id="navbar-search-main">
+        <!-- <form class="navbar-search form-inline" id="navbar-search-main">
           <div class="input-group input-group-merge search-bar">
               <span class="input-group-text" id="topbar-addon">
                 <svg class="icon icon-xs" x-description="Heroicon name: solid/search" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -17,8 +19,28 @@
               </span>
               <input type="text" class="form-control" id="topbarInputIconLeft" placeholder="Search" aria-label="Search" aria-describedby="topbar-addon">
           </div>
-        </form>
+        </form> -->
         <!-- / Search form -->
+        
+        <!-- Clock -->
+        <button class = "btn btn-outline-gray-900">
+        	<div class="d-flex align-items-center">
+	        	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clock-fill me-2" viewBox="0 0 16 16">
+				  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"/>
+				</svg>
+			<span id="clock" class="fw-bold font-small"></span>
+			</div>
+        </button>
+        
+        <script type="text/javascript">
+        	const clock = document.getElementById("clock");
+	        window.setInterval(function () {
+			    clock.innerHTML = moment().format('ddd DD/MM/YYYY HH:mm:ss');
+			}, 1000);
+        </script>
+
+       	<!-- / Clock -->
+        
       </div>
       <!-- Navbar links -->
       <ul class="navbar-nav align-items-center">
@@ -170,3 +192,5 @@
     </div>
   </div>
 </nav>
+
+<hr>

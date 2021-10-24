@@ -3,6 +3,7 @@ encoding//WebContent/WEB-INF/views/admin/pages/category/detail.jsp=UTF-8
 encoding//src/controllers/AdminAuthController.java=UTF-8
 encoding//src/controllers/CategoryController.java=UTF-8
 encoding//src/controllers/MailController.java=UTF-8
+encoding//src/controllers/OrderController.java=UTF-8
 encoding//src/controllers/ProductController.java=UTF-8
 encoding//src/controllers/UploadController.java=UTF-8
 encoding//src/entities/AdminEntity.java=UTF-8
