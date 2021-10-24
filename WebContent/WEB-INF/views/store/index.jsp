@@ -283,8 +283,9 @@
             	<div>
                     <div class="relative item-menu-container overflow-hidden">
                         <a href="${applicationScope.productDetailPage}/${p.id}" class="block overflow-hidden">
-                            <img src="<c:url value='/resources/store/assets/img/sp1.jpeg'/>" alt=""
-                                class="transform hover:scale-110 transition-all "></a>
+                            <%-- <img src="<c:url value='/resources/store/assets/img/sp1.jpeg'/>" alt="" --%>
+                            <img src="data:image/png;base64,${p.images[0].image}" alt="${p.id}"
+                                class="transform hover:scale-110 transition-all "/></a>
 
                         <div class="flex justify-center bg-pink-300 items-center py-2 absolute item__menu w-full">
                             <a href="#"><i
