@@ -214,7 +214,7 @@
           id="subcustomer-pages" aria-expanded="false">
           <ul class="flex-column nav">
             <li class="nav-item">
-              <a class="nav-link" href="${applicationScope.orderPage}">
+              <a class="nav-link" href="${applicationScope.customerPage}">
                 <span class="sidebar-text">Quản lý</span>
               </a>
             </li>
