@@ -52,10 +52,10 @@
                     <!-- <p class="mb-0">Trang sản phẩm</p> -->
                 </div>
                 <div class="btn-toolbar mb-2 mb-md-0">
-                    <a href="${applicationScope.addCategoryPage }" class="btn btn-sm btn-secondary d-inline-flex align-items-center">
+                    <%-- <a href="${applicationScope.addCategoryPage }" class="btn btn-sm btn-secondary d-inline-flex align-items-center">
                         <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
                         Thêm danh mục
-                    </a>
+                    </a> --%>
                     <div class="btn-group ms-2 ms-lg-3">
                         <!-- <button type="button" class="btn btn-sm btn-outline-gray-600">Chia sẻ</button> -->
                         <button type="button" class="btn btn-sm btn-outline-gray-600">Xuất file</button>
@@ -75,11 +75,11 @@
                                 </svg>
                             </span><input type="text" class="form-control" placeholder="Search users"></div>
                         <select class="form-select fmxw-200 d-none d-md-inline" aria-label="Message select example 2">
-                            <option selected="selected">All</option>
-                            <option value="1">Active</option>
-                            <option value="2">Inactive</option>
-                            <option value="3">Pending</option>
-                            <option value="3">Cancelled</option>
+                            <option selected="selected">Tất cả</option>
+                            <option value="1">Xử lý xong</option>
+                            <option value="2">Đang xử lý</option>
+                            <option value="3">Đã xử lý</option>
+                            <option value="3">Huỷ đơn hàng</option>
                         </select>
                     </div>
                     <div class="col-3 col-lg-4 d-flex justify-content-end">
@@ -153,7 +153,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                    <c:forEach var="p" items="${orders}">
+                    <c:forEach items="${orders}" var="order">
                         <tr>
                             <td>
                                 <div class="form-check dashboard-check"><input class="form-check-input" type="checkbox" value id="userCheck1">
@@ -161,9 +161,9 @@
                                 </div>
                             </td>
                             <td>
-                                <a href="#" class="d-flex align-items-center"><img src="images/profile-picture-1.jpg" class="avatar rounded-circle me-3" alt="Avatar">
-                                    <div class="d-block">
-                                        <span class="fw-bold">Roy Fendley</span>
+                               <!--  <a href="#" class="d-flex align-items-center"><img src="images/profile-picture-1.jpg" class="avatar rounded-circle me-3" alt="Avatar">
+                                     --><div class="d-block">
+                                        <span class="fw-bold">${order.id}</span>
                                         <div class="small text-gray">
                                             <span class="__cf_email__" data-cfemail="fd94939b92bd98859c908d9198d39e9290">[email&#160;protected]</span>
                                         </div>
@@ -171,17 +171,43 @@
                                 </a>
                             </td>
                             <td>
-                                <span class="fw-normal">10 Feb 2020</span>
+                                <span class="fw-normal">${order.shipName}</span>
                             </td>
                             <td>
-                                <span class="fw-normal d-flex align-items-center">
+                                <span class="fw-normal d-flex align-items-center text-wrap">
                                     <svg class="icon icon-xxs text-success me-1" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
                                     </svg>
-                                    Email</span>
+                                    ${order.orderDate}</span>
                             </td>
                             <td>
-                                <span class="fw-normal text-success">Active</span>
+                                <span class="fw-normal text-wrap">${order.shipAddress}</span>
+                            </td>
+                            <td>
+                           <%--  <span class="fw-normal text-wrap">${order.orderDetails}</span> --%>
+                           <span class="fw-normal text-wrap">
+                               <c:forEach items="${order.orderDetails }" var="detail">
+                               		${detail.product.name},
+                               </c:forEach>
+                               </span>
+                            </td>
+                            <td>
+                                <span class="fw-normal">${order.orderTotal}</span>
+                            </td>
+                            <td>
+                                <span class="fw-normal">
+                                <c:choose>
+								  <c:when test="${order.state == 0}">
+								  	<span class="text-warning">Khách mới đặt</span>  
+								  </c:when>
+								   <c:when test="${order.state == 1}">
+								  		<span class="text-info">Đang xử lý</span>
+								  </c:when>
+								  <c:otherwise>
+								    <span class="text-success">Đã giao cho khách hàng</span>
+								  </c:otherwise>
+								</c:choose>
+                                </span>
                             </td>
                             <td>
                                 <div class="btn-group">
@@ -198,7 +224,7 @@
                                             </svg>
                                             Reset Pass
                                         </a>
-                                        <a class="dropdown-item d-flex align-items-center" href="#">
+                                        <a class="dropdown-item d-flex align-items-center" href="${applicationScope.orderPage }/${order.id}">
                                             <svg class="dropdown-icon text-gray-400 me-2" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
                                                 <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>

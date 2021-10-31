@@ -34,6 +34,7 @@ public class GlobalInterceptor extends HandlerInterceptorAdapter {
 		application.setAttribute("addCategoryPage", "admin/categories/add");
 		application.setAttribute("mailPage", "admin/mail");
 		application.setAttribute("orderPage", "admin/orders");
+		application.setAttribute("customerPage", "admin/customers");
 		
 		// STORE
 		application.setAttribute("storeIndexPage", "");
