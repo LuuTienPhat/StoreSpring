@@ -21,7 +21,7 @@
 			<div class="flex detail__wrapper">
 				<a href="${applicationScope.productDetailPage}/${product.id}"
 					class="product-detail__img-container"><img
-					src="<c:url value='/resources/store/assets/img/sp1.jpeg'/>" alt=""></a>
+					src="data:image/png;base64,${product.images[0].image}" alt="${product.id}"></a>
 				<div class="ml-5 flex-1 detail__desc">
 					<h3 class="text-3xl font-bold mb-2">${product.name}</h3>
 					<div class="flex justify-between">
@@ -34,12 +34,12 @@
 						</div>
 					</div>
 					<h2 class="price my-4 text-3xl font-bold">${product.price}đ</h2>
-					<div class="flex my-4 items-center">
+					<!-- <div class="flex my-4 items-center">
 						<h6 class="color mr-4">Màu sắc</h6>
 						<div
 							class="color-visual border-2 border-blue-400 rounded-full w-9 h-9 bg-yellow-300 cursor-pointer">
 						</div>
-					</div>
+					</div> -->
 					<form>
 					<!--  chưa cập nhật thêm vào giỏ -->
 						<div class="flex my-4">
@@ -66,12 +66,12 @@
 						</div>
 					</form>
 					<div class="delivery-policy">
-						<div class="flex my-2">
-							<div class="flex w-100 items-center mr-2">
+						<div class="my-2">
+							<div class="flex w-100 items-center mb-2">
 								<i class="fas fa-truck mr-2"></i> <span class="font-bold">Giao
 									hàng toàn quốc đơn hàng từ 100k</span>
 							</div>
-							<div class="flex w-1/2 items-center mr-2">
+							<div class="flex w-1/2 items-center mb-2">
 								<i class="fas fa-coins mr-2"></i> <span class="font-bold">COD
 									nội thành HN, HCM</span>
 							</div>
