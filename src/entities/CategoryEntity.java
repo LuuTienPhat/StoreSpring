@@ -1,6 +1,7 @@
 package entities;
 
 import java.sql.Blob;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -11,16 +12,25 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "Category")
 public class CategoryEntity {
 	@Id
+	@Column(name = "id", updatable = false)
 	private String id;
 	@Column(name = "name")
 	private String name;
 	@Column(name = "image")
 	private String image;
+	@Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
+	@Column(name = "date_added", updatable = false)
+	private Date dateAdded;
 	@Column(name = "description")
 	private String description;
 
@@ -59,12 +69,6 @@ public class CategoryEntity {
 		this.description = description;
 	}
 
-	/*
-	 * public byte[] getData() { return data; }
-	 * 
-	 * public void setData(byte[] data) { this.data = data; }
-	 */
-
 	public List<ProductEntity> getProducts() {
 		return products;
 	}
@@ -73,17 +77,15 @@ public class CategoryEntity {
 		this.products = products;
 	}
 
-	public CategoryEntity(String id, String name, String image, String description, List<ProductEntity> products) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.image = image;
-		this.description = description;
-		this.products = products;
-	}
-
 	public CategoryEntity() {
 		super();
 	}
 
+	public Date getDateAdded() {
+		return dateAdded;
+	}
+
+	public void setDateAdded(Date dateAdded) {
+		this.dateAdded = dateAdded;
+	}
 }

@@ -12,4 +12,4 @@
 <link type="text/css" href="<c:url value='/resources/admin/css/volt.css' />" rel="stylesheet" />
 
 <!-- Boostsrap-Icon -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.6.0/font/bootstrap-icons.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.0/font/bootstrap-icons.css">
