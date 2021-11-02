@@ -77,10 +77,11 @@ public class CategoryController {
 
 		// model.addAttribute("categories", categories);
 		model.addAttribute("pagedListHolder", pagedListHolder);
+		model.addAttribute("title", "Quản lý Danh mục");
 		return viewsDirectory + "category";
 	}
 
-	//ADD CATEGORY
+	// ADD CATEGORY
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	public String renderAddCategoryPage(ModelMap model) {
 		CategoryEntity category = new CategoryEntity();
@@ -117,8 +118,8 @@ public class CategoryController {
 		}
 		return "redirect:/admin/categories";
 	}
-	
-	//DELETE CATEGORY
+
+	// DELETE CATEGORY
 	@RequestMapping(value = "/delete/{id}")
 	public String deleteCategory(ModelMap model, @PathVariable("id") String id) {
 		Session session = factory.openSession();
@@ -148,7 +149,8 @@ public class CategoryController {
 
 		CategoryEntity category = getCategory(id);
 		model.addAttribute("category", category);
-		return viewsDirectory + "detail";
+		model.addAttribute("title", "Danh mục " + category.getName());
+		return viewsDirectory + "viewCategory";
 	}
 
 	// EDIT CATEGORY
@@ -203,8 +205,8 @@ public class CategoryController {
 		List<CategoryEntity> categories = query.list();
 		return categories;
 	}
-	
-	//GET SINGLE CATEGORY
+
+	// GET SINGLE CATEGORY
 	public CategoryEntity getCategory(String id) {
 		Session session = factory.getCurrentSession();
 		String hql = "FROM CategoryEntity WHERE id = '" + id + "'";
