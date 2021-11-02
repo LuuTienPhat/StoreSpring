@@ -142,9 +142,18 @@
                                         <span class="visually-hidden">Toggle Dropdown</span>
                                     </button>
                                     <div class="dropdown-menu py-0">
-                                        <a class="dropdown-item rounded-top" href="${applicationScope.productPage}/${product.id}"><span class="fas fa-eye me-2"></span>Chi tiết</a>
-                                        <a class="dropdown-item" href="${applicationScope.productPage}/edit/${product.id}"><span class="fas fa-edit me-2"></span>Chỉnh sửa</a>
-                                        <a class="dropdown-item text-danger rounded-bottom" href="${applicationScope.productPage}/delete/${product.id}"><span class="fas fa-trash-alt me-2"></span>Xoá</a>
+                                        <a class="dropdown-item rounded-top" href="${applicationScope.productPage}/${product.id}">
+	                                        <i class="bi bi-eye-fill dropdown-icon text-gray-400 me-2 icon-sm"></i>
+	                                        Chi tiết
+	                                    </a>
+                                        <a class="dropdown-item text-warning" href="${applicationScope.productPage}/edit/${product.id}">
+	                                       <i class="bi bi-pencil-square dropdown-icon me-2"></i>
+	                                        Chỉnh sửa
+                                        </a>
+                                        <a class="dropdown-item text-danger rounded-bottom" href="${applicationScope.productPage}/delete/${product.id}">
+											<i class="bi bi-trash2-fill dropdown-icon me-2"></i>
+											Xoá
+										</a>
                                     </div>
                                 </div>
                             </td>

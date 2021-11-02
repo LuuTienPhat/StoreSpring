@@ -73,7 +73,7 @@ public class ProductController {
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	public String renderAddProductPage(ModelMap model) throws IOException {
 		model.addAttribute("title", "Thêm sản phẩm");
-		model.addAttribute("categories", getCategory());
+		model.addAttribute("categories", getCategories());
 		// model.addAttribute("product", new ProductEntity());
 		return viewsDirectory + "addProduct";
 	}
@@ -159,7 +159,7 @@ public class ProductController {
 	@RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
 	public String renderEditProductPage(ModelMap model, @PathVariable("id") String id) throws IOException {
 		model.addAttribute("product", getProduct(id));
-		model.addAttribute("categories", getCategory());
+		model.addAttribute("categories", getCategories());
 		model.addAttribute("title", "Chi tiết sản phẩm");
 		return viewsDirectory + "editProduct";
 	}
@@ -198,7 +198,8 @@ public class ProductController {
 		return "redirect:/admin/products";
 	}
 
-	public List<CategoryEntity> getCategory() throws IOException {
+	// GET CATEGORIES FROM SQL
+	public List<CategoryEntity> getCategories() throws IOException {
 		Session session = factory.getCurrentSession();
 		String hql = "FROM CategoryEntity";
 		Query query = session.createQuery(hql);
@@ -206,6 +207,7 @@ public class ProductController {
 		return categories;
 	}
 
+	// GET PRODUCTS
 	public List<ProductEntity> getProducts() throws IOException {
 		Session session = factory.getCurrentSession();
 		String hql = "FROM ProductEntity";
@@ -214,6 +216,7 @@ public class ProductController {
 		return products;
 	}
 
+	// GET PRODUCT WITH ID
 	public ProductEntity getProduct(String id) throws IOException {
 		Session session = factory.getCurrentSession();
 		String hql = "FROM ProductEntity WHERE id = '" + id + "'";
@@ -222,4 +225,5 @@ public class ProductController {
 		ProductEntity product = (ProductEntity) query.list().get(0);
 		return product;
 	}
+
 }
