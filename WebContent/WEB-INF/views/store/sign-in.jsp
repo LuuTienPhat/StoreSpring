@@ -14,10 +14,10 @@
 		<div
 			class="sign-up-form-container mx-auto my-10 border-2 border-gray-100 rounded-md">
 			<div class="flex">
-				<a href="#"
-					class="switch-to-sign-in w-full py-2 relative text-xl text-pink-300 text-center active-show-after">ĐĂNG
+				<a href="${applicationScope.signInPage}"
+					class="switch-to-sign-in w-full py-2 relative text-xl text-indigo-300 text-center active-show-after">ĐĂNG
 					NHẬP</a><a href="${applicationScope.signUpPage}"
-					class="switch-to-sign-up w-full py-2 relative text-xl text-pink-300 text-center">ĐĂNG
+					class="switch-to-sign-up w-full py-2 relative text-xl text-indigo-300 text-center">ĐĂNG
 					KÝ</a>
 			</div>
 			<f:form action="store/sign-in" class="w-full  p-4" method="post"
@@ -31,10 +31,10 @@
 					placeholder="Mật khẩu" />
 				<f:errors path="password" cssClass="error" element="div" />
 				<button
-					class="w-full px-4 py-2 font-bold bg-pink-300 hover:bg-pink-400 transition-colors text-white rounded-md mb-3">ĐĂNG
+					class="w-full px-4 py-2 font-bold bg-indigo-300 hover:bg-indigo-400 transition-colors text-white rounded-md mb-3">ĐĂNG
 					NHẬP</button>
 				<a href="#"
-					class="pr-2 py-1 block hover:text-pink-300 transition-colors w-full text-center mb-3">Quên
+					class="pr-2 py-1 block hover:text-indigo-300 transition-colors w-full text-center mb-3">Quên
 					mật khẩu?</a>
 				<h4 class="text-center mb-3">Hoặc đăng nhập với</h4>
 
