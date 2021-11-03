@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="<c:url value='/resources/store/assets/css/reset.css'/>"/>
     <link rel="stylesheet" href="<c:url value='/resources/store/assets/css/base.css'/>">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;1,300&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="<c:url value='/resources/store/assets/css/main.css'/>">
+    <link rel="stylesheet" href="<c:url value='/resources/store/assets/css/main.css'/>?version=51">
     <link rel="stylesheet" href="<c:url value='/resources/store/assets/css/responsive.css'/>">
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">

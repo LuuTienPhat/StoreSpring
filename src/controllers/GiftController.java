@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import entities.CartDetailEntity;
 import entities.CategoryEntity;
@@ -179,6 +180,20 @@ public class GiftController {
 
 		return "store/category-products";
 	}
+	
+	@RequestMapping("/all")
+	public String allProduct(ModelMap model, HttpServletRequest request) {
+		model.addAttribute("listCategory", getListCategory());
+		PagedListHolder pagedListHolder = new PagedListHolder(this.getAllProducts());
+		int page = ServletRequestUtils.getIntParameter(request, "p", 0);
+		pagedListHolder.setPage(page);
+		pagedListHolder.setMaxLinkedPages(3);
+		pagedListHolder.setPageSize(8);
+		
+		model.addAttribute("pagedListHolder", pagedListHolder);
+
+		return "store/all-products";
+	}
 
 	@RequestMapping("/shopping-cart")
 	public String shoppingCart(ModelMap model) {
@@ -304,6 +319,30 @@ public class GiftController {
 		return "redirect:/store/shopping-cart";
 	}
 
+	/*
+	 * @RequestMapping(value = "/search", method = RequestMethod.GET) public String
+	 * search2() {
+	 * 
+	 * return "store/search-result"; }
+	 */
+	@RequestMapping(value = "/search")
+	public String search2() {
+		return "redirect:/";
+	}
+	@RequestMapping(value = "/search/{keyword}")
+	public String search(HttpServletRequest request, ModelMap model, @PathVariable("keyword") String keyword) {
+		model.addAttribute("listCategory", this.getListCategory());
+		model.addAttribute("keyword", keyword);
+		System.out.println(keyword);
+		PagedListHolder pagedListHolder = new PagedListHolder(this.searchForProduct(keyword));
+		int page = ServletRequestUtils.getIntParameter(request, "p", 0);
+		pagedListHolder.setPage(page);
+		pagedListHolder.setMaxLinkedPages(3);
+		pagedListHolder.setPageSize(8);
+		
+		model.addAttribute("pagedListHolder", pagedListHolder);
+		return "store/search-result";
+	}
 	public boolean cartItemIsExit(String product_id) {
 		Session session = factory.getCurrentSession();
 		String hql = "SELECT c.id.product_id FROM CartDetailEntity c WHERE c.id.customer_id =:customerId and c.id.product_id=:productId";
@@ -318,7 +357,7 @@ public class GiftController {
 		Session session = factory.getCurrentSession();
 		String hql = "SELECT c.quantity FROM CartDetailEntity c WHERE c.id.customer_id =:customerId and c.id.product_id=:productId";
 		Query query = session.createQuery(hql);
-		query.setParameter("customerId", getUserIdByUserName("tuanbui"));
+		query.setParameter("customerId", this.getUserIdByUserName("tuanbui"));
 		query.setParameter("productId", product_id);
 		int quantity = (int) query.uniqueResult();
 		return quantity;
@@ -328,13 +367,13 @@ public class GiftController {
 		Session session = factory.getCurrentSession();
 		String hql = "SELECT c.quantity FROM CartDetailEntity c WHERE c.id.customer_id =:customerId and c.id.product_id=:productId";
 		Query query = session.createQuery(hql);
-		query.setParameter("customerId", getUserIdByUserName("tuanbui"));
+		query.setParameter("customerId", this.getUserIdByUserName("tuanbui"));
 		query.setParameter("productId", product_id);
 		int quantityOfCart = (int) query.uniqueResult();
 		System.out.println("quantity from cart: " + quantityOfCart);
 		hql = "SELECT c.product.quantity FROM CartDetailEntity c WHERE c.id.customer_id =:customerId and c.id.product_id=:productId";
 		query = session.createQuery(hql);
-		query.setParameter("customerId", getUserIdByUserName("tuanbui"));
+		query.setParameter("customerId", this.getUserIdByUserName("tuanbui"));
 		query.setParameter("productId", product_id);
 		int quantityOfProduct = (int) query.uniqueResult();
 		System.out.println("quantity from product: " + quantityOfProduct);
@@ -429,6 +468,33 @@ public class GiftController {
 		String hql = "FROM CategoryEntity";
 		Query query = session.createQuery(hql);
 		List<CategoryEntity> list = query.list();
+		return list;
+	}
+	
+	public List<ProductEntity> getTop16RecentProduct() {
+		/* System.out.println("getListCartDetail"); */
+		Session session = factory.getCurrentSession();
+		String hql = "FROM ProductEntity p ORDER BY p.dateAdded DESC";
+		Query query = session.createQuery(hql);
+		List<ProductEntity> list = query.setMaxResults(16).list();
+		return list;
+	}
+	
+	public List<ProductEntity> getAllProducts() {
+		/* System.out.println("getListCartDetail"); */
+		Session session = factory.getCurrentSession();
+		String hql = "FROM ProductEntity p ORDER BY p.dateAdded DESC";
+		Query query = session.createQuery(hql);
+		List<ProductEntity> list = query.list();
+		return list;
+	}
+	
+	public List<ProductEntity> searchForProduct(String keyword) {
+		/* System.out.println("getListCartDetail"); */
+		Session session = factory.getCurrentSession();
+		String hql = "FROM ProductEntity p WHERE p.name LIKE :keyword OR p.category.name LIKE:keyword ORDER BY p.dateAdded DESC";
+		Query query = session.createQuery(hql).setParameter("keyword", "%"+keyword+"%");
+		List<ProductEntity> list = query.setParameter("keyword", "%"+keyword+"%").list();
 		return list;
 	}
 }

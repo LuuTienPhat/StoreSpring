@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>Thể loại: ${pagedListHolder.pageList[0].category.name}</title>
+<title>Kết quả tìm kiếm</title>
 <%@include file="/WEB-INF/views/store/include/store-head.jsp"%>
 <%@taglib tagdir="/WEB-INF/tags" prefix="tg"%>
 </head>
@@ -46,8 +46,8 @@
 					cả</a> > -->
 					<%-- <a href="store/category/${list[0].category.id}"
 						class="inline-block font-bold text-2xl text-indigo-400 hover:text-indigo-200 transition-colors">${list[0].category.name}</a> --%>
-					<a href="store/category/${pagedListHolder.pageList[0].category.id}"
-						class="inline-block font-bold text-2xl text-indigo-400 hover:text-indigo-200 transition-colors">${pagedListHolder.pageList[0].category.name}</a>
+					<span href="store/category/${pagedListHolder.pageList[0].category.id}"
+						class="inline-block font-bold text-2xl text-indigo-400 transition-colors">Kết quả tìm kiếm cho: ${keyword}</span>
 				</div>
 				<hr class="border-none bg-indigo-400" style="height: 1px;">
 			</div>
@@ -55,7 +55,7 @@
 				<jsp:useBean id="pagedListHolder" scope="request"
 					type="org.springframework.beans.support.PagedListHolder" />
 				<c:url
-					value="store/category/${pagedListHolder.pageList[0].category.id}/"
+					value="store/search/${keyword}/"
 					var="pagedLink">
 					<c:param name="p" value="~" />
 				</c:url>
@@ -276,6 +276,7 @@
 	<script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
 	<!-- <script src="./assets/js/main.js"></script> -->
 	<script src="<c:url value='/resources/store/assets/js/main.js'/>"></script>
+
 </body>
 
 </html>

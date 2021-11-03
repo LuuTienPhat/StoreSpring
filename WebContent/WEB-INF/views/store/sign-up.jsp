@@ -40,9 +40,9 @@
 			class="sign-up-form-container mx-auto my-10 border-2 border-gray-100 rounded-md">
 			<div class="flex">
 				<a href="${applicationScope.signInPage}"
-					class="switch-to-sign-in w-full py-2 relative text-xl text-pink-300 text-center">ĐĂNG
-					NHẬP</a><a href="#"
-					class="switch-to-sign-up w-full py-2 relative text-xl text-pink-300 text-center active-show-after">ĐĂNG
+					class="switch-to-sign-in w-full py-2 relative text-xl text-indigo-300 text-center">ĐĂNG
+					NHẬP</a><a href="${applicationScope.signUpPage}"
+					class="switch-to-sign-up w-full py-2 relative text-xl text-indigo-300 text-center active-show-after">ĐĂNG
 					KÝ</a>
 			</div>
 
@@ -160,7 +160,7 @@
 					placeholder="Nhập lại mật khẩu (*)" />
 				<f:errors path="confirmPassword" cssClass="error" element="div" />
 				<button
-					class="w-full px-4 py-2 font-bold bg-pink-300 hover:bg-pink-400 transition-colors text-white rounded-md">ĐĂNG
+					class="w-full px-4 py-2 font-bold bg-indigo-300 hover:bg-indigo-400 transition-colors text-white rounded-md">ĐĂNG
 					KÝ</button>
 			</f:form>
 		</div>

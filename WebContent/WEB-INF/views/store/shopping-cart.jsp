@@ -39,7 +39,7 @@
 								<!-- desc = tên sản phẩm + màu sắc + kích cỡ (nếu có) -->
 								<td class="card-list__table-desc"><a
 									href="${applicationScope.productDetailPage}"
-									class="hover:text-pink-400">${c.product.name}</a></td>
+									class="hover:text-indigo-400">${c.product.name}</a></td>
 								<td class="cart-list__price font-bold">${c.product.price}đ</td>
 								<td class="cart-list__quantity">
 									<div class="input-group flex align-items-center">
@@ -54,7 +54,7 @@
 								<td class="card-list__total font-bold">${c.quantity*c.product.price}đ</td>
 								<td class="card-list__action"><a
 									href="store/shopping-cart/delete/${c.product.id}"
-									class="hover:text-pink-400">Xóa</a></td>
+									class="hover:text-indigo-400">Xóa</a></td>
 							</tr>
 						</c:forEach>
 					</tbody>
@@ -64,13 +64,13 @@
 				</table>
 				<div class="flex justify-end mb-4">
 					<button
-						class="px-4 py-2 font-bold bg-pink-300 hover:bg-pink-400 transition-colors text-white rounded-md"
+						class="px-4 py-2 font-bold bg-indigo-300 hover:bg-indigo-400 transition-colors text-white rounded-md"
 						type="submit">Cập nhật</button>
 						<a href="store/shopping-cart/delete-all"
-						class="ml-2 px-4 py-2 font-bold bg-pink-300 hover:bg-pink-400 transition-colors text-white rounded-md"
+						class="ml-2 px-4 py-2 font-bold bg-indigo-300 hover:bg-indigo-400 transition-colors text-white rounded-md"
 						>Xóa tất cả</a>
 						<a href="store/shopping-cart/check-out"
-						class="ml-2 px-4 py-2 font-bold bg-pink-300 hover:bg-pink-400 transition-colors text-white rounded-md"
+						class="ml-2 px-4 py-2 font-bold bg-indigo-300 hover:bg-indigo-400 transition-colors text-white rounded-md"
 						>Thanh toán</a>
 				</div>
 			</form>
@@ -78,13 +78,13 @@
 			<p>Hỗ trợ ship 30k cho đơn hàng từ 500k toàn quốc</p>
 			<p>Đơn hàng trên website được xử lý trong giờ hành chính</p>
 
-			<h3 class="text-right text-pink-300 mt-4 text-3xl font-bold">
+			<h3 class="text-right text-indigo-300 mt-4 text-3xl font-bold">
 				Tổng: <span class="cart-total">000</span>đ
 			</h3>
 			<div class="section__heading mb-8  mt-16">
 				<h3>
 					<a href="#"
-						class="hover:text-pink-300 transition-colors text-3xl font-bold">Các
+						class="hover:text-indigo-300 transition-colors text-3xl font-bold">Các
 						sản phẩm đã xem</a>
 				</h3>
 			</div>
@@ -98,16 +98,16 @@
 							alt="" class="transform hover:scale-110 transition-all "></a>
 
 						<div
-							class="flex justify-center bg-pink-300 items-center py-2 absolute item__menu w-full">
+							class="flex justify-center bg-indigo-300 items-center py-2 absolute item__menu w-full">
 							<a href="#"><i
-								class="fa text-2xl fa-heart text-white hover:text-pink-400"></i></a>
+								class="fa text-2xl fa-heart text-white hover:text-indigo-400"></i></a>
 							<div class="border-l-2 border-white h-7 mx-2"></div>
 							<a href="#"><i
-								class="fa text-2xl fa-cart-plus text-white hover:text-pink-400"></i></a>
+								class="fa text-2xl fa-cart-plus text-white hover:text-indigo-400"></i></a>
 						</div>
 					</div>
 					<a href="#"
-						class="item__name block hover:text-pink-300 transition-colors font-bold my-2">Squishy
+						class="item__name block hover:text-indigo-300 transition-colors font-bold my-2">Squishy
 						MJ Momo duck nháy mắt 7cm</a> <span class="item__price font-bold">50000đ</span>
 				</div>
 				<div class="item w-1/5 px-3 mb-4">
@@ -117,16 +117,16 @@
 							alt="" class="transform hover:scale-110 transition-all "></a>
 
 						<div
-							class="flex justify-center bg-pink-300 items-center py-2 absolute item__menu w-full">
+							class="flex justify-center bg-indigo-300 items-center py-2 absolute item__menu w-full">
 							<a href="#"><i
-								class="fa text-2xl fa-heart text-white hover:text-pink-400"></i></a>
+								class="fa text-2xl fa-heart text-white hover:text-indigo-400"></i></a>
 							<div class="border-l-2 border-white h-7 mx-2"></div>
 							<a href="#"><i
-								class="fa text-2xl fa-cart-plus text-white hover:text-pink-400"></i></a>
+								class="fa text-2xl fa-cart-plus text-white hover:text-indigo-400"></i></a>
 						</div>
 					</div>
 					<a href="#"
-						class="item__name block hover:text-pink-300 transition-colors font-bold my-2">Squishy
+						class="item__name block hover:text-indigo-300 transition-colors font-bold my-2">Squishy
 						MJ Momo duck nháy mắt 7cm</a> <span class="item__price font-bold">50000đ</span>
 				</div>
 				<div class="item w-1/5 px-3 mb-4">
@@ -136,16 +136,16 @@
 							alt="" class="transform hover:scale-110 transition-all "></a>
 
 						<div
-							class="flex justify-center bg-pink-300 items-center py-2 absolute item__menu w-full">
+							class="flex justify-center bg-indigo-300 items-center py-2 absolute item__menu w-full">
 							<a href="#"><i
-								class="fa text-2xl fa-heart text-white hover:text-pink-400"></i></a>
+								class="fa text-2xl fa-heart text-white hover:text-indigo-400"></i></a>
 							<div class="border-l-2 border-white h-7 mx-2"></div>
 							<a href="#"><i
-								class="fa text-2xl fa-cart-plus text-white hover:text-pink-400"></i></a>
+								class="fa text-2xl fa-cart-plus text-white hover:text-indigo-400"></i></a>
 						</div>
 					</div>
 					<a href="#"
-						class="item__name block hover:text-pink-300 transition-colors font-bold my-2">Squishy
+						class="item__name block hover:text-indigo-300 transition-colors font-bold my-2">Squishy
 						MJ Momo duck nháy mắt 7cm</a> <span class="item__price font-bold">50000đ</span>
 				</div>
 				<div class="item w-1/5 px-3 mb-4">
@@ -155,16 +155,16 @@
 							alt="" class="transform hover:scale-110 transition-all "></a>
 
 						<div
-							class="flex justify-center bg-pink-300 items-center py-2 absolute item__menu w-full">
+							class="flex justify-center bg-indigo-300 items-center py-2 absolute item__menu w-full">
 							<a href="#"><i
-								class="fa text-2xl fa-heart text-white hover:text-pink-400"></i></a>
+								class="fa text-2xl fa-heart text-white hover:text-indigo-400"></i></a>
 							<div class="border-l-2 border-white h-7 mx-2"></div>
 							<a href="#"><i
-								class="fa text-2xl fa-cart-plus text-white hover:text-pink-400"></i></a>
+								class="fa text-2xl fa-cart-plus text-white hover:text-indigo-400"></i></a>
 						</div>
 					</div>
 					<a href="#"
-						class="item__name block hover:text-pink-300 transition-colors font-bold my-2">Squishy
+						class="item__name block hover:text-indigo-300 transition-colors font-bold my-2">Squishy
 						MJ Momo duck nháy mắt 7cm</a> <span class="item__price font-bold">50000đ</span>
 				</div>
 			</div>
