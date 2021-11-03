@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.support.PagedListHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -65,6 +66,7 @@ public class CategoryController {
 					+ "%' OR description LIKE '%" + search + "%'";
 			Query query = session.createQuery(hql);
 			categories = query.list();
+
 		} else {
 			categories = getCategories();
 		}
@@ -72,11 +74,12 @@ public class CategoryController {
 		PagedListHolder pagedListHolder = new PagedListHolder(categories);
 		int page = ServletRequestUtils.getIntParameter(request, "p", 0);
 		pagedListHolder.setPage(page);
-		pagedListHolder.setMaxLinkedPages(5);
-		pagedListHolder.setPageSize(10);
+		pagedListHolder.setMaxLinkedPages(10);
+		pagedListHolder.setPageSize(5);
 
 		// model.addAttribute("categories", categories);
 		model.addAttribute("pagedListHolder", pagedListHolder);
+		model.addAttribute("type", "danh mục");
 		model.addAttribute("title", "Quản lý Danh mục");
 		return viewsDirectory + "category";
 	}
@@ -87,36 +90,50 @@ public class CategoryController {
 		CategoryEntity category = new CategoryEntity();
 		model.addAttribute("category", category);
 		model.addAttribute("title", "Thêm Danh Mục");
-		return viewsDirectory + "add";
+		return viewsDirectory + "addCategory";
 	}
 
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
-	public String addCategory(ModelMap model, @RequestParam("name") String name,
-			@RequestParam("description") String description, @RequestParam("image") MultipartFile image)
+	public String addCategory(ModelMap model, @ModelAttribute(value = "category") CategoryEntity category,
+			BindingResult errors, @RequestParam(value = "image", required = false) MultipartFile image)
 			throws IllegalStateException, IOException, InterruptedException {
 
-		CategoryEntity category = new CategoryEntity();
-		category.setId(Generate.generateCategoryId(5));
-		category.setName(name);
-		category.setDescription(description);
-		category.setDateAdded(new Date());
-		category.setImage(Base64.getEncoder().encodeToString(image.getBytes()));
-
-		Session session = factory.openSession();
-		Transaction t = session.beginTransaction();
-		try {
-			session.save(category);
-			t.commit();
-			System.out.println("Added");
-
-		} catch (Exception e) {
-			t.rollback();
-			System.out.println("Error");
-			System.err.println(e.getMessage());
-		} finally {
-			session.close();
+		
+		if (category.getName().isEmpty()) {
+			errors.rejectValue("name", "category", "Nhập tên danh mục");
+			model.addAttribute("nameValid", "is-invalid");
 		}
-		return "redirect:/admin/categories";
+
+		if (errors.hasFieldErrors("name")) {
+			model.addAttribute("title", "Thêm Danh Mục");
+			return viewsDirectory + "addCategory";
+
+		} else {
+			List<CategoryEntity> categories = getCategories();
+			category.setId(Generate.generateCategoryId(categories));
+			category.setDateAdded(new Date());
+			
+			if(image.getSize() != 0) {
+				category.setImage(Base64.getEncoder().encodeToString(image.getBytes()));
+			}
+			
+			Session session = factory.openSession();
+			Transaction t = session.beginTransaction();
+			try {
+				session.save(category);
+				t.commit();
+				System.out.println("Added");
+
+			} catch (Exception e) {
+				t.rollback();
+				System.out.println("Error");
+				System.err.println(e.getMessage());
+			} finally {
+				session.close();
+			}
+
+			return "redirect:/admin/categories";
+		}
 	}
 
 	// DELETE CATEGORY
@@ -135,7 +152,7 @@ public class CategoryController {
 		} catch (Exception e) {
 			t.rollback();
 			System.out.println("Error");
-			System.err.println(e.getMessage());
+			e.printStackTrace();
 		} finally {
 			session.close();
 		}
@@ -166,26 +183,27 @@ public class CategoryController {
 
 		model.addAttribute("category", category);
 		model.addAttribute("title", "Sửa danh mục");
-		return viewsDirectory + "edit";
+		return viewsDirectory + "editCategory";
 	}
 
 	@RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
 	public String editCategory(ModelMap model, HttpServletRequest request, @PathVariable(value = "id") String id,
-			@RequestParam("image") MultipartFile image) throws IOException {
+			@RequestParam(value = "image", required = false) MultipartFile image) throws IOException {
 		System.out.println("Id: " + id);
 
-		CategoryEntity category = new CategoryEntity();
-		category.setId(id);
+		CategoryEntity category = getCategory(id);
 		category.setName(request.getParameter("name"));
 		category.setDescription(request.getParameter("description"));
-		category.setImage(Base64.getEncoder().encodeToString(image.getBytes()));
+		if (image.getSize() != 0) {
+			category.setImage(Base64.getEncoder().encodeToString(image.getBytes()));
+		}
 
 		Session session = factory.openSession();
 		Transaction t = session.beginTransaction();
 		try {
-			session.update(category);
+			session.merge(category);
 			t.commit();
-			System.out.println("Deleted");
+			System.out.println("Updated");
 
 		} catch (Exception e) {
 			t.rollback();

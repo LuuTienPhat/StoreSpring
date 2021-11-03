@@ -34,8 +34,8 @@
         
         <script type="text/javascript">
         	const clock = document.getElementById("clock");
-	        window.setInterval(function () {
-	        	const today = new Date();
+        	const runClock = () => {
+        		const today = new Date();
 	        	const date_locale = today.toLocaleDateString("vi-VN", {
 	        			weekday: "long",
 		        		year: "numeric",
@@ -50,7 +50,10 @@
 	        	});
 	        	
 			    clock.innerHTML = date_locale + " " + time_locale;
-			}, 1000);
+        	}
+        	
+        	runClock();
+	        window.setInterval(runClock, 1000);
         </script>
 
        	<!-- / Clock -->
