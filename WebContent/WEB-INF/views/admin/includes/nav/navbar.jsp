@@ -23,20 +23,37 @@
         <!-- / Search form -->
         
         <!-- Clock -->
-        <button class = "btn btn-outline-gray-900">
+        <button class = "btn btn-outline-gray-900" style = "width: 260px">
         	<div class="d-flex align-items-center">
 	        	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clock-fill me-2" viewBox="0 0 16 16">
 				  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"/>
 				</svg>
-			<span id="clock" class="fw-bold font-small"></span>
+			<span id="clock" class="fw-bold font-small" ></span>
 			</div>
         </button>
         
         <script type="text/javascript">
         	const clock = document.getElementById("clock");
-	        window.setInterval(function () {
-			    clock.innerHTML = moment().format('ddd DD/MM/YYYY HH:mm:ss');
-			}, 1000);
+        	const runClock = () => {
+        		const today = new Date();
+	        	const date_locale = today.toLocaleDateString("vi-VN", {
+	        			weekday: "long",
+		        		year: "numeric",
+	        		    month: "2-digit",
+	        		    day: "2-digit",
+	        		});
+	        	const time_locale = today.toLocaleTimeString("vi-VN", {
+	        		hourCycle: 'h23',
+	        		hour: "2-digit",
+        		    minute: "2-digit",
+        		    second: "2-digit"
+	        	});
+	        	
+			    clock.innerHTML = date_locale + " " + time_locale;
+        	}
+        	
+        	runClock();
+	        window.setInterval(runClock, 1000);
         </script>
 
        	<!-- / Clock -->

@@ -142,13 +142,13 @@
                                     <label class="form-check-label" for="userCheck55"></label>
                                 </div>
                             </th>
-                            <th class="border-bottom">#</th>
-                            <th class="border-bottom">Tên người đặt</th>
-                            <th class="border-bottom">Ngày đặt</th>
-                            <th class="border-bottom">Địa chỉ</th>
-                            <th class="border-bottom">Sản phẩm</th>
-                            <th class="border-bottom">Tổng số tiền</th>
-                            <th class="border-bottom">Trạng thái</th>
+                            <th class="border-bottom text-wrap">#</th>
+                            <th class="border-bottom text-wrap">Tên người đặt</th>
+                            <th class="border-bottom text-wrap">Ngày đặt</th>
+                            <th class="border-bottom text-wrap">Địa chỉ</th>
+                            <th class="border-bottom text-wrap">Sản phẩm</th>
+                            <th class="border-bottom text-wrap">Tổng số tiền</th>
+                            <th class="border-bottom text-wrap">Trạng thái</th>
                             <th class="border-bottom rounded-end"></th>
                         </tr>
                     </thead>
@@ -195,7 +195,7 @@
                                 <span class="fw-normal">${order.orderTotal}</span>
                             </td>
                             <td>
-                                <span class="fw-normal">
+                                <span class="fw-normal text-wrap">
                                 <c:choose>
 								  <c:when test="${order.state == 0}">
 								  	<span class="text-warning">Khách mới đặt</span>  
