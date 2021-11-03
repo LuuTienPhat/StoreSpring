@@ -292,20 +292,23 @@
         </div>
         <div class="col-12 col-md-8 col-xl-6 text-center text-lg-start">
             <!-- List -->
-            <ul class="list-inline list-group-flush list-group-borderless text-md-end mb-0">
-                <li class="list-inline-item px-0 px-sm-2">
-                    <a href="" class="btn ${order.state == 0 ? 'btn-danger' : '' } " >Chưa hoàn thành</a>
-                </li>
-                <li class="list-inline-item px-0 px-sm-2 ">
-                    <a href="" class="btn ${order.state == 1 ? 'btn-warning' : '' }">Đang xử lý</a>
-                </li>
-                <li class="list-inline-item px-0 px-sm-2 ">
-                    <a href="" class="btn ${order.state == 2 ? 'btn-success' : '' }">Đã hoàn thành</a>
-                </li>
-               <!--  <li class="list-inline-item px-0 px-sm-2">
-                    <a href="https://themesberg.com/contact">Contact</a>
-                </li> -->
-            </ul>
+            <form action="${applicationScope.orderPage }/${order.id}" method="post">
+	            <ul class="list-inline list-group-flush list-group-borderless text-md-end mb-0">
+	                <li class="list-inline-item px-0 px-sm-2">
+	                    <button class="btn ${order.state == 0 ? 'btn-danger' : '' }" name="state" value="0" >Chưa hoàn thành</button>
+	                </li>
+	                <li class="list-inline-item px-0 px-sm-2 ">
+	                    <button class="btn ${order.state == 1 ? 'btn-warning' : '' }" name="state" value="1" >Đang xử lý</button>
+	                </li>
+	                <li class="list-inline-item px-0 px-sm-2 ">
+	                    <button class="btn ${order.state == 2 ? 'btn-success' : '' }" name="state" value="2">Đã hoàn thành</button>
+	                </li>
+	                
+	               <!--  <li class="list-inline-item px-0 px-sm-2">
+	                    <a href="https://themesberg.com/contact">Contact</a>
+	                </li> -->
+	            </ul>
+            </form>
         </div>
     </div>
 </footer>

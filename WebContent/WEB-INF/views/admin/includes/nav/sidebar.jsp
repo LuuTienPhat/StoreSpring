@@ -2,6 +2,17 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c"%>
 
+<!-- LOADING PAGE -->
+<!-- <div class="vh-100 vw-100 bg-gray-900 overflow-hidden position-fixed d-flex flex-column align-items-center justify-content-center animate__animated animate__fadeOut" 
+	style="z-index: 1080" id="loading-page">
+	
+		<div class="spinner-grow text-warning" role="status" style="width: 5rem; height: 5rem;">
+		  <span class="visually-hidden">Loading...</span>
+		</div>
+		
+		<h2 class="text-white fw-bolder fst-italic text-uppercase my-0 mt-4">spring store 21</h2>
+</div> -->
+
 <!-- SIDE BAR RESPONSIVE -->
 <nav class="navbar navbar-dark navbar-theme-primary px-4 col-12 d-lg-none">
     <a class="navbar-brand me-lg-5" href="${applicationScope.dashboardPage }">

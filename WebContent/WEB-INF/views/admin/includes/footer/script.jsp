@@ -28,7 +28,7 @@
 <script src="<c:url value='/resources/admin/vendor/sweetalert2/dist/sweetalert2.all.min.js' />"></script>
 
 <!-- Moment JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script> -->
 
 <!-- Vanilla JS Datepicker -->
 <script src="<c:url value='/resources/admin/vendor/vanillajs-datepicker/dist/js/datepicker.min.js' />"></script>
@@ -44,3 +44,14 @@
 
 <!-- Volt JS -->
 <script src="<c:url value='/resources/admin/assets/js/volt.js' />"></script>
+
+<!-- Simplebar -->
+<script src="<c:url value='/resources/admin/vendor/simple-datatables/dist/umd/simple-datatables.js' />"></script>
+
+<!-- <script type="text/javascript">
+	const loadingPage = document.getElementById("loading-page");
+	window.addEventListener("load", () => {
+		loadingPage.classList.remove("d-flex");
+		loadingPage.classList.add("d-none");
+	})
+</script> -->
