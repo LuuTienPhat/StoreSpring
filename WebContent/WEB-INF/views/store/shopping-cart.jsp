@@ -66,9 +66,9 @@
 					<button
 						class="px-4 py-2 font-bold bg-indigo-300 hover:bg-indigo-400 transition-colors text-white rounded-md"
 						type="submit">Cập nhật</button>
-						<a href="store/shopping-cart/delete-all"
+						<!-- <a href="store/shopping-cart/delete-all"
 						class="ml-2 px-4 py-2 font-bold bg-indigo-300 hover:bg-indigo-400 transition-colors text-white rounded-md"
-						>Xóa tất cả</a>
+						>Xóa tất cả</a> -->
 						<a href="store/shopping-cart/check-out"
 						class="ml-2 px-4 py-2 font-bold bg-indigo-300 hover:bg-indigo-400 transition-colors text-white rounded-md"
 						>Thanh toán</a>

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
 import org.hibernate.Query;
@@ -26,13 +27,11 @@ import entities.ProductEntity;
 public class MainController {
 	@Autowired
 	SessionFactory factory;
-	@Autowired
-	ServletContext application1;
 	@RequestMapping("")
-	public String store(ModelMap model) {
+	public String store(ModelMap model, HttpSession session) {
 		/* model.addAttribute("list", getListProduct()); */
 		model.addAttribute("list", getTop16RecentProduct());
-		application1.setAttribute("listCategory", getListCategory());
+		session.setAttribute("listCategory", getListCategory());
 		/* addProductsForTesting(); */
 		return "store/index";
 	}
