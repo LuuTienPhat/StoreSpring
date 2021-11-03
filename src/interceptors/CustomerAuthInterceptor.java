@@ -13,13 +13,11 @@ public class CustomerAuthInterceptor extends HandlerInterceptorAdapter{
 			throws Exception {
 		//System.out.println("Authorize Interceptor preHandler()");
 		HttpSession session = request.getSession();	
-		session.setAttribute("customer", "notnull");
-		if(session.getAttribute("customer") == null) {
-			
+		if(session.getAttribute("customerUsername") == null) {
 			response.sendRedirect(request.getContextPath() + "/store/sign-in");
 			return false;
 		}else {
-			System.out.println(session.getAttribute("customer"));
+			System.out.println(session.getAttribute("customerUsername"));
 		}
 		return true;
 

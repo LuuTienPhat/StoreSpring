@@ -37,7 +37,7 @@
 	<%@include file="/WEB-INF/views/store/include/store-header.jsp"%>
 	<main class="main">
 		<div
-			class="sign-up-form-container mx-auto my-10 border-2 border-gray-100 rounded-md">
+			class="sign-up-form-container mx-auto my-10 border-2 border-gray-200 rounded-md">
 			<div class="flex">
 				<a href="${applicationScope.signInPage}"
 					class="switch-to-sign-in w-full py-2 relative text-xl text-indigo-300 text-center">ĐĂNG

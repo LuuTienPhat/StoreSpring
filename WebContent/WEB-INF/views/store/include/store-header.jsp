@@ -56,20 +56,31 @@
                         <li><a href="#" class="px-2 py-1 block hover:text-indigo-300 transition-colors">Kẹp tóc</a></li>
                         <li><a href="#" class="px-2 py-1 block hover:text-indigo-300 transition-colors">Ví</a></li>
                         <li><a href="#" class="px-2 py-1 block hover:text-indigo-300 transition-colors">Idol</a></li> -->
-                        <c:forEach var = "category" begin = "2" end = "4" step="1" items="${applicationScope.listCategory}">
+                        <c:forEach var = "category" begin = "2" end = "4" step="1" items="${sessionScope.listCategory}">
          							<li><a href="store/category/${category.id}" class="px-2 py-1 block hover:text-indigo-300 transition-colors">${category.name}</a></li>
       					</c:forEach>
                     </ul>
                 </div>
                 <div class="nav__log-in flex justify-between items-center">
                     <div class="hidden mobile-user mr-3">
-                        <a href="${applicationScope.signInPage}"
+                        <a href="${applicationScope.userInfoPage}"
                         class="py-1 block hover:text-indigo-300 transition-colors font-bold"><i class="fas fa-user text-2xl"></i></a>
                     </div>
-                    <div class="flex justify-between items-center sign-in-up"><a href="${applicationScope.signInPage}"
+                    <div class="flex justify-between items-center sign-in-up">
+                    <c:if test="${sessionScope.customerUsername!=null}">
+                    	<a href="${applicationScope.userInfoPage}"
+                        class="py-1 block hover:text-indigo-300 transition-colors font-bold mr-2 ml-5">${sessionScope.customerUsername} |</a>
+                        <a href="${applicationScope.logOutPage}" class="py-1 block hover:text-indigo-300 transition-colors font-bold mr-4">
+                        Thoát</a>
+                    </c:if>
+                    <c:if test="${sessionScope.customerUsername == null || sessionScope.customerUsername == '' }">
+                    <a href="${applicationScope.signInPage}"
                         class="py-1 block hover:text-indigo-300 transition-colors font-bold mr-2 ml-5">Đăng nhập |</a>
-                    <a href="${applicationScope.signUpPage}" class="py-1 block hover:text-indigo-300 transition-colors font-bold mr-4">
+                        <a href="${applicationScope.signUpPage}" class="py-1 block hover:text-indigo-300 transition-colors font-bold mr-4">
                         Đăng ký</a>
+                    </c:if>
+                    
+                    
                     </div>
                     <a href="${applicationScope.shoppingCartPage}" class="py-1 block transition-colors mr-2 relative"><i
                         class="hover:text-indigo-300 fa fa-shopping-bag text-2xl"></i>
@@ -328,7 +339,7 @@
                         <!-- <i class="fa fa-chevron-down flex-1 nav__submenu-container pr-2 hidden"></i> -->
                     </div>
                 </li>
-                <c:forEach var="category" items="${applicationScope.listCategory}">
+                <c:forEach var="category" items="${sessionScope.listCategory}">
                 	<li class="nav__submenu-container relative">
                     <div class="cursor-pointer px-2 py-3 flex justify-between border-b-2 border-white">
                         <a href="store/category/${category.id}" class="block font-bold text-sm hover:text-indigo-400 transition-colors w-full">${category.name}</a>
