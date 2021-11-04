@@ -16,8 +16,10 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.support.PagedListHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,6 +31,7 @@ import entities.ImageEntity;
 import entities.CustomerEntity;
 import models.UploadFile;
 import models.Generate;
+import models.EntityData;
 
 @Transactional
 @Controller
@@ -48,10 +51,10 @@ public class CustomerController {
 	String viewsDirectory = "admin/pages/customer/";
 
 	@RequestMapping("")
-	public String renderProductPage(ModelMap model, HttpServletRequest request,
+	public String renderCustomerPage(ModelMap model, HttpServletRequest request,
 			@RequestParam(value = "search", required = false) String search) throws IOException {
 
-		List<CustomerEntity> products = new ArrayList<CustomerEntity>();
+		List<CustomerEntity> customers = new ArrayList<CustomerEntity>();
 		if (search != null) {
 			Session session = factory.getCurrentSession();
 			String hql = "FROM CustomerEntity WHERE id LIKE '%" + search + "%' OR name LIKE '%" + search
@@ -59,14 +62,21 @@ public class CustomerController {
 					+ search + "%' OR price LIKE '%" + search + "%' OR category_id LIKE '%" + search + "%'";
 
 			Query query = session.createQuery(hql);
-			products = query.list();
+			customers = query.list();
 
 		} else {
-			products = getCustomers();
+			customers = getCustomers();
 		}
+		
+		PagedListHolder pagedListHolder = new PagedListHolder(customers);
+		int page = ServletRequestUtils.getIntParameter(request, "p", 0);
+		pagedListHolder.setPage(page);
+		pagedListHolder.setMaxLinkedPages(5);
+		pagedListHolder.setPageSize(5);
 
-		model.addAttribute("products", products);
-		model.addAttribute("title", "Quản lý khách hàng");
+		model.addAttribute("pagedListHolder", customers);
+		model.addAttribute("title", "Quản lý Khách hàng");
+		model.addAttribute("type", "khách hàng");
 		return viewsDirectory + "customer";
 	}
 
@@ -181,21 +191,23 @@ public class CustomerController {
 	 * 
 	 * return "redirect:/admin/products"; }
 	 */
+	
+	// GET CUSTOMER FROM SQL
+		public List<CustomerEntity> getCustomers() throws IOException {
+			Session session = factory.getCurrentSession();
+			String hql = "FROM CustomerEntity";
+			Query query = session.createQuery(hql);
+			List<CustomerEntity> customers = query.list();
+			return customers;
+		}
 
-	public List<CustomerEntity> getCustomers() throws IOException {
-		Session session = factory.getCurrentSession();
-		String hql = "FROM CustomerEntity";
-		Query query = session.createQuery(hql);
-		List<CustomerEntity> customers = query.list();
-		return customers;
-	}
+		// GET SINGLE CUSTOMER
+		public CustomerEntity getCustomer(String id) throws IOException {
+			Session session = factory.getCurrentSession();
+			String hql = "FROM CustomerEntity WHERE id = '" + id + "'";
+			Query query = session.createQuery(hql);
 
-	public CustomerEntity getCustomer(String id) throws IOException {
-		Session session = factory.getCurrentSession();
-		String hql = "FROM CustomerEntity WHERE id = '" + id + "'";
-		Query query = session.createQuery(hql);
-
-		CustomerEntity customer = (CustomerEntity) query.list().get(0);
-		return customer;
-	}
+			CustomerEntity customer = (CustomerEntity) query.list().get(0);
+			return customer;
+		}
 }
