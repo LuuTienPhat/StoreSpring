@@ -43,6 +43,7 @@ public class GlobalInterceptor extends HandlerInterceptorAdapter {
 		application.setAttribute("signUpPage", "store/sign-up");
 		application.setAttribute("shoppingCartPage", "store/shopping-cart");
 		application.setAttribute("userInfoPage", "store/user-info");
+		application.setAttribute("changePasswordPage", "store/user-info/change-password");
 		application.setAttribute("logOutPage", "store/log-out");
 		return true;
 		

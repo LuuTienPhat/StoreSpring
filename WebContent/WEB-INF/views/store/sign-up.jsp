@@ -159,6 +159,10 @@
 					class="w-full p-2 border-2 border-gray-300 rounded-md mb-3"
 					placeholder="Nhập lại mật khẩu (*)" />
 				<f:errors path="confirmPassword" cssClass="error" element="div" />
+				<div class="mb-2 flex justify-end">
+					<label for="showPassword" class=""><input type="checkbox"
+						class="mr-1" id="showPassword">Hiện mật khẩu</label>
+				</div>
 				<button
 					class="w-full px-4 py-2 font-bold bg-indigo-300 hover:bg-indigo-400 transition-colors text-white rounded-md">ĐĂNG
 					KÝ</button>
@@ -180,6 +184,20 @@
 				e.target.style.display = "none";
 			})
 		}
+		const show = document.getElementById("showPassword");
+		const inputPasswordField = document
+				.querySelectorAll('input[type="password"]');
+		show.addEventListener("click", function(e) {
+			if (this.checked) {
+				for (var i = 0; i < inputPasswordField.length; i++) {
+					inputPasswordField[i].type = "text";
+				}
+			} else {
+				for (var i = 0; i < inputPasswordField.length; i++) {
+					inputPasswordField[i].type = "password";
+				}
+			}
+		});
 	</script>
 </body>
 

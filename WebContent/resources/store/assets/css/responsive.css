@@ -187,6 +187,20 @@
 }
 
 @media (max-width: 739px){
+	.info-wrapper{
+		flex-direction: column !important;
+		
+	}
+	.input-wrapper{
+		flex-direction: column !important;
+	}
+	.input-wrapper label{
+		margin-bottom: 8px;
+	}
+	.user-info-nav{
+		margin: 0 0 20px 0 !important;
+		width: unset;
+	}
     .main__new-product{
         padding-left: 16px !important;
         padding-right: 16px !important;
@@ -264,6 +278,7 @@
     
 }
 @media (max-width: 600px){
+	
     .main__new-product .item{
         width: 50%;
     }
