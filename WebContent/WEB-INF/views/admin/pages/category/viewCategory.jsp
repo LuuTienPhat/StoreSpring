@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c"%>
+<!-- ========== Tag Lib ========= -->
+<%@include file="/WEB-INF/views/admin/includes/header/taglib.jsp"%>>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -66,7 +67,7 @@
                   </svg>
                 </div> -->
               <div class=" col-md-3 col-sm-4 col-12">
-                <img src="data:image/png;base64,${category.image }" class="img-fluid" style="height: 100%;" />
+                <img src="${category.image }" class="img-fluid" style="height: 100%;" />
               </div>
 
               <div class="d-flex col-md-9 flex-md-row col-sm-8 flex-column mt-2">
@@ -102,6 +103,7 @@
                   <button class="btn btn-block btn-danger mb-3" data-bs-toggle="modal" data-bs-target="#modal-warning">
                     Xoá
                   </button>
+                  
                   <!-- Modal Content -->
                   <div class="modal fade" id="modal-warning" tabindex="-1" role="dialog" aria-labelledby="modal-warning"
                     aria-hidden="true">
@@ -125,6 +127,7 @@
                     </div>
                   </div>
                   <!-- End of Modal Content -->
+                  
                 </div>
               </div>
             </div>
@@ -220,14 +223,12 @@
                             
                             <td><span class="fw-bold text-warning text-wrap">${product.category.name}</span></td>
                             <td><span class="fw-normal text-wrap">${product.dateAdded}</span></td>
-                            <c:choose>
-							    <c:when test="${!product.images.isEmpty()}">
-							        <td><img src="data:image/png;base64,${product.images.get(0).image}" width=100 height=100 alt="${product.name}"/></td>
-							    </c:when>    
-							    <c:otherwise>
-							       <td><span class="text-wrap"><img src="data:image/png;base64" alt="${product.id}"/></span></td>
-							    </c:otherwise>
-							</c:choose>
+                            
+					        <td>
+					        	<span class="text-wrap">
+						        	<img src="${product.images.isEmpty() ? '' : product.images.get(0).image}" width=100 height=100 alt="${product.name}"/>
+						        </span>
+					        </td>
                             
                             
                             <td class = "text-center">
@@ -288,7 +289,7 @@
             </div>
             
     </div>
-
+	<%@include file="/WEB-INF/views/admin/includes/footer/script.jsp"%>
      </main>
 	
 	<!-- ========== All JS files linkup ========= -->
