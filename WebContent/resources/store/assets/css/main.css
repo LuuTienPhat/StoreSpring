@@ -68,12 +68,17 @@
 .sign-up-form-container{
     max-width: 600px;
 }
-.sign-up-form-container label{
+.input-wrapper label{
     min-width: 150px;
 }
 .sign-up-form-container.flex-1{
     max-width: 1000px;
 }
+
+.user-info-nav{
+	width: 200px;
+}
+
 .nav__submenu-container > div:first-child{
     border-color: transparent;
 }
