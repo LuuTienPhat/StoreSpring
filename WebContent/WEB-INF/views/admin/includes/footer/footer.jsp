@@ -6,7 +6,7 @@
         <div class="col-12 col-md-4 col-xl-6 mb-4 mb-md-0 d-flex align-items-center">
             <p class="mb-0 text-center text-lg-start">
 	            ©<span class="current-year me-2"></span>
-	            <a class="text-primary fw-normal fst-italic text-uppercase fw-bold" href="#" target="_blank">spring store 21</a>
+	            <a class="text-primary fw-normal fst-italic text-uppercase fw-bold" href="#" target="_blank">store spring 21</a>
             </p>
         </div>
         <div class="col-12 col-md-8 col-xl-6 text-center text-lg-start">

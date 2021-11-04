@@ -1,5 +1,6 @@
 package controllers;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -98,25 +99,43 @@ public class CategoryController {
 			BindingResult errors, @RequestParam(value = "image", required = false) MultipartFile image)
 			throws IllegalStateException, IOException, InterruptedException {
 
-		
 		if (category.getName().isEmpty()) {
 			errors.rejectValue("name", "category", "Nhập tên danh mục");
 			model.addAttribute("nameValid", "is-invalid");
 		}
 
 		if (errors.hasFieldErrors("name")) {
+			model.addAttribute("category", category);
 			model.addAttribute("title", "Thêm Danh Mục");
 			return viewsDirectory + "addCategory";
 
 		} else {
 			List<CategoryEntity> categories = getCategories();
-			category.setId(Generate.generateCategoryId(categories));
+			String categoryId = Generate.generateCategoryId(categories);
+			category.setId(categoryId);
 			category.setDateAdded(new Date());
-			
-			if(image.getSize() != 0) {
-				category.setImage(Base64.getEncoder().encodeToString(image.getBytes()));
+
+			if (image.getSize() != 0) {
+				String basePath = uploadFile.getBasePath();
+				String imageFileName = categoryId + UploadFile.getExtension(image.getOriginalFilename());
+				String imagePath = UploadFile.getCategoryBasePath() + imageFileName;
+				category.setImage(imagePath);
+
+				File fileInServer = new File(context.getRealPath("resources\\upload\\categories\\" + imageFileName));
+				File fileInResource = new File(basePath + "/categories/" + imageFileName);
+				if (!fileInServer.exists()) {
+					BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(fileInServer));
+					stream.write(image.getBytes());
+					stream.close();
+				}
+				if (!fileInResource.exists()) {
+					BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(fileInResource));
+					stream.write(image.getBytes());
+					stream.close();
+				}
+				Thread.sleep(5000);
 			}
-			
+
 			Session session = factory.openSession();
 			Transaction t = session.beginTransaction();
 			try {
@@ -139,18 +158,38 @@ public class CategoryController {
 	// DELETE CATEGORY
 	@RequestMapping(value = "/delete/{id}")
 	public String deleteCategory(ModelMap model, @PathVariable("id") String id) {
+
+		/*
+		 * CategoryEntity category = new CategoryEntity(); category.setId(id);
+		 */
+
+		CategoryEntity category = getCategory(id);
+
+		String imageFileName = category.getId() + UploadFile.getExtension(category.getImage());
+
+		String basePath = uploadFile.getBasePath();
+		File fileInServer = new File(context.getRealPath("resources\\upload\\categories\\" + imageFileName));
+		File fileInResource = new File(basePath + "/categories/" + imageFileName);
+		if (fileInServer.exists()) {
+			fileInServer.delete();
+		}
+
+		if (fileInResource.exists()) {
+			fileInResource.delete();
+		}
+
 		Session session = factory.openSession();
 		Transaction t = session.beginTransaction();
-		CategoryEntity category = new CategoryEntity();
-		category.setId(id);
-
+		// session.getTransaction().begin();
 		try {
 			session.delete(category);
 			t.commit();
+			// session.getTransaction().commit();
 			System.out.println("Deleted");
 
 		} catch (Exception e) {
 			t.rollback();
+			// session.getTransaction().rollback();
 			System.out.println("Error");
 			e.printStackTrace();
 		} finally {
@@ -175,12 +214,7 @@ public class CategoryController {
 	public String renderEditCategoryPage(ModelMap model, @PathVariable(value = "id") String id) {
 		System.out.println("Id: " + id);
 
-		Session session = factory.getCurrentSession();
-		String hql = "FROM CategoryEntity WHERE id = '" + id + "'";
-		Query query = session.createQuery(hql);
-		CategoryEntity category = (CategoryEntity) query.list().get(0);
-		System.out.println(category.getDateAdded());
-
+		CategoryEntity category = getCategory(id);
 		model.addAttribute("category", category);
 		model.addAttribute("title", "Sửa danh mục");
 		return viewsDirectory + "editCategory";
@@ -188,14 +222,44 @@ public class CategoryController {
 
 	@RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
 	public String editCategory(ModelMap model, HttpServletRequest request, @PathVariable(value = "id") String id,
-			@RequestParam(value = "image", required = false) MultipartFile image) throws IOException {
+			@RequestParam(value = "image", required = false) MultipartFile image)
+			throws IOException, InterruptedException {
 		System.out.println("Id: " + id);
 
 		CategoryEntity category = getCategory(id);
 		category.setName(request.getParameter("name"));
 		category.setDescription(request.getParameter("description"));
+
 		if (image.getSize() != 0) {
-			category.setImage(Base64.getEncoder().encodeToString(image.getBytes()));
+			String basePath = uploadFile.getBasePath();
+			String oldImageFileName = category.getId() + UploadFile.getExtension(category.getImage());
+			String imageFileName = category.getId() + UploadFile.getExtension(image.getOriginalFilename());
+			String imagePath = UploadFile.getCategoryBasePath() + imageFileName;
+			category.setImage(imagePath);
+			
+			File oldFileInServer = new File(context.getRealPath("resources\\upload\\categories\\" + oldImageFileName));
+			File oldFileInResource = new File(basePath + "/categories/" + oldImageFileName);
+
+			File fileInServer = new File(context.getRealPath("resources\\upload\\categories\\" + imageFileName));
+			File fileInResource = new File(basePath + "/categories/" + imageFileName);
+			
+			if(oldFileInResource.exists()) {
+				oldFileInResource.delete();
+			}
+			
+			if(oldFileInServer.exists()) {
+				oldFileInServer.delete();
+			}
+			
+			BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(fileInServer));
+			stream.write(image.getBytes());
+			stream.close();
+
+			BufferedOutputStream stream2 = new BufferedOutputStream(new FileOutputStream(fileInResource));
+			stream2.write(image.getBytes());
+			stream2.close();
+
+			Thread.sleep(2000);
 		}
 
 		Session session = factory.openSession();
@@ -217,19 +281,21 @@ public class CategoryController {
 
 	// GET CATEGORIES FROM SQL
 	public List<CategoryEntity> getCategories() throws IOException {
-		Session session = factory.getCurrentSession();
+		Session session = factory.openSession();
 		String hql = "FROM CategoryEntity";
 		Query query = session.createQuery(hql);
 		List<CategoryEntity> categories = query.list();
+		session.close();
 		return categories;
 	}
 
 	// GET SINGLE CATEGORY
 	public CategoryEntity getCategory(String id) {
-		Session session = factory.getCurrentSession();
+		Session session = factory.openSession();
 		String hql = "FROM CategoryEntity WHERE id = '" + id + "'";
 		Query query = session.createQuery(hql);
 		CategoryEntity category = (CategoryEntity) query.list().get(0);
+		session.close();
 		return category;
 	}
 }

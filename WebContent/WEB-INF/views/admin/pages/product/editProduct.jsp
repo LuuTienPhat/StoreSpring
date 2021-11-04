@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c"%>
+<!-- ========== Tag Lib ========= -->
+<%@include file="/WEB-INF/views/admin/includes/header/taglib.jsp"%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -28,7 +29,7 @@
         <main class="content">
 			<%@include file="/WEB-INF/views/admin/includes/nav/navbar.jsp"%>
            
-            <!-- <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
+           <!--  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
                 <div>
                     <div class="dropdown">
                         <button class="btn btn-secondary d-inline-flex align-items-center me-2 dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -94,7 +95,7 @@
             
             <div class="row pt-4">
                 <div class="col-12 col-xl-8">
-                    <div class="card card-body border-0 shadow mb-4">
+                    <div class="card card-body border-0 shadow">
                         <h2 class="h5 mb-4">Thông tin sản phẩm</h2>
                         <form action ="${applicationScope.productPage }/edit/${product.id}" method = "post" enctype="multipart/form-data">
                             <div class="row">
@@ -208,7 +209,14 @@
                         <div class="col-12 mb-4">
                             <div class="card shadow border-0 text-center p-0">
                                 <div class="rounded-top">
-                                	<img src="data:image/png;base64,${product.images.get(0).image}" class="img-fluid">
+                                <c:choose>
+				                	<c:when test="${product.images.size() != 0 }">
+				              			<img src="data:image/png;base64, ${product.images[0].image }" class="img-fluid" style="height: 100%;" alt="${product.name}" />  		
+				                	</c:when>
+				                	<c:otherwise>
+				                		<img src="data:image/png;base64" class="img-fluid" alt="${product.name}" style="height: 100%;" />  		
+				                	</c:otherwise>
+				                </c:choose>
                                 </div>
                                 <div class="card-body pb-5">
                                     <!-- <img src="../assets/img/team/profile-picture-1.jpg" class="avatar-xl rounded-circle mx-auto mt-n7 mb-4" alt="Neil Portrait"> -->
@@ -256,7 +264,7 @@
                     </div>
                 </div>
             </div>
-
+		<%@include file="/WEB-INF/views/admin/includes/footer/footer.jsp"%>
         </main>
         
 <!-- ========== All JS files linkup ========= -->

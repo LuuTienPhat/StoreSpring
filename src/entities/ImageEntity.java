@@ -2,6 +2,7 @@ package entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -12,7 +13,8 @@ import javax.persistence.Table;
 public class ImageEntity {
 	@Id
 	@Column(name = "id")
-	private String id;
+	@GeneratedValue
+	private int id;
 
 	@ManyToOne()
 	@JoinColumn(name = "product_id")
@@ -21,11 +23,11 @@ public class ImageEntity {
 	@Column(name = "image")
 	private String image;
 
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 

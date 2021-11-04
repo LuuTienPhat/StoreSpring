@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c"%>
+<!-- ========== Tag Lib ========= -->
+<%@include file="/WEB-INF/views/admin/includes/header/taglib.jsp"%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -9,7 +10,6 @@
 
 <!-- ========== Meta Tags ========= -->
 <%@include file="/WEB-INF/views/admin/includes/header/head.jsp"%>
-<title>${title}</title>
 
 <!-- ========== Favicon linkup ========= -->
 <%@include file="/WEB-INF/views/admin/includes/header/favicon.jsp"%>
@@ -38,8 +38,8 @@
               </svg>
             </a>
           </li>
-          <li class="breadcrumb-item"><a href="#">Volt</a></li>
-          <li class="breadcrumb-item active" aria-current="page">Modals</li>
+          <li class="breadcrumb-item"><a href="#">Sản phẩm</a></li>
+          <li class="breadcrumb-item active" aria-current="page">${product.id}</li>
         </ol>
       </nav>
       <div class="d-flex justify-content-between w-100 flex-wrap">
@@ -66,8 +66,15 @@
                       clip-rule="evenodd"></path>
                   </svg>
                 </div> -->
-              <div class=" col-md-3 col-sm-4 col-12">
-                <img src="data:image/png;base64, ${product.images[0].image }" class="img-fluid" style="height: 100%;" />
+              <div class=" col-md-3 col-sm-4 col-12">\
+                <c:choose>
+                	<c:when test="${product.images.size() != 0 }">
+              			<img src="${product.images[0].image }" class="img-fluid" style="height: 100%;" alt="${product.name}" />  		
+                	</c:when>
+                	<c:otherwise>
+                		<img src="" class="img-fluid" alt="${product.name}" style="height: 100%;" />  		
+                	</c:otherwise>
+                </c:choose>
               </div>
 
               <div class="d-flex col-md-9 flex-md-row col-sm-8 flex-column mt-2">
@@ -557,7 +564,7 @@
       </div>
 
     </div>
-
+	<%@include file="/WEB-INF/views/admin/includes/footer/footer.jsp"%>
      </main>
 	
 	<!-- ========== All JS files linkup ========= -->
