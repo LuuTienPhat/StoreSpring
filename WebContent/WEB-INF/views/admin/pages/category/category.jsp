@@ -1,8 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c"%>
-<%@ taglib uri = "http://www.springframework.org/tags/form" prefix="form"%>
-<%@ taglib prefix="tg" tagdir="/WEB-INF/tags"%>
+<!-- ========== Tag Lib ========= -->
+<%@include file="/WEB-INF/views/admin/includes/header/taglib.jsp"%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -18,18 +17,20 @@
 
 <!-- ========== All CSS files linkup ========= -->
 <%@include file="/WEB-INF/views/admin/includes/header/styles.jsp"%>
-
-<script
-	src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-
 </head>
 
 <body>
-
-
 <%@include file="/WEB-INF/views/admin/includes/nav/sidebar.jsp"%>
-    
+
+<jsp:useBean id="pagedListHolder" scope="request"
+	type="org.springframework.beans.support.PagedListHolder" />
+<c:url
+	value="admin/categories/"
+	var="pagedLink">
+	<c:param name="p" value="~" />
+</c:url>
+
+
 <main class="content">
 	<%@include file="/WEB-INF/views/admin/includes/nav/navbar.jsp"%>
 	
@@ -44,8 +45,8 @@
                                     </svg>
                                 </a>
                             </li>
-                            <li class="breadcrumb-item"><a href="#">Volt</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">Quản lý danh mục sản phẩm</li>
+                            <li class="breadcrumb-item">Danh mục</li>
+                            <li class="breadcrumb-item active" aria-current="page">Quản lý</li>
                         </ol>
                     </nav>
                     <h2 class="h4">Danh mục sản phẩm</h2>
@@ -100,15 +101,6 @@
                     </div>
                 </div>
             </div>
-            
-           	<div id="pagination">
-           	<jsp:useBean id="pagedListHolder" scope="request" type="org.springframework.beans.support.PagedListHolder" />
-				<c:url value="admin/categories" var="pagedLink">
-					<c:param name="p" value="~" />
-				</c:url>
-			<tg:paging pagedListHolder="${pagedListHolder}"
-				pagedLink="${pagedLink}" />
-				</div>
 				
             <div class="card card-body border-0 shadow table-wrapper table-responsive overflow-hidden">
                 <table class="table table-hover">
@@ -118,6 +110,7 @@
                             <th class="border-gray-200">Tên danh mục</th>
                             <th class="border-gray-200">Hình ảnh</th>						
                             <th class="border-gray-200">Mô tả</th>
+                            <th class="border-gray-200">Ngày thêm</th>
                             <th class="border-gray-200 rounded-end"></th>
                         </tr>
                     </thead>
@@ -126,13 +119,17 @@
                         <c:forEach items="${pagedListHolder.pageList}" var="category" varStatus="i">
                         <tr>
                             <td>
-                                <a href="#" class="fw-bold">
+                                <a href="${applicationScope.categoryPage}/${category.id}" class="fw-bold">
                                     ${category.id}
                                 </a>
                             </td>
                             <td><span class="fw-normal">${category.name}</span></td>
-                            <td><img src="data:image/png;base64,${category.image}" width=100 height=100 alt="${category.name}"/></td>
+                            <td><img src="${category.image}" width=100 height=100 alt="${category.name}"/></td>
                             <td><span class="fw-normal text-wrap">${category.description}</span></td>
+                            <td><span class="fw-normal text-wrap">
+                            	<fmt:setLocale value="vi_VN" scope="session"/>
+                            	<fmt:formatDate value="${category.dateAdded}" pattern="dd/MM/yyyy"/>
+                            </span></td>
                             <td class = "text-center">
                                 <div class="btn-group">
                                     <button class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-0" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -141,9 +138,20 @@
                                         <span class="visually-hidden">Toggle Dropdown</span>
                                     </button>
                                     <div class="dropdown-menu py-0">
-                                        <a class="dropdown-item rounded-top" href="${applicationScope.categoryPage}/${category.id}"><span class="fas fa-eye me-2"></span>Chi tiết</a>
-                                        <a class="dropdown-item" href="${applicationScope.categoryPage}/edit/${category.id}"><span class="fas fa-edit me-2"></span>Chỉnh sửa</a>
-                                        <a class="dropdown-item text-danger rounded-bottom" href="${applicationScope.categoryPage}/delete/${category.id}"><span class="fas fa-trash-alt me-2"></span>Xoá</a>
+                                    	
+										<a class="dropdown-item rounded-top" href="${applicationScope.categoryPage}/${category.id}">
+										<i class="bi bi-eye-fill dropdown-icon text-gray-400 me-2 icon-sm"></i>
+										Chi tiết</a>
+                                    
+                                        
+                                        <a class="dropdown-item text-warning" href="${applicationScope.categoryPage}/edit/${category.id}">
+	                                        <i class="bi bi-pencil-square dropdown-icon me-2"></i>
+	                                        Chỉnh sửa
+                                        </a>
+                                        
+                                        <a class="dropdown-item text-danger rounded-bottom text-danger" href="${applicationScope.categoryPage}/delete/${category.id}">
+                                        	<i class="bi bi-trash2-fill dropdown-icon me-2"></i>
+                                        	Xoá</a>
                                     </div>
                                 </div>
                             </td>
@@ -151,37 +159,16 @@
                       </c:forEach>      
                     </tbody>
                 </table>
-                <div class="card-footer px-3 border-0 d-flex flex-column flex-lg-row align-items-center justify-content-between">
-                    <nav aria-label="Page navigation example">
-                        <ul class="pagination mb-0">
-                            <li class="page-item">
-                                <a class="page-link" href="#">Previous</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">1</a>
-                            </li>
-                            <li class="page-item active">
-                                <a class="page-link" href="#">2</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">3</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">4</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">5</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">Next</a>
-                            </li>
-                        </ul>
-                    </nav>
-                    <div class="fw-normal small mt-4 mt-lg-0">Showing <b>5</b> out of <b>25</b> entries</div>
+                
+                <div>
+                	<tg:adminPaging pagedListHolder="${pagedListHolder}"
+					pagedLink="${pagedLink}" />
                 </div>
+                
+                
             </div>
             
-
+		<%@include file="/WEB-INF/views/admin/includes/footer/footer.jsp"%>
 
 </main>
 
