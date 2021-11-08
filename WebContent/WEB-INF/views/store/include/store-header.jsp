@@ -8,8 +8,61 @@
 <%@taglib uri="http://java.sun.com/jstl/core_rt" prefix="c"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="f"%>
 </head>
+<style>
+    .msg {
+        position: fixed;
+        top: 200px;
+        right: 30px;
+        transform: translateX(300px);
+        transition: all .3s ease-out;
+        z-index: 999999;
+    }
+    .msg-detail{
+        color: white;
+        width: 220px;
+        padding: 12px;
+    }
+    .msg.active {
+        transform: translateX(0);
+        transition: all .3s ease-out;
+    }
+</style>
 <body>
 	<div class="overcoat"></div>
+	<c:if test="${message!=null}">
+	<div class="msg">
+        <div class="msg-detail flex justify-between items-center bg-indigo-400 mb-4">
+            <span class="block mr-2">${message}</span>
+            <i class="fas fa-times cursor-pointer text-2xl"></i>
+        </div>
+    </div>
+    
+    <script type="text/javascript">
+        var a = document.querySelectorAll(".msg i");
+        for (var i = 0; i < a.length; i++) {
+            a[i].addEventListener("click", function (e) {
+                e.target.parentNode.style.display = "none";
+            })
+        }
+        document.addEventListener('readystatechange', event => {
+            setTimeout(function(){}, 3000);
+            const msgs = document.querySelectorAll(".msg");
+            for (var i = 0; i < msgs.length; i++) {
+                msgs[i].classList.add("active");
+            }
+        });
+        setTimeout(function(){
+            const msgs = document.querySelectorAll(".msg");
+            for (var i = 0; i < msgs.length; i++) {
+                if(msgs[i].classList.contains("active")){
+                    msgs[i].classList.remove("active");
+                }
+                
+            }
+         }, 20000);
+    </script>
+	</c:if>
+	
 	<header class="header">
 		<ul class="nav__top flex justify-end bg-indigo-300">
 			<li><a href="#"

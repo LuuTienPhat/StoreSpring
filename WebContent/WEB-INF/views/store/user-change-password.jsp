@@ -46,7 +46,9 @@
 			</div>
 			<div class="flex justify-between info-wrapper">
 				<div class="p-4 pt-0 border-2 mr-4 border-gray-200 user-info-nav">
-					<div class="my-2 mt-3 text-center text-indigo-400 text-xl font-bold">${customerEntity.firstname} ${customerEntity.lastname}</div>
+					<div
+						class="my-2 mt-3 text-center text-indigo-400 text-xl font-bold">${customerEntity.firstname}
+						${customerEntity.lastname}</div>
 					<div class="mb-1">
 						<a href="${applicationScope.userInfoPage}"
 							class="hover:text-indigo-400 transition-colors">Thông tin
@@ -108,7 +110,8 @@
 
 						</div>
 						<div class="mb-2 flex justify-end">
-							<label for="showPassword" class=""><input type="checkbox" class="mr-1" id="showPassword">Hiện mật khẩu</label>
+							<label for="showPassword" class=""><input type="checkbox"
+								class="mr-1" id="showPassword">Hiện mật khẩu</label>
 						</div>
 						<button
 							class="w-full px-4 py-2 font-bold bg-indigo-300 hover:bg-indigo-400 transition-colors text-white rounded-md">THAY
@@ -132,17 +135,18 @@
 				e.target.style.display = "none";
 			})
 		}
-		
+
 		const show = document.getElementById("showPassword");
-		const inputPasswordField = document.querySelectorAll('input[type="password"]');
-		show.addEventListener("click", function(e){
-			if(this.checked){
-				for(var i=0; i< inputPasswordField.length; i++){
-					inputPasswordField[i].type="text";
+		const inputPasswordField = document
+				.querySelectorAll('input[type="password"]');
+		show.addEventListener("click", function(e) {
+			if (this.checked) {
+				for (var i = 0; i < inputPasswordField.length; i++) {
+					inputPasswordField[i].type = "text";
 				}
-			}else{
-				for(var i=0; i< inputPasswordField.length; i++){
-					inputPasswordField[i].type="password";
+			} else {
+				for (var i = 0; i < inputPasswordField.length; i++) {
+					inputPasswordField[i].type = "password";
 				}
 			}
 		});

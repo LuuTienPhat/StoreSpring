@@ -184,6 +184,16 @@
     .detail__desc{
         margin: 0 !important;
     }
+    .check-out-wrapper{
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .check-out-wrapper .sign-up-form-container:first-child{
+        max-width: 100%;
+        margin: 0 !important;
+        margin-bottom: 8px !important;
+    }
 }
 
 @media (max-width: 739px){
