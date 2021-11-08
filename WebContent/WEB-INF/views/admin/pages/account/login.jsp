@@ -9,7 +9,6 @@
 
   <!-- ========== Meta Tags ========= -->
   <%@include file="/WEB-INF/views/admin/includes/header/head.jsp" %>
-  <title>Admin Log In</title>
 
   <!-- ========== Favicon linkup ========= -->
   <%@include file="/WEB-INF/views/admin/includes/header/favicon.jsp" %>
