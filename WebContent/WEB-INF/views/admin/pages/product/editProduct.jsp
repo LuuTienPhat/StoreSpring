@@ -97,19 +97,12 @@
                 <div class="col-12 col-xl-8">
                     <div class="card card-body border-0 shadow">
                         <h2 class="h5 mb-4">Thông tin sản phẩm</h2>
-                        <form action ="${applicationScope.productPage }/edit/${product.id}" method = "post" enctype="multipart/form-data">
+                        <form:form action ="${applicationScope.productPage }/edit/${product.id}" method = "post" modelAttribute="product" enctype="multipart/form-data">
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <div>
                                         <label for="first_name">#</label>
-                                        <!-- <div class="input-group"> -->
-                                        <!-- <span class="input-group-text">
-                                        	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hash" viewBox="0 0 16 16">
-												  <path d="M8.39 12.648a1.32 1.32 0 0 0-.015.18c0 .305.21.508.5.508.266 0 .492-.172.555-.477l.554-2.703h1.204c.421 0 .617-.234.617-.547 0-.312-.188-.53-.617-.53h-.985l.516-2.524h1.265c.43 0 .618-.227.618-.547 0-.313-.188-.524-.618-.524h-1.046l.476-2.304a1.06 1.06 0 0 0 .016-.164.51.51 0 0 0-.516-.516.54.54 0 0 0-.539.43l-.523 2.554H7.617l.477-2.304c.008-.04.015-.118.015-.164a.512.512 0 0 0-.523-.516.539.539 0 0 0-.531.43L6.53 5.484H5.414c-.43 0-.617.22-.617.532 0 .312.187.539.617.539h.906l-.515 2.523H4.609c-.421 0-.609.219-.609.531 0 .313.188.547.61.547h.976l-.516 2.492c-.008.04-.015.125-.015.18 0 .305.21.508.5.508.265 0 .492-.172.554-.477l.555-2.703h2.242l-.515 2.492zm-1-6.109h2.266l-.515 2.563H6.859l.532-2.563z"/>
-												</svg>
-											</span> -->
-                                        	<input class="form-control" id="id" type="text" value = "${product.id }" disabled>
-                                    	<!-- </div> -->
+                                        <form:input class="form-control" id="id" type="text" value="${product.id}" path="id" readonly="true" />
                                     </div>
                                 </div>
                                 <div class="col-md-6 mb-3">
@@ -123,7 +116,7 @@
 												</svg>
 											</span>
 											
-                                        	<input class="form-control" id="productName" name = "name" type="text" value = "${product.name}" required>
+                                        	<form:input path="name" class="form-control" id="productName"  type="text" value = "${product.name}" />
                                     		
                                     	</div>	
                                     </div>
@@ -134,13 +127,13 @@
                                 <div class="col-md-6 mb-3">
                                     <div>
                                         <label for="quantity">Số lượng</label>
-                                        <input class="form-control" id="quantity" name = "quantity" type="text" value = "${product.quantity }" required>
+                                        <form:input class="form-control" id="quantity" path = "quantity" type="text" value = "${product.quantity }" />
                                     </div>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <div>
                                         <label for="unit">Đơn vị tính</label>
-                                        <input class="form-control" id="unit" name = "unit" type="text" value = "${product.unit}" required>
+                                        <form:input class="form-control" id="unit" path = "unit" type="text" value = "${product.unit}" />
                                     </div>
                                 </div>
                             </div>
@@ -156,22 +149,18 @@
 										  <path d="M0 5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V5zm3 0a2 2 0 0 1-2 2v4a2 2 0 0 1 2 2h10a2 2 0 0 1 2-2V7a2 2 0 0 1-2-2H3z"/>
 										</svg>
 												</span>
-                                        <input class="form-control" id="price" name = "price" type="text" value = "${product.price }" required>
+                                        <form:input class="form-control" id="price" path="price" type="text" label="<fmt:formatNumber value='${product.price}' type='number' groupingUsed = 'false' />" />
                                     	</div>
                                     </div>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <div>
                                         <label for="unit">Danh mục</label>
-                                        <select name = "categoryId" class="form-select" id="category" aria-describedby="catgoryHelp" required>
-					                  	<option value="">Chọn danh mục sản phẩm</option>
-					                  	<c:forEach items="${categories}" var="category" varStatus="i">
-					                  		<option value="${category.id}" ${product.category.id == category.id ?  'selected' : ''  } >
-					                  			${category.name}
-					                  		</option>
-					                  	</c:forEach>
-					                  </select>
-                                        <%-- <input class="form-control" id="unit" name = "unit" type="text" value = "${product.unit}" required> --%>
+                                        <form:select path="category.id"  class="form-select ${categoryValid }" id="category" aria-describedby="catgoryHelp" >
+	                                     	<form:option value="">Chọn danh mục của sản phẩm</form:option>
+	                                     	<form:options items="${categories}" itemLabel="name" itemValue="id"/>
+	                                 	</form:select>
+	                                 	<form:errors path = "category" class="invalid-feedback"/>
                                     </div>
                                 </div>
                             </div>
@@ -185,15 +174,17 @@
                                             <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
                                             </svg>
                                         </span>
-                                        <input value ="${product.dateAdded}" class="form-control" id="dateAdded" type="text" disabled>                                               
+                                        
+                                        <form:input path="dateAdded" label ="<fmt:formatDate value='${product.dateAdded}' pattern='dd/MM/yyyy' />" class="form-control" id="dateAdded" type="text" readonly="true" />                                               
                                      </div>
                                 </div>
                             </div>
+                            
                             <div class="row">
                                 <div class="col-md-12 mb-3">
                                     <div class="form-group">
                                         <label for="">Mô tả</label>
-                                        <textarea class="form-control" id="description" name = "description" rows="4">${product.description}</textarea>
+                                        <form:textarea class="form-control" id="description" path="description" rows="4"></form:textarea>
                                     </div>
                                 </div>
                             </div>
@@ -209,14 +200,7 @@
                         <div class="col-12 mb-4">
                             <div class="card shadow border-0 text-center p-0">
                                 <div class="rounded-top">
-                                <c:choose>
-				                	<c:when test="${product.images.size() != 0 }">
-				              			<img src="data:image/png;base64, ${product.images[0].image }" class="img-fluid" style="height: 100%;" alt="${product.name}" />  		
-				                	</c:when>
-				                	<c:otherwise>
-				                		<img src="data:image/png;base64" class="img-fluid" alt="${product.name}" style="height: 100%;" />  		
-				                	</c:otherwise>
-				                </c:choose>
+                               		<img src="${product.images.size() != 0 ? product.images[0].image : '' }" class="img-fluid" style="height: 100%;" alt="${product.name}" />  		
                                 </div>
                                 <div class="card-body pb-5">
                                     <!-- <img src="../assets/img/team/profile-picture-1.jpg" class="avatar-xl rounded-circle mx-auto mt-n7 mb-4" alt="Neil Portrait"> -->
@@ -249,7 +233,7 @@
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-paperclip icon text-gray-500 me-2" viewBox="0 0 16 16">
 												  <path d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0V3z"/>
 												</svg>
-                                                <input type="file" name = "image">
+                                                <input type="file" name="image" >
                                                 <div class="d-md-block text-left">
                                                     <div class="fw-normal text-dark mb-1">Chọn hình ảnh</div>
                                                     <div class="text-gray small">JPG, GIF hoặc PNG. Kích thước tối đa 800K</div>
@@ -260,7 +244,7 @@
                                 </div>
                             </div>
                         </div>
-                        </form>
+                        </form:form>
                     </div>
                 </div>
             </div>
