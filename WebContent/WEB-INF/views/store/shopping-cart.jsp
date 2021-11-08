@@ -30,16 +30,18 @@
 								<input type="text" name="product_id" value="${c.product.id}"
 									class="hidden" />
 								<td class="card-list__table-image"><a
-									href="${applicationScope.productDetailPage}"
+									href="${applicationScope.productDetailPage}/${c.product.id}"
 									class="table-image__container"> <img
 										<%-- src="<c:url value='/resources/store/assets/img/sp1.jpeg'/>" --%>
 										src="data:image/png;base64,${c.product.images[0].image}" alt="${c.product.id}"/>
 										<!-- alt=""> -->
 								</a></td>
 								<!-- desc = tên sản phẩm + màu sắc + kích cỡ (nếu có) -->
-								<td class="card-list__table-desc"><a
-									href="${applicationScope.productDetailPage}"
-									class="hover:text-indigo-400">${c.product.name}</a></td>
+								<td class="card-list__table-desc"  style="text-align: left;"><a
+									href="${applicationScope.productDetailPage}/${c.product.id}"
+									class="hover:text-indigo-400">${c.product.name}</a>
+									<div>Tồn kho: ${c.product.quantity}</div>
+									</td>
 								<td class="cart-list__price font-bold">${c.product.price}đ</td>
 								<td class="cart-list__quantity">
 									<div class="input-group flex align-items-center">

@@ -17,7 +17,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import entities.CartDetailEntity;
 import entities.CategoryEntity;
+import entities.CustomerEntity;
 import entities.ImageEntity;
 import entities.ProductEntity;
 
@@ -28,12 +30,25 @@ public class MainController {
 	@Autowired
 	SessionFactory factory;
 	@RequestMapping("")
-	public String store(ModelMap model, HttpSession session) {
+	public String store(ModelMap model, HttpSession httpSession) {
 		/* model.addAttribute("list", getListProduct()); */
 		model.addAttribute("list", getTop16RecentProduct());
-		session.setAttribute("listCategory", getListCategory());
+		httpSession.setAttribute("listCategory", getListCategory());
+		int sum = 0;
+		for (CartDetailEntity c : this.getCustomerByUsername((String) httpSession.getAttribute("customerUsername")).getCartDetails()) {
+			sum = sum + c.getQuantity();
+		}
+		System.out.println(sum);
+		httpSession.setAttribute("customerTotalQuantity", sum);
 		/* addProductsForTesting(); */
 		return "store/index";
+	}
+	public CustomerEntity getCustomerByUsername(String userName) {
+		Session session = factory.getCurrentSession();
+		String hql = "FROM CustomerEntity c WHERE c.username =:userName";
+		Query query = session.createQuery(hql);
+		CustomerEntity customer = (CustomerEntity) query.setParameter("userName", userName).uniqueResult();
+		return customer;
 	}
 	public List<ProductEntity> getListProduct() {
 		/* System.out.println("getListCartDetail"); */

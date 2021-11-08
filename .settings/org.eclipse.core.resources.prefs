@@ -9,4 +9,5 @@ encoding//src/controllers/OrderController.java=UTF-8
 encoding//src/controllers/ProductController.java=UTF-8
 encoding//src/controllers/UploadController.java=UTF-8
 encoding//src/entities/AdminEntity.java=UTF-8
+encoding//src/entities/OrderDetailEntity.java=UTF-8
 encoding//src/models/Account.java=UTF-8
