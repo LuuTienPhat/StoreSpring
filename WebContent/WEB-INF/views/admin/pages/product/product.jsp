@@ -178,7 +178,7 @@
                                     <i class="bi bi-pencil-square dropdown-icon me-2"></i>
                                     Chỉnh sửa
                                  </a>
-                                 <a class="dropdown-item text-danger rounded-bottom" data-bs-toggle="modal" data-bs-target="#modal-warning">
+                                 <a id="btnDelete" class="dropdown-item text-danger rounded-bottom" data-bs-toggle="modal" data-bs-target="#modal-warning" data-id="${product.id}">
                                     <i class="bi bi-trash2-fill dropdown-icon me-2"></i>
                                     Xoá
                                  </a>
@@ -212,7 +212,7 @@
                <!-- <small class="my-0 mt-4 text-wrap">Hãy chắc chắn sản phẩm đó không tồn tại trong các hoá đơn hoặc đơn hàng.</small> -->
              </div>
              <div class="modal-footer">
-               <a type="button" class="btn btn-danger" href="${applicationScope.productPage}/delete/${product.id}">Đồng ý</a>
+               <a type="button" class="btn btn-danger" id="btnConfirm" href="">Đồng ý</a>
                <button type="button" class="btn btn-link text-gray-600 ms-auto"
                  data-bs-dismiss="modal">Đóng</button>
              </div>
@@ -223,6 +223,19 @@
 
       <!-- ========== All JS files linkup ========= -->
       <%@include file="/WEB-INF/views/admin/includes/footer/script.jsp"%>
-
+		
+		<script type="text/javascript">
+   		const btnDeletes = document.querySelectorAll("#btnDelete");
+   		
+   		btnDeletes.forEach(btnDelete => {
+   			btnDelete.addEventListener('click', () => {
+   	   			let productId = btnDelete.dataset.id;
+   	   			const btnConfirm = document.querySelector("#btnConfirm");
+   	   			btnConfirm.href = "<c:out value='${applicationScope.productPage}'/>/delete/" + productId;
+   	   		})
+   		})
+   		
+   </script>
    </body>
+   
 </html>

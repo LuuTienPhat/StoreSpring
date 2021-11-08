@@ -1,8 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c"%>
-<%@ taglib uri = "http://www.springframework.org/tags/form" prefix="form"%>
-<%@ taglib prefix="tg" tagdir="/WEB-INF/tags"%>
+<!-- ========== Tag Lib ========= -->
+<%@include file="/WEB-INF/views/admin/includes/header/taglib.jsp"%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -17,15 +16,16 @@
 
 <!-- ========== All CSS files linkup ========= -->
 <%@include file="/WEB-INF/views/admin/includes/header/styles.jsp"%>
-
-<script
-	src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-
 </head>
 
 <body>
-
+<jsp:useBean id="pagedListHolder" scope="request"
+	type="org.springframework.beans.support.PagedListHolder" />
+<c:url
+	value="admin/categories/"
+	var="pagedLink">
+	<c:param name="p" value="~" />
+</c:url>
 
 <%@include file="/WEB-INF/views/admin/includes/nav/sidebar.jsp"%>
     
@@ -43,8 +43,8 @@
                                     </svg>
                                 </a>
                             </li>
-                            <li class="breadcrumb-item"><a href="#">Volt</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">${title}</li>
+                            <li class="breadcrumb-item">Khách hàng</li>
+                            <li class="breadcrumb-item active" aria-current="page"><a href="${applicationScope.customerPage }">${title}</a></li>
                         </ol>
                     </nav>
                     <h2 class="h4">Khách hàng</h2>
@@ -123,7 +123,7 @@
                     </div>
                 </div>
             </div>
-            <div class="card card-body shadow border-0 table-wrapper table-responsive">
+            <div class="card card-body shadow border-0 table-wrapper table-responsive overflow-hidden">
                 <div class="d-flex mb-3">
                     <select class="form-select fmxw-200" aria-label="Message select example">
                         <option selected="selected">Bulk Action</option>
@@ -153,7 +153,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                    <c:forEach items="${customers}" var="customer">
+                    <c:forEach items="${pagedListHolder.pageList}" var="customer">
                         <tr>
                             <td>
                                 <div class="form-check dashboard-check"><input class="form-check-input" type="checkbox" value id="userCheck1">
@@ -227,62 +227,34 @@
                                            
                                             Send E-Mail
                                         </a>
-                                        <a class="dropdown-item d-flex align-items-center" href="${applicationScope.orderPage }/${order.id}">
+                                        <a class="dropdown-item d-flex align-items-center" href="${applicationScope.customerPage }/${customer.id}">
                                             <svg class="dropdown-icon text-gray-400 me-2" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
                                                 <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
                                             </svg>
                                             Xem chi tiết
                                         </a>
-                                        <a class="dropdown-item d-flex align-items-center" href="#">
+                                        <!-- <a class="dropdown-item d-flex align-items-center" href="#">
                                             <svg class="dropdown-icon text-danger me-2" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M11 6a3 3 0 11-6 0 3 3 0 016 0zM14 17a6 6 0 00-12 0h12zM13 8a1 1 0 100 2h4a1 1 0 100-2h-4z"/>
                                             </svg>
-                                            Suspend</a>
+                                            Suspend</a> -->
                                     </div>
                                 </div>
-                                <svg class="icon icon-xs text-danger ms-1" title="Delete" data-bs-toggle="tooltip" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <!-- <svg class="icon icon-xs text-danger ms-1" title="Delete" data-bs-toggle="tooltip" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
-                                </svg>
+                                </svg> -->
                             </td>
                         </tr>
                         </c:forEach>
                         </tbody>
                 </table>
-                <div class="card-footer px-3 border-0 d-flex flex-column flex-lg-row align-items-center justify-content-between">
-                    <nav aria-label="Page navigation example">
-                        <ul class="pagination mb-0">
-                            <li class="page-item">
-                                <a class="page-link" href="#">Previous</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">1</a>
-                            </li>
-                            <li class="page-item active">
-                                <a class="page-link" href="#">2</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">3</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">4</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">5</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">Next</a>
-                            </li>
-                        </ul>
-                    </nav>
-                    <div class="fw-normal small mt-4 mt-lg-0">Showing
-                        <b>5</b>
-                        out of
-                        <b>25</b>
-                        entries</div>
+                <div>
+                	<tg:adminPaging pagedListHolder="${pagedListHolder}"
+					pagedLink="${pagedLink}" />
                 </div>
             </div>
-         
+         <%@include file="/WEB-INF/views/admin/includes/footer/footer.jsp"%>
 </main>
 
 <!-- ========== All JS files linkup ========= -->

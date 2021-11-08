@@ -58,34 +58,36 @@
                               <div class="row mb-4">
                                  <div class="col-6">
                                     <label for="productName">Tên sản phẩm</label>
-                                    <form:input type="productName" class="form-control" path="name" id="productName" />
+                                    <form:input type="productName" class="form-control ${nameValid }" path="name" id="productName" placeholder="Nhập tên sản phẩm"/>
+                                 	<form:errors path="name" class="invalid-feedback"/>
                                  </div>
                                  <div class="col-6">
                                     <label for="quantity">Số lượng</label>
-                                    <input value="20" type="quantity" class="form-control" name="quantity" id="quantity" placeholder="20" />
+                                    <form:input value="0" type="quantity" class="form-control ${quantityValid }" path="quantity" id="quantity" placeholder="Nhập số lượng" />
+                                 	<form:errors path="quantity" class="invalid-feedback"/>
                                  </div>
                               </div>
                               <div class="row mb-4">
 	                              <div class="col-6">
 	                                 <label for="unit">Đơn vị tính</label>
-	                                 <form:input type="unit" value="cái" class="form-control" path="unit" id="unit" placeholder="cái" />
+	                                 <form:input type="unit" value="cái" class="form-control" path="unit" id="unit" placeholder="Nhập đơn vị tính" />
 	                              </div>
 	                              <div class="col-6">
                                  <label for="price">Giá tiền</label>
-                                 <form:input value="10000" type="price" class="form-control" path="price" id="price" aria-describedby="priceHelp" placeholder="50000" />
+                                 <form:input value="0" type="price" class="form-control ${priceValid }" path="price" id="price" aria-describedby="priceHelp" placeholder="50000" />
+                              	<form:errors path="price" class="invalid-feedback"/>
                               </div>
 	                              
                               </div>
                               
                               <div class="mb-4">
-	                                 <label class="my-1 me-2" for="category">Loại sản phẩm</label>
-	                                 <select name="categoryId" class="form-select" id="category" aria-describedby="catgoryHelp">
-	                                    <option value="">Chọn danh mục sản phẩm</option>
-	                                    <c:forEach items="${categories}" var="category" varStatus="i">
-	                                       <option value="${category.id}">${category.name}</option>
-	                                    </c:forEach>
-	                                 </select>
-	                              </div>
+                                 <label class="my-1 me-2" for="category">Loại sản phẩm</label>
+                                 <form:select path="category.id"  class="form-select ${categoryValid }" id="category" aria-describedby="catgoryHelp" >
+                                     <form:option value="">Chọn danh mục của sản phẩm</form:option>
+                                     <form:options items="${categories}" itemLabel="name" itemValue="id"/>
+                                 </form:select>
+                                 <form:errors path = "category" class="invalid-feedback"/>
+	                          </div>
                               
                               <div class="mb-4">
                                  <label for="textarea">Mô tả</label>
