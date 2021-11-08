@@ -44,7 +44,9 @@
 			</div>
 			<div class="flex justify-between info-wrapper">
 				<div class="p-4 pt-0 border-2 mr-4 border-gray-200 user-info-nav">
-					<div class="my-2 mt-3 text-center text-indigo-400 text-xl font-bold">${customerEntity.firstname} ${customerEntity.lastname}</div>
+					<div
+						class="my-2 mt-3 text-center text-indigo-400 text-xl font-bold">${customerEntity.firstname}
+						${customerEntity.lastname}</div>
 					<div class="mb-1">
 						<span href="${applicationScope.userInfoPage}"
 							class="text-indigo-400 transition-colors">Thông tin tài
@@ -246,6 +248,7 @@
 					</f:form>
 				</div>
 			</div>
+		</div>
 	</main>
 	<%@include file="/WEB-INF/views/store/include/store-footer.jsp"%>
 
