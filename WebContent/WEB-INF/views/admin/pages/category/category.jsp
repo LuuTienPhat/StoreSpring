@@ -10,7 +10,6 @@
 
 <!-- ========== Meta Tags ========= -->
 <%@include file="/WEB-INF/views/admin/includes/header/head.jsp"%>
-<title>Category Manager</title>
 
 <!-- ========== Favicon linkup ========= -->
 <%@include file="/WEB-INF/views/admin/includes/header/favicon.jsp"%>
