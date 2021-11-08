@@ -34,12 +34,14 @@ public class MainController {
 		/* model.addAttribute("list", getListProduct()); */
 		model.addAttribute("list", getTop16RecentProduct());
 		httpSession.setAttribute("listCategory", getListCategory());
-		int sum = 0;
-		for (CartDetailEntity c : this.getCustomerByUsername((String) httpSession.getAttribute("customerUsername")).getCartDetails()) {
-			sum = sum + c.getQuantity();
+		if(httpSession.getAttribute("customerUsername")!=null) {
+			int sum = 0;
+			for (CartDetailEntity c : this.getCustomerByUsername((String) httpSession.getAttribute("customerUsername")).getCartDetails()) {
+				sum = sum + c.getQuantity();
+			}
+			System.out.println(sum);
+			httpSession.setAttribute("customerTotalQuantity", sum);
 		}
-		System.out.println(sum);
-		httpSession.setAttribute("customerTotalQuantity", sum);
 		/* addProductsForTesting(); */
 		return "store/index";
 	}

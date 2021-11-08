@@ -50,24 +50,29 @@ public class GiftController {
 	public String store(ModelMap model, HttpSession httpSession) {
 		httpSession.setAttribute("listCategory", this.getListCategory());
 		model.addAttribute("list", this.getListProduct());
-		int sum = 0;
-		for (CartDetailEntity c : this.getCustomerByUsername((String) httpSession.getAttribute("customerUsername")).getCartDetails()) {
-			sum = sum + c.getQuantity();
+		if(httpSession.getAttribute("customerUsername")!=null) {
+			int sum = 0;
+			for (CartDetailEntity c : this.getCustomerByUsername((String) httpSession.getAttribute("customerUsername")).getCartDetails()) {
+				sum = sum + c.getQuantity();
+			}
+			System.out.println(sum);
+			httpSession.setAttribute("customerTotalQuantity", sum);
 		}
-		System.out.println(sum);
-		httpSession.setAttribute("customerTotalQuantity", sum);
+		
 		return "store/index";
 	}
 
 	@RequestMapping("/")
 	public String store2(ModelMap model, HttpSession httpSession) {
 		httpSession.setAttribute("listCategory", this.getListCategory());
-		int sum = 0;
-		for (CartDetailEntity c : this.getCustomerByUsername((String) httpSession.getAttribute("customerUsername")).getCartDetails()) {
-			sum = sum + c.getQuantity();
+		if(httpSession.getAttribute("customerUsername")!=null) {
+			int sum = 0;
+			for (CartDetailEntity c : this.getCustomerByUsername((String) httpSession.getAttribute("customerUsername")).getCartDetails()) {
+				sum = sum + c.getQuantity();
+			}
+			System.out.println(sum);
+			httpSession.setAttribute("customerTotalQuantity", sum);
 		}
-		System.out.println(sum);
-		httpSession.setAttribute("customerTotalQuantity", sum);
 		model.addAttribute("list", this.getListProduct());
 		return "store/index";
 	}
