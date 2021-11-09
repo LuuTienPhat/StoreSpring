@@ -30,9 +30,14 @@ public class CustomerEntity {
 	private String address;
 	@Column(name = "email")
 	private String email;
+	@Column(name = "date_added")
+	private String dateAdded;
 
 	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<CartDetailEntity> cartDetails;
+	
+	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private List<OrderEntity> orders;
 
 	public String getId() {
 		return id;
@@ -97,6 +102,15 @@ public class CustomerEntity {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	
+
+	public String getDateAdded() {
+		return dateAdded;
+	}
+
+	public void setDateAdded(String dateAdded) {
+		this.dateAdded = dateAdded;
+	}
 
 	public List<CartDetailEntity> getCartDetails() {
 		return cartDetails;
@@ -104,6 +118,14 @@ public class CustomerEntity {
 
 	public void setCartDetails(List<CartDetailEntity> cartDetails) {
 		this.cartDetails = cartDetails;
+	}
+
+	public List<OrderEntity> getOrders() {
+		return orders;
+	}
+
+	public void setOrders(List<OrderEntity> orders) {
+		this.orders = orders;
 	}
 
 }
