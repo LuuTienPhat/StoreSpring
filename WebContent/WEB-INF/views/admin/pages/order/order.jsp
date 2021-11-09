@@ -11,7 +11,6 @@
 
 <!-- ========== Meta Tags ========= -->
 <%@include file="/WEB-INF/views/admin/includes/header/head.jsp"%>
-<title>Category Manager</title>
 
 <!-- ========== Favicon linkup ========= -->
 <%@include file="/WEB-INF/views/admin/includes/header/favicon.jsp"%>
@@ -27,9 +26,16 @@
 
 <body>
 
-
 <%@include file="/WEB-INF/views/admin/includes/nav/sidebar.jsp"%>
-    
+
+<jsp:useBean id="pagedListHolder" scope="request"
+	type="org.springframework.beans.support.PagedListHolder" />
+<c:url
+	value="${requestScope['javax.servlet.forward.request_uri']}"
+	var="pagedLink">
+	<c:param name="p" value="~" />
+</c:url>
+
 <main class="content">
 	<%@include file="/WEB-INF/views/admin/includes/nav/navbar.jsp"%>
 	
@@ -48,7 +54,7 @@
                             <li class="breadcrumb-item active" aria-current="page">Quản lý danh mục sản phẩm</li>
                         </ol>
                     </nav>
-                    <h2 class="h4">Danh mục sản phẩm</h2>
+                    <h2 class="h4">Đơn hàng</h2>
                     <!-- <p class="mb-0">Trang sản phẩm</p> -->
                 </div>
                 <div class="btn-toolbar mb-2 mb-md-0">
@@ -153,7 +159,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                    <c:forEach items="${orders}" var="order">
+                    <c:forEach items="${pagedListHolder.pageList}" var="order">
                         <tr>
                             <td>
                                 <div class="form-check dashboard-check"><input class="form-check-input" type="checkbox" value id="userCheck1">
@@ -246,38 +252,9 @@
                         </c:forEach>
                         </tbody>
                 </table>
-                <div class="card-footer px-3 border-0 d-flex flex-column flex-lg-row align-items-center justify-content-between">
-                    <nav aria-label="Page navigation example">
-                        <ul class="pagination mb-0">
-                            <li class="page-item">
-                                <a class="page-link" href="#">Previous</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">1</a>
-                            </li>
-                            <li class="page-item active">
-                                <a class="page-link" href="#">2</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">3</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">4</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">5</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">Next</a>
-                            </li>
-                        </ul>
-                    </nav>
-                    <div class="fw-normal small mt-4 mt-lg-0">Showing
-                        <b>5</b>
-                        out of
-                        <b>25</b>
-                        entries</div>
-                </div>
+                 <div>
+               		<tg:adminPaging pagedListHolder="${pagedListHolder}" pagedLink="${pagedLink}" />
+           		</div>
             </div>
          
 </main>
