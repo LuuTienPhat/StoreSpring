@@ -157,7 +157,7 @@ public class CategoryController {
 
 	// DELETE CATEGORY
 	@RequestMapping(value = "/delete/{id}")
-	public String deleteCategory(ModelMap model, @PathVariable("id") String id) {
+	public String deleteCategory(ModelMap model,@PathVariable("id") String id) {
 
 		/*
 		 * CategoryEntity category = new CategoryEntity(); category.setId(id);
@@ -200,12 +200,21 @@ public class CategoryController {
 
 	// VIEW DETAILS OF CATEGORY
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public String categoryDetail(ModelMap model, @PathVariable(value = "id") String id) {
+	public String categoryDetail(ModelMap model, HttpServletRequest request, @PathVariable(value = "id") String id) {
 		System.out.println("Id: " + id);
 
 		CategoryEntity category = getCategory(id);
 		model.addAttribute("category", category);
 		model.addAttribute("title", "Danh mục " + category.getName());
+		
+		PagedListHolder pagedListHolder = new PagedListHolder(category.getProducts());
+		int page = ServletRequestUtils.getIntParameter(request, "p", 0);
+		pagedListHolder.setPage(page);
+		pagedListHolder.setMaxLinkedPages(10);
+		pagedListHolder.setPageSize(5);
+		
+		model.addAttribute("pagedListHolder", pagedListHolder);
+		
 		return viewsDirectory + "viewCategory";
 	}
 
@@ -222,61 +231,75 @@ public class CategoryController {
 
 	@RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
 	public String editCategory(ModelMap model, HttpServletRequest request, @PathVariable(value = "id") String id,
-			@RequestParam(value = "image", required = false) MultipartFile image)
+			@RequestParam(value = "image", required = false) MultipartFile image,
+			@ModelAttribute("category") CategoryEntity modifiedCategory, BindingResult errors)
 			throws IOException, InterruptedException {
-		System.out.println("Id: " + id);
 
-		CategoryEntity category = getCategory(id);
-		category.setName(request.getParameter("name"));
-		category.setDescription(request.getParameter("description"));
-
-		if (image.getSize() != 0) {
-			String basePath = uploadFile.getBasePath();
-			String oldImageFileName = category.getId() + UploadFile.getExtension(category.getImage());
-			String imageFileName = category.getId() + UploadFile.getExtension(image.getOriginalFilename());
-			String imagePath = UploadFile.getCategoryBasePath() + imageFileName;
-			category.setImage(imagePath);
-			
-			File oldFileInServer = new File(context.getRealPath("resources\\upload\\categories\\" + oldImageFileName));
-			File oldFileInResource = new File(basePath + "/categories/" + oldImageFileName);
-
-			File fileInServer = new File(context.getRealPath("resources\\upload\\categories\\" + imageFileName));
-			File fileInResource = new File(basePath + "/categories/" + imageFileName);
-			
-			if(oldFileInResource.exists()) {
-				oldFileInResource.delete();
-			}
-			
-			if(oldFileInServer.exists()) {
-				oldFileInServer.delete();
-			}
-			
-			BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(fileInServer));
-			stream.write(image.getBytes());
-			stream.close();
-
-			BufferedOutputStream stream2 = new BufferedOutputStream(new FileOutputStream(fileInResource));
-			stream2.write(image.getBytes());
-			stream2.close();
-
-			Thread.sleep(2000);
+		if (modifiedCategory.getName().isEmpty()) {
+			errors.rejectValue("name", "category", "Nhập tên danh mục");
+			model.addAttribute("nameValid", "is-invalid");
 		}
 
-		Session session = factory.openSession();
-		Transaction t = session.beginTransaction();
-		try {
-			session.merge(category);
-			t.commit();
-			System.out.println("Updated");
+		if (errors.hasFieldErrors("name")) {
+			CategoryEntity category = getCategory(id);
+			modifiedCategory.setImage(category.getImage());
+			model.addAttribute("category", modifiedCategory);
+			model.addAttribute("title", "Thêm Danh Mục");
+			return viewsDirectory + "editCategory";
+		} else {
+			CategoryEntity category = getCategory(id);
+			category.setName(modifiedCategory.getName());
+			category.setDescription(modifiedCategory.getDescription());
 
-		} catch (Exception e) {
-			t.rollback();
-			System.out.println("Error");
-			e.printStackTrace();
-		} finally {
-			session.close();
+			if (image.getSize() != 0) {
+				String basePath = uploadFile.getBasePath();
+				String oldImageFileName = category.getId() + UploadFile.getExtension(category.getImage());
+				String imageFileName = category.getId() + UploadFile.getExtension(image.getOriginalFilename());
+				String imagePath = UploadFile.getCategoryBasePath() + imageFileName;
+				category.setImage(imagePath);
+
+				File oldFileInServer = new File(
+						context.getRealPath("resources\\upload\\categories\\" + oldImageFileName));
+				File oldFileInResource = new File(basePath + "/categories/" + oldImageFileName);
+
+				File fileInServer = new File(context.getRealPath("resources\\upload\\categories\\" + imageFileName));
+				File fileInResource = new File(basePath + "/categories/" + imageFileName);
+
+				if (oldFileInResource.exists()) {
+					oldFileInResource.delete();
+				}
+
+				if (oldFileInServer.exists()) {
+					oldFileInServer.delete();
+				}
+
+				BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(fileInServer));
+				stream.write(image.getBytes());
+				stream.close();
+
+				BufferedOutputStream stream2 = new BufferedOutputStream(new FileOutputStream(fileInResource));
+				stream2.write(image.getBytes());
+				stream2.close();
+
+				Thread.sleep(3000);
+			}
+
+			Session session = factory.openSession();
+			Transaction t = session.beginTransaction();
+			try {
+				session.merge(category);
+				t.commit();
+				System.out.println("Updated");
+
+			} catch (Exception e) {
+				t.rollback();
+				System.out.println("Error");
+				e.printStackTrace();
+			} finally {
+				session.close();
+			}
+			return "redirect:/admin/categories";
 		}
-		return "redirect:/admin/categories";
 	}
 
 	// GET CATEGORIES FROM SQL

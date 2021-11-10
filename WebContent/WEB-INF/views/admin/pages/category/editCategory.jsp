@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c"%>
+<!-- ========== Tag Lib ========= -->
+<%@include file="/WEB-INF/views/admin/includes/header/taglib.jsp"%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -15,11 +16,6 @@
 
 <!-- ========== All CSS files linkup ========= -->
 <%@include file="/WEB-INF/views/admin/includes/header/styles.jsp"%>
-
-<script
-	src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-
 </head>
 
 <body>
@@ -96,18 +92,19 @@
                 <div class="col-12 col-xl-8">
                     <div class="card card-body border-0 shadow mb-4">
                         <h2 class="h5 mb-4">Thông tin danh mục</h2>
-                        <form action ="${applicationScope.categoryPage }/edit/${category.id}" method = "post" enctype="multipart/form-data">
+                        <form:form action ="${applicationScope.categoryPage }/edit/${category.id}" method = "post" modelAttribute="category" enctype="multipart/form-data">
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <div>
                                         <label for="first_name">#</label>
-                                        <input class="form-control" id="id" type="text" value = "${category.id }" disabled>
+                                        <form:input class="form-control" path="id" type="text" value = "${category.id }" readonly="true" />
                                     </div>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <div>
                                         <label for="last_name">Tên danh mục</label>
-                                        <input class="form-control" id="categoryName" name = "name" name = "name" type="text" value = "${category.name}" required>
+                                        <form:input class="form-control ${nameValid }" id="name" path="name" type="text" />
+                                       	<form:errors path="name" class="invalid-feedback"/>
                                     </div>
                                 </div>
                             </div>
@@ -120,7 +117,7 @@
                                             <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
                                             </svg>
                                         </span>
-                                        <input data-datepicker="" value ="${category.dateAdded}" class="form-control" id="dateAdded" type="text" disabled>                                               
+                                        <form:input path="dateAdded" label="<fmt:formatDate value='${category.dateAdded}' pattern='dd/MM/yyyy'/>" class="form-control" id="dateAdded" type="text" readonly="true" />                                               
                                      </div>
                                 </div>
                             </div>
@@ -128,7 +125,7 @@
                                 <div class="col-md-12 mb-3">
                                     <div class="form-group">
                                         <label for="">Mô tả</label>
-                                        <textarea class="form-control" id="description" name = "description" rows="4">${category.description}</textarea>
+                                        <form:textarea class="form-control" id="description" path = "description" rows="4"></form:textarea>
                                     </div>
                                 </div>
                             </div>
@@ -144,7 +141,7 @@
                         <div class="col-12 mb-4">
                             <div class="card shadow border-0 text-center p-0">
                                 <div class="rounded-top">
-                                	<img src="data:image/png;base64,${category.image}" class="img-fluid">
+                                	<img src="${category.image}" class="img-fluid" alt="${category.name}" id="preview-image">
                                 </div>
                                 <div class="card-body pb-5">
                                     <!-- <img src="../assets/img/team/profile-picture-1.jpg" class="avatar-xl rounded-circle mx-auto mt-n7 mb-4" alt="Neil Portrait"> -->
@@ -177,22 +174,33 @@
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-paperclip icon text-gray-500 me-2" viewBox="0 0 16 16">
 												  <path d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0V3z"/>
 												</svg>
-                                                <input type="file" name = "image">
+                                                <input type="file" name = "image" id="image-upload">
                                                 <div class="d-md-block text-left">
                                                     <div class="fw-normal text-dark mb-1">Chọn hình ảnh</div>
                                                     <div class="text-gray small">JPG, GIF hoặc PNG. Kích thước tối đa 800K</div>
                                                 </div>
+                                                <script>
+                                                	var previewImage = document.getElementById("preview-image");
+                                                	var imageUpload = document.getElementById("image-upload");
+                                                	imageUpload.onchange = evt => {
+                                                		  const [file] = imageUpload.files
+                                                		  if (file) {
+                                                			  previewImage.src = URL.createObjectURL(file)
+                                                		  }
+                                                		}
+                                                </script>
                                             </div>
                                         </div>
                                      </div>                                        
                                 </div>
                             </div>
                         </div>
-                        </form>
+                        </form:form>
                     </div>
                 </div>
             </div>
 
+			<%@include file="/WEB-INF/views/admin/includes/footer/footer.jsp"%>
         </main>
         
 <!-- ========== All JS files linkup ========= -->

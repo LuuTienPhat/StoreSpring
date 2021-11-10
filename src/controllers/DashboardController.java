@@ -5,11 +5,14 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/admin/")
+@RequestMapping("/admin/dashboard")
 public class DashboardController {
-	@RequestMapping("dashboard")
+	
+	String viewsDirectory = "admin/pages/dashboard/";
+	
+	@RequestMapping("")
 	public String renderAdminPage(ModelMap model) {
 		model.addAttribute("title", "Dashboard");
-		return "admin/pages/dashboard";
+		return viewsDirectory +  "dashboard";
 	}
 }

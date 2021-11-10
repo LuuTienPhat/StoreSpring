@@ -2,6 +2,10 @@
 	pageEncoding="UTF-8"%>
 <!-- ========== Tag Lib ========= -->
 <%@include file="/WEB-INF/views/admin/includes/header/taglib.jsp"%>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<c:set var="req" value="${pageContext.request}" />
+<c:set var="url">${req.requestURL}</c:set>
+<c:set var="uri" value="${req.requestURI}" />
 
 <!DOCTYPE html>
 <html lang="en">
@@ -10,7 +14,6 @@
 
 <!-- ========== Meta Tags ========= -->
 <%@include file="/WEB-INF/views/admin/includes/header/head.jsp"%>
-<title>Category Manager</title>
 
 <!-- ========== Favicon linkup ========= -->
 <%@include file="/WEB-INF/views/admin/includes/header/favicon.jsp"%>
@@ -25,7 +28,7 @@
 <jsp:useBean id="pagedListHolder" scope="request"
 	type="org.springframework.beans.support.PagedListHolder" />
 <c:url
-	value="admin/categories/"
+	value="${pagedLink}"
 	var="pagedLink">
 	<c:param name="p" value="~" />
 </c:url>
@@ -46,7 +49,7 @@
                                 </a>
                             </li>
                             <li class="breadcrumb-item">Danh mục</li>
-                            <li class="breadcrumb-item active" aria-current="page">Quản lý</li>
+                            <li class="breadcrumb-item active" aria-current="page"><a href="${requestScope['javax.servlet.forward.request_uri']}">Quản lý</a></li>
                         </ol>
                     </nav>
                     <h2 class="h4">Danh mục sản phẩm</h2>
@@ -63,6 +66,7 @@
                     </div>
                 </div>
             </div>
+            
             <div class="table-settings mb-4">
                 <div class="row align-items-center justify-content-between">
                     <div class="col col-md-6 col-lg-3 col-xl-4 ">
@@ -149,9 +153,10 @@
 	                                        Chỉnh sửa
                                         </a>
                                         
-                                        <a class="dropdown-item text-danger rounded-bottom text-danger" href="${applicationScope.categoryPage}/delete/${category.id}">
-                                        	<i class="bi bi-trash2-fill dropdown-icon me-2"></i>
-                                        	Xoá</a>
+                                        <a id="btnDelete" class="dropdown-item text-danger rounded-bottom" data-bs-toggle="modal" data-bs-target="#modal-warning" data-id="${category.id}">
+                                    <i class="bi bi-trash2-fill dropdown-icon me-2"></i>
+                                    Xoá
+                                 </a>
                                     </div>
                                 </div>
                             </td>
@@ -168,6 +173,29 @@
                 
             </div>
             
+            <!-- Modal Content -->
+       <div class="modal fade" id="modal-warning" tabindex="-1" role="dialog" aria-labelledby="modal-warning"
+         aria-hidden="true">
+         <div class="modal-dialog modal-dialog-centered" role="document">
+           <div class="modal-content">
+             <div class="modal-header">
+               <h2 class="h5 modal-title">Xác nhận</h2>
+               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+             </div>
+             <div class="modal-body text-center">
+               <h5 class="my-0 mb-2">Bạn có muốn xoá danh mục này?</h5>
+               <small class="my-0 mt-4 text-wrap text-gray-500">Hãy chắc chắn danh mục này <span class="fw-bold">không tồn tại</span> sản phẩm nào</small>
+             </div>
+             <div class="modal-footer">
+               <a type="button" class="btn btn-danger" id="btnConfirm" href="">Đồng ý</a>
+               <button type="button" class="btn btn-link text-gray-600 ms-auto"
+                 data-bs-dismiss="modal">Đóng</button>
+             </div>
+           </div>
+         </div>
+       </div>
+       <!-- End of Modal Content -->
+            
 		<%@include file="/WEB-INF/views/admin/includes/footer/footer.jsp"%>
 
 </main>
@@ -176,4 +204,17 @@
 <%@include file="/WEB-INF/views/admin/includes/footer/script.jsp"%>
 
 </body>
+
+<script type="text/javascript">
+   		const btnDeletes = document.querySelectorAll("#btnDelete");
+   		
+   		btnDeletes.forEach(btnDelete => {
+   			btnDelete.addEventListener('click', () => {
+   	   			let categoryId = btnDelete.dataset.id;
+   	   			const btnConfirm = document.querySelector("#btnConfirm");
+   	   			btnConfirm.href = "<c:out value='${applicationScope.categoryPage}'/>/delete/" + categoryId;
+   	   		})
+   		})
+   		
+   </script>
 </html>

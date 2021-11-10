@@ -1,8 +1,14 @@
 package entities;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotBlank;
@@ -21,6 +27,10 @@ public class AdminEntity {
 	private String password;
 	@Column(name = "recovery")
 	private String recovery;
+	
+	@OneToOne(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+	private AdminInfoEntity admin;
+	
 	public String getId() {
 		return id;
 	}
@@ -46,6 +56,12 @@ public class AdminEntity {
 		this.recovery = recovery;
 	}
 	
+	public AdminInfoEntity getAdmin() {
+		return admin;
+	}
+	public void setAdmin(AdminInfoEntity admin) {
+		this.admin = admin;
+	}
 	public AdminEntity() {
 		// TODO Auto-generated constructor stub
 		super();

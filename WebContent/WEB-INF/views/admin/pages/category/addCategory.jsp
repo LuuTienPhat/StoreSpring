@@ -46,7 +46,7 @@
             </div>
 
             <div class="row">
-                <div class="col-12 mb-4">
+                <div class="col-12">
                     <div class="card border-0 shadow components-section">
                         <div class="card-body">     
                             <div class="row mb-4">
@@ -65,7 +65,7 @@
                 </div>
                 
                 <div class="mb-3">
-                 	<img alt="Chọn hình ảnh" src="" id="preview-image" class="img-thumbnail" width = "200" height="200">
+                 	<img alt="Hình ảnh" src="" id="preview-image" class="img-thumbnail" width = "200" height="200">
                 </div>
                 
                 <div class="mb-3">
@@ -96,6 +96,8 @@
                     </div>
                 </div>
             </div>
+            
+            <%@include file="/WEB-INF/views/admin/includes/footer/footer.jsp"%>
         </main>
 <!-- ========== All JS files linkup ========= -->
 <%@include file="/WEB-INF/views/admin/includes/footer/script.jsp"%>
