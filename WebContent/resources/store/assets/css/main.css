@@ -317,3 +317,7 @@ tbody::before {
 	transform: translateX(0);
 	transition: all .3s ease-out;
 }
+.ordered-list{
+	height: 700px;
+	overflow-y: scroll;
+}

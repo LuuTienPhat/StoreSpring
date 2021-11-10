@@ -63,6 +63,10 @@
 							class="hover:text-indigo-400 transition-colors">Giỏ hàng</a>
 					</div>
 					<div class="mb-1">
+						<a href="${applicationScope.orderHistoryPage}"
+							class="hover:text-indigo-400 transition-colors">Lịch sử mua hàng</a>
+					</div>
+					<div class="mb-1">
 						<a href="${applicationScope.logOutPage}"
 							class="hover:text-indigo-400 transition-colors">Đăng xuất</a>
 					</div>

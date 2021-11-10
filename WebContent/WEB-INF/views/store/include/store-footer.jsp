@@ -30,7 +30,7 @@
 
             <div class="flex flex-col w-32 ml-3">
                 <div class="">
-                    <a href="${applicationScope.storeIndexPage}" class="w-full"><img src="<c:url value='/resources/store/assets/img/logo-f.png'/>"></a>
+                    <a href="${applicationScope.storeIndexPage}" class="w-full"><img src="<c:url value='/resources/store/assets/img/logo_200x200 copy2.png'/>"></a>
                 </div>
                 <span class="mb-1">Hãy kết nối với chúng mình</span>
                 <div class="flex justify-between items-center h-fit mb-2 social">

@@ -61,17 +61,6 @@
                                 </div>
 
                             </div>
-                            <%-- <div class="flex input-wrapper">
-                                <label for="" class="mr-3">Tên: <span class="text-red-500">(*)</span></label>
-                                <div class="w-full">
-                                    <f:input type="text" path="lastName" id=""
-                                        class="w-full p-2 border-2 border-gray-300 rounded-md mb-3"
-                                        placeholder="Tên (*)" value="${customerEntity.lastname}" />
-                                    <f:errors path="lastName" cssClass="error" element="div" />
-                                </div>
-
-                            </div> --%>
-
 
                             <div class="flex input-wrapper">
                                 <label for="" class="mr-3">Điện thoại: <span class="text-red-500">(*)</span></label>
@@ -225,38 +214,27 @@
                                 <tr class="card-list__table-item">
                                         <!-- desc = tên sản phẩm + màu sắc + kích cỡ (nếu có) -->
                                         <td class="card-list__table-desc" style="text-align: left !important;"><a
-                                                href="${applicationScope.productDetailPage}/${c.product.id}" class="hover:text-pink-400">${c.product.name}</a>
+                                                href="${applicationScope.productDetailPage}/${c.product.id}" class="hover:text-indigo-400">${c.product.name}</a>
                                             <br>
                                             <div class="cart-list__price">Đơn giá: <span
-                                                    class="font-bold">${c.product.price}đ</span></div>
+                                                    class="font-bold"><fmt:setLocale value="vi_VN" scope="session" />
+                              <fmt:formatNumber value="${c.product.price}" type="currency" /></span></div>
                                         </td>
                                         <td class="cart-list__quantity">
                                             ${c.quantity}
                                         </td>
-                                        <td class="card-list__total font-bold">${c.quantity*c.product.price}đ</td>
+                                        <td class="card-list__total font-bold"><fmt:setLocale value="vi_VN" scope="session" />
+                              <fmt:formatNumber value="${c.quantity*c.product.price}" type="currency" /></td>
                                     </tr>
                                 
                                 </c:forEach>
-                                    <!-- <tr class="card-list__table-item">
-                                        desc = tên sản phẩm + màu sắc + kích cỡ (nếu có)
-                                        <td class="card-list__table-desc" style="text-align: left !important;"><a
-                                                href="./product-detail.html" class="hover:text-pink-400">Squishy MJ
-                                                Momo duck nháy mắt 7cm - Vàng</a>
-                                            <br>
-                                            <div class="cart-list__price">Đơn giá: <span
-                                                    class="font-bold">50000đ</span></div>
-                                        </td>
-                                        <td class="cart-list__quantity">
-                                            2
-                                        </td>
-                                        <td class="card-list__total font-bold">50000đ</td>
-                                    </tr>
- -->
+                                    
                                 </tbody>
                             </table>
                             <div class="flex justify-between border-t my-1 py-2">
                                 <span class="">Tạm tính</span>
-                                <span class="font-bold">${cartDetailsTotal} đ</span>
+                                <span class="font-bold"><fmt:setLocale value="vi_VN" scope="session" />
+                              <fmt:formatNumber value="${cartDetailsTotal}" type="currency" /></span>
                             </div>
                             <div class="flex justify-between border-t my-1 py-2">
                                 <span class="">Phí vận chuyển</span>
@@ -264,14 +242,15 @@
                             </div>
                             <div class="flex justify-between border-t my-1 py-2">
                                 <span class="">Tổng cộng</span>
-                                <span class="font-bold">${cartDetailsTotal + 30000} đ</span>
+                                <span class="font-bold"><fmt:setLocale value="vi_VN" scope="session" />
+                              <fmt:formatNumber value="${cartDetailsTotal + 30000}" type="currency" /></span>
                             </div>
                         </div>
                     </div>
 
                     <div class="w-full flex justify-end">
                         <button
-                            class="px-4 py-2 my-2 font-bold bg-pink-300 hover:bg-pink-400 transition-colors text-white rounded-md">Thanh
+                            class="px-4 py-2 my-2 font-bold bg-indigo-300 hover:bg-indigo-400 transition-colors text-white rounded-md">Thanh
                             toán</button>
                     </div>
 
