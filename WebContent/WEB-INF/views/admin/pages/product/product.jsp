@@ -20,7 +20,7 @@
       <%@include file="/WEB-INF/views/admin/includes/nav/sidebar.jsp"%>
 
       <jsp:useBean id="pagedListHolder" scope="request" type="org.springframework.beans.support.PagedListHolder" />
-      <c:url value="admin/products/" var="pagedLink">
+      <c:url value="${pagedLink }" var="pagedLink">
          <c:param name="p" value="~" />
       </c:url>
 
