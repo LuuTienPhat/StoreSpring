@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c"%>
+<!-- ========== Tag Lib ========= -->
+<%@include file="/WEB-INF/views/admin/includes/header/taglib.jsp"%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -9,7 +10,6 @@
 
 <!-- ========== Meta Tags ========= -->
 <%@include file="/WEB-INF/views/admin/includes/header/head.jsp"%>
-<title>Category Manager</title>
 
 <!-- ========== Favicon linkup ========= -->
 <%@include file="/WEB-INF/views/admin/includes/header/favicon.jsp"%>
@@ -96,12 +96,13 @@
                 <div class="col-12 col-xl-8">
                     <div class="card card-body border-0 shadow mb-4">
                         <h2 class="h5 mb-4">General information</h2>
-                        <form>
+                        <form:form action="" method="post" modelAttribute="admin">
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <div>
                                         <label for="first_name">First Name</label>
-                                        <input class="form-control" id="first_name" type="text" placeholder="Enter your first name" required>
+                                        <form:input path="firstname" class="form-control" id="first_name" type="text" placeholder="Nhập tên" />
+                                    	
                                     </div>
                                 </div>
                                 <div class="col-md-6 mb-3">
@@ -233,7 +234,7 @@
                             <div class="mt-3">
                                 <button class="btn btn-gray-800 mt-2 animate-up-2" type="submit">Save all</button>
                             </div>
-                        </form>
+                        </form:form>
                     </div>
                     <div class="card card-body border-0 shadow mb-4 mb-xl-0">
                         <h2 class="h5 mb-4">Alerts & Notifications</h2>

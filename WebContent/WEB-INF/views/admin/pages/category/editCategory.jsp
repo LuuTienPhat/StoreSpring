@@ -92,18 +92,19 @@
                 <div class="col-12 col-xl-8">
                     <div class="card card-body border-0 shadow mb-4">
                         <h2 class="h5 mb-4">Thông tin danh mục</h2>
-                        <form action ="${applicationScope.categoryPage }/edit/${category.id}" method = "post" enctype="multipart/form-data">
+                        <form:form action ="${applicationScope.categoryPage }/edit/${category.id}" method = "post" modelAttribute="category" enctype="multipart/form-data">
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <div>
                                         <label for="first_name">#</label>
-                                        <input class="form-control" id="id" type="text" value = "${category.id }" disabled>
+                                        <form:input class="form-control" path="id" type="text" value = "${category.id }" readonly="true" />
                                     </div>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <div>
                                         <label for="last_name">Tên danh mục</label>
-                                        <input class="form-control" id="categoryName" name = "name" name = "name" type="text" value = "${category.name}" required>
+                                        <form:input class="form-control ${nameValid }" id="name" path="name" type="text" />
+                                       	<form:errors path="name" class="invalid-feedback"/>
                                     </div>
                                 </div>
                             </div>
@@ -116,7 +117,7 @@
                                             <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
                                             </svg>
                                         </span>
-                                        <input value ="${category.dateAdded}" class="form-control" id="dateAdded" type="text" disabled>                                               
+                                        <form:input path="dateAdded" label="<fmt:formatDate value='${category.dateAdded}' pattern='dd/MM/yyyy'/>" class="form-control" id="dateAdded" type="text" readonly="true" />                                               
                                      </div>
                                 </div>
                             </div>
@@ -124,7 +125,7 @@
                                 <div class="col-md-12 mb-3">
                                     <div class="form-group">
                                         <label for="">Mô tả</label>
-                                        <textarea class="form-control" id="description" name = "description" rows="4">${category.description}</textarea>
+                                        <form:textarea class="form-control" id="description" path = "description" rows="4"></form:textarea>
                                     </div>
                                 </div>
                             </div>
@@ -194,11 +195,12 @@
                                 </div>
                             </div>
                         </div>
-                        </form>
+                        </form:form>
                     </div>
                 </div>
             </div>
 
+			<%@include file="/WEB-INF/views/admin/includes/footer/footer.jsp"%>
         </main>
         
 <!-- ========== All JS files linkup ========= -->
