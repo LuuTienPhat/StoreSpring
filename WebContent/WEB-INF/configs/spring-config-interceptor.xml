@@ -33,6 +33,9 @@
 			<mvc:exclude-mapping path="/store"/>
 			<mvc:exclude-mapping path="/store/sign-in"/>
 			<mvc:exclude-mapping path="/store/sign-up"/>
+			<mvc:exclude-mapping path="/store/search/**"/>
+			<mvc:exclude-mapping path="/store/category/**"/>
+			<mvc:exclude-mapping path="/store/product-detail/**"/>
 			<bean class="interceptors.CustomerAuthInterceptor" />
 		</mvc:interceptor>
 		 

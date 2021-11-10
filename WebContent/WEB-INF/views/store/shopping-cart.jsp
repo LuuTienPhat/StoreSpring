@@ -10,7 +10,14 @@
 <body>
 	<%@include file="/WEB-INF/views/store/include/store-header.jsp"%>
 	<main class="main">
-		<div class="cart-list__container main__new-product px-32 my-16">
+		<div class="cart-list__container main__new-product px-32 my-6">
+		<h3 class="text-indigo-400 font-bold mb-4 text-3xl">GIỎ HÀNG CỦA BẠN</h3>
+				<hr class="border-none bg-indigo-400 mb-4" style="height: 1px;">
+					<c:if test="${listCartDetail.size()==0}">
+							<p>Bạn không có sản phẩm nào trong giỏ hàng.</p>
+							<p class="mb-2"><a href="${applicationScope.storeIndexPage}"
+							class="inline-block font-bold text-indigo-400 hover:text-indigo-200 transition-colors">Quay lại trang chủ</a> để mua sắm.</p>
+						</c:if>
 			<form action="store/shopping-cart/update" method="post">
 				<table class="cart-list__table mb-4">
 					<thead>
@@ -23,8 +30,9 @@
 							<th>Thao tác</th>
 						</tr>
 					</thead>
-
+						
 					<tbody>
+					
 						<c:forEach var="c" items="${listCartDetail}">
 							<tr class="card-list__table-item">
 								<input type="text" name="product_id" value="${c.product.id}"
@@ -33,7 +41,7 @@
 									href="${applicationScope.productDetailPage}/${c.product.id}"
 									class="table-image__container"> <img
 										<%-- src="<c:url value='/resources/store/assets/img/sp1.jpeg'/>" --%>
-										src="data:image/png;base64,${c.product.images[0].image}" alt="${c.product.id}"/>
+										src="${c.product.images[0].image}" alt="${c.product.id}"/>
 										<!-- alt=""> -->
 								</a></td>
 								<!-- desc = tên sản phẩm + màu sắc + kích cỡ (nếu có) -->
@@ -42,7 +50,8 @@
 									class="hover:text-indigo-400">${c.product.name}</a>
 									<div>Tồn kho: ${c.product.quantity}</div>
 									</td>
-								<td class="cart-list__price font-bold">${c.product.price}đ</td>
+								<td class="cart-list__price font-bold"><fmt:setLocale value="vi_VN" scope="session" />
+                              <fmt:formatNumber value="${c.product.price}" type="currency" /></td>
 								<td class="cart-list__quantity">
 									<div class="input-group flex align-items-center">
 										<button class="button-minus">-</button>
@@ -53,7 +62,8 @@
 
 									</div>
 								</td>
-								<td class="card-list__total font-bold">${c.quantity*c.product.price}đ</td>
+								<td class="card-list__total font-bold"><fmt:setLocale value="vi_VN" scope="session" />
+                              <fmt:formatNumber value="${c.quantity*c.product.price}" type="currency" /></td>
 								<td class="card-list__action"><a
 									href="store/shopping-cart/delete/${c.product.id}"
 									class="hover:text-indigo-400">Xóa</a></td>
@@ -81,7 +91,7 @@
 			<p>Đơn hàng trên website được xử lý trong giờ hành chính</p>
 
 			<h3 class="text-right text-indigo-300 mt-4 text-3xl font-bold">
-				Tổng: <span class="cart-total">000</span>đ
+				Tổng: <span class="cart-total">000</span>
 			</h3>
 			<div class="section__heading mb-8  mt-16">
 				<h3>
@@ -178,6 +188,6 @@
 	<!-- <script src="./assets/js/main.js"></script> -->
 	<script src="<c:url value='/resources/store/assets/js/main.js'/>"></script>
 	<!-- <script src="./assets/js/cart.js"></script> -->
-	<script src="<c:url value='/resources/store/assets/js/cart.js'/>"></script>
+	<script src="<c:url value='/resources/store/assets/js/cart.js?version=51'/>"></script>
 </body>
 </html>
