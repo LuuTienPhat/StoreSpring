@@ -21,7 +21,7 @@
 			<div class="flex detail__wrapper">
 				<a href="${applicationScope.productDetailPage}/${product.id}"
 					class="product-detail__img-container"><img
-					src="data:image/png;base64,${product.images[0].image}" alt="${product.id}"></a>
+					src="${product.images[0].image}" alt="${product.id}"></a>
 				<div class="ml-5 flex-1 detail__desc">
 					<h3 class="text-3xl font-bold mb-2">${product.name}</h3>
 					<div class="flex justify-between">
@@ -33,7 +33,18 @@
 								class="fa fa-heart hover:text-indigo-400 text-2xl cursor-pointer"></i>
 						</div>
 					</div>
-					<h2 class="price my-4 text-3xl font-bold">${product.price}đ</h2>
+					<div>
+						<%-- <span class="item__price font-bold"><fmt:setLocale value="vi_VN" scope="session" />
+                              <fmt:formatNumber value="${pd.price}" type="currency" /></span> --%>
+                              <h2 class="price my-4 text-3xl font-bold"><fmt:setLocale value="vi_VN" scope="session" />
+                              <fmt:formatNumber value="${product.price}" type="currency" /></h2>
+                              <c:if test="${product.quantity <= 0}">
+                              <span class="px-1 ml-1 bg-gray-500 text-white text-2xl">Hết hàng</span>
+                              </c:if>
+						</div>
+					<%-- <h2 class="price my-4 text-3xl font-bold"><fmt:setLocale value="vi_VN" scope="session" />
+                              <fmt:formatNumber value="${product.price}" type="currency" /></h2> --%>
+					
 					<!-- <div class="flex my-4 items-center">
 						<h6 class="color mr-4">Màu sắc</h6>
 						<div
@@ -42,7 +53,7 @@
 					</div> -->
 					<form>
 					<!--  chưa cập nhật thêm vào giỏ -->
-						<div class="flex my-4">
+						<%-- <div class="flex my-4">
 							<input type="text" value="${product.quantity}"
 									name="product_id" class="hidden">
 							<h6 class="mr-4">Số lượng</h6>
@@ -55,11 +66,11 @@
 
 							</div>
 
-						</div>
+						</div> --%>
 						<div class="flex my-4 border-gray-300 border-b-2 pb-5">
-							<button
+							<a href = "store/shopping-cart/insert-into-cart/${product.id}"
 								class="w-full text-center py-2 font-bold bg-indigo-300 hover:bg-indigo-400 transition-colors text-white rounded-md mr-4 add-to-cart">THÊM
-								VÀO GIỎ HÀNG</button>
+								VÀO GIỎ HÀNG</a>
 							<button
 								class="w-full text-center py-2 font-bold bg-indigo-300 hover:bg-indigo-400 transition-colors text-white rounded-md buy-now">MUA
 								NGAY</button>

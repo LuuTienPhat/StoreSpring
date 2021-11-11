@@ -2,20 +2,34 @@ function updateBagTotal(){
     const itemTotals = document.querySelectorAll(".card-list__total");
     var bagTotal=0;
     for(var i=0; i<itemTotals.length; i++){
-        bagTotal = bagTotal + Number.parseInt(itemTotals[i].innerText.substring(0,itemTotals[i].innerText.length-1));
+		/*ddang fix*/
+		var itemtotal = itemTotals[i].innerText.substring(0,itemTotals[i].innerText.length-2);
+		var s = itemTotals[i].innerText.substring(0,itemTotals[i].innerText.length-2);
+		console.log(s);
+		for(var j=0; j<s.length; j++){
+			s = s.replace(".","");
+		}
+		console.log(s);
+        bagTotal = bagTotal + Number.parseInt(s);
     }
-    document.querySelector(".cart-total").innerText = bagTotal;
+    document.querySelector(".cart-total").innerText =  Intl.NumberFormat('vi-VN').format(bagTotal) +" ₫";
 }
 function updateItemTotal(node){
     const rows = document.querySelectorAll("table tr");
     for(let i=0; i<rows.length; i++){
         if(rows[i].contains(node)){
             var price = rows[i].querySelector(".cart-list__price").innerText;
-
+			var s = price.substring(0, price.length-2);
+			for(var j=0; j<s.length; j++){
+				s = s.replace(".","");
+			}
+			console.log(s);
             var quantity = rows[i].querySelector(".quantity-field").value;
-            var total =  Number.parseInt(price.substring(0, price.length -1))*quantity;
+            var total =  Number.parseInt(s)*quantity;
             var itemtotal =  rows[i].querySelector(".card-list__total");
-            itemtotal.innerText= total +"đ";
+
+			var total2 = new Intl.NumberFormat('vi-VN').format(total);
+            itemtotal.innerText= total2 +" ₫";
             
         }
     }
