@@ -1,4 +1,5 @@
 eclipse.preferences.version=1
+encoding//WebContent/WEB-INF/views/admin/includes/nav/breadcrumb.jsp=UTF-8
 encoding//WebContent/WEB-INF/views/admin/pages/category/viewCategory.jsp=UTF-8
 encoding//src/controllers/AdminAuthController.java=UTF-8
 encoding//src/controllers/CategoryController.java=UTF-8
@@ -9,5 +10,7 @@ encoding//src/controllers/ProductController.java=UTF-8
 encoding//src/controllers/ProfileControler.java=UTF-8
 encoding//src/controllers/UploadController.java=UTF-8
 encoding//src/entities/AdminEntity.java=UTF-8
+encoding//src/entities/AdminInfoEntity.java=UTF-8
+encoding//src/entities/CustomerEntity.java=UTF-8
 encoding//src/entities/OrderDetailEntity.java=UTF-8
 encoding//src/models/Account.java=UTF-8
