@@ -16,7 +16,7 @@ import org.hibernate.validator.constraints.NotBlank;
 @Table(name = "Admin")
 public class AdminEntity {
 	@Id
-	@Column(name = "admin_id")
+	@Column(name = "id")
 	private String id;
 	@Column(name = "firstname")
 	private String firstname;
@@ -34,7 +34,7 @@ public class AdminEntity {
 	private String address;
 	
 	@OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "admin_id", referencedColumnName = "id")
+    @JoinColumn(name = "id", referencedColumnName = "id")
 	private AccountEntity account;
 	
 	public String getId() {
