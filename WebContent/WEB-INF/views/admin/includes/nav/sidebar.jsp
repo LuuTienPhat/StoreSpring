@@ -197,8 +197,13 @@
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="${applicationScope.addInvoicePage}">
-                <span class="sidebar-text">Tạo hoá đơn</span>
+              <a class="nav-link" href="${applicationScope.addImportInvoicePage}">
+                <span class="sidebar-text">Tạo hoá đơn nhập</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="${applicationScope.addExportInvoicePage}">
+                <span class="sidebar-text">Tạo hoá đơn xuất</span>
               </a>
             </li>
           </ul>
