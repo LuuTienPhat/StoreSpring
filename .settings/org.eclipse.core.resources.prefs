@@ -9,6 +9,7 @@ encoding//src/controllers/OrderController.java=UTF-8
 encoding//src/controllers/ProductController.java=UTF-8
 encoding//src/controllers/ProfileControler.java=UTF-8
 encoding//src/controllers/UploadController.java=UTF-8
+encoding//src/controllers/GiftController.java=UTF-8
 encoding//src/entities/AdminEntity.java=UTF-8
 encoding//src/entities/AdminInfoEntity.java=UTF-8
 encoding//src/entities/CustomerEntity.java=UTF-8
