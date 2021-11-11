@@ -1,5 +1,6 @@
 package entities;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -11,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "Invoice")
@@ -19,7 +22,8 @@ public class InvoiceEntity {
 	@Column(name = "id", updatable = false)
 	private String id;
 	@Column(name = "date")
-	private String date;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date date;
 
 	@ManyToOne()
 	@JoinColumn(name = "admin_id")
@@ -40,11 +44,11 @@ public class InvoiceEntity {
 		this.id = id;
 	}
 
-	public String getDate() {
+	public Date getDate() {
 		return date;
 	}
 
-	public void setDate(String date) {
+	public void setDate(Date date) {
 		this.date = date;
 	}
 
@@ -74,5 +78,7 @@ public class InvoiceEntity {
 
 	public InvoiceEntity() {
 		// TODO Auto-generated constructor stub
+		this.invoiceType = new InvoiceTypeEntity();
+		this.admin = new AdminEntity();
 	}
 }
