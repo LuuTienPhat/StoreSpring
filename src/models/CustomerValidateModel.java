@@ -15,11 +15,12 @@ public class CustomerValidateModel {
 	private String city;
 //	private String dateofbirth;
 	private String district;
+	private String commune;
 	private String specificAddress;
 	private String address;
 	private String email;
 	
-	
+	private String fullAddress;
 	public String getConfirmPassword() {
 		return confirmPassword;
 	}
@@ -97,6 +98,18 @@ public class CustomerValidateModel {
 	}
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	public String getCommune() {
+		return commune;
+	}
+	public void setCommune(String commune) {
+		this.commune = commune;
+	}
+	public String getFullAddress() {
+		return fullAddress;
+	}
+	public void setFullAddress(String fullAddress) {
+		this.fullAddress = fullAddress;
 	}
 	
 }

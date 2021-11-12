@@ -82,6 +82,23 @@ public class GiftController {
 	@RequestMapping("/product-detail/{productId}")
 	public String productDetail2(@PathVariable("productId") String productId, ModelMap model, HttpSession httpSession) {
 		httpSession.setAttribute("listCategory", this.getListCategory());
+		if(httpSession.getAttribute("listRecentViewProducts") != null) {
+			List<ProductEntity> lpe = (List<ProductEntity>) httpSession.getAttribute("listRecentViewProducts");
+			boolean existed = false;
+			for(ProductEntity pe: lpe) {
+				if(pe.getId().equals(productId)) {
+					existed = true;
+				}
+			}
+			if(!existed) {
+				lpe.add(0, this.getProduct(productId));
+			}
+			httpSession.setAttribute("listRecentViewProducts", lpe);
+		}else {
+			List<ProductEntity> lpe = new ArrayList<ProductEntity>();
+			lpe.add(0, this.getProduct(productId));
+			httpSession.setAttribute("listRecentViewProducts", lpe);
+		}
 		model.addAttribute("product", this.getProduct(productId));
 		System.out.println(productId + "; " + this.getProduct(productId).getName());
 		return "store/product-detail";
@@ -167,11 +184,14 @@ public class GiftController {
 		} else if (!validateEmail(customer.getEmail().trim())) {
 			errors.rejectValue("email", "customer", "Email không đúng định dạng!");
 		}
-		if (customer.getCity().trim().length() == 0) {
-			errors.rejectValue("city", "customer", "Vui lòng chọn tỉnh, thành phố!");
+		if (customer.getCity().trim().equals("0")) {
+			errors.rejectValue("city", "customer", "Vui lòng chọn Tỉnh/ Thành phố!");
 		}
-		if (customer.getDistrict().trim().length() == 0) {
-			errors.rejectValue("district", "customer", "Vui lòng chọn quận huyện!");
+		if (customer.getDistrict().trim().equals("0")) {
+			errors.rejectValue("district", "customer", "Vui lòng chọn Quận/ Huyện!");
+		}
+		if (customer.getCommune().trim().equals("0")) {
+			errors.rejectValue("commune", "customer", "Vui lòng chọn Xã/ Phường!");
 		}
 		if (customer.getSpecificAddress().trim().length() == 0) {
 			errors.rejectValue("specificAddress", "customer", "Vui lòng nhập địa chỉ chi tiết!");
@@ -193,8 +213,9 @@ public class GiftController {
 			ce.setFirstname(customer.getFirstName().trim());
 			ce.setLastname(customer.getLastName().trim());
 			ce.setPhone(customer.getTelephone().trim());
-			ce.setAddress(customer.getSpecificAddress().trim() + ", " + customer.getDistrict().trim() + ", "
-					+ customer.getCity().trim());
+//			ce.setAddress(customer.getSpecificAddress().trim() + ", " + customer.getDistrict().trim() + ", "
+//					+ customer.getCity().trim());
+			ce.setAddress(customer.getFullAddress());
 			ce.setEmail(customer.getEmail().trim());
 //			model.addAttribute("message", "Chúc mừng, bạn đã nhập đúng!");
 			if (this.insertCustomer(ce)) {
@@ -368,6 +389,10 @@ public class GiftController {
 		httpSession.setAttribute("listCategory", this.getListCategory());
 		List<CartDetailEntity> listCart = this
 				.getListCartDetail(this.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername")));
+		if(listCart.size()==0) {
+			attributes.addFlashAttribute("message", "Không có sản phẩm nào trong giỏ hàng!");
+			return "redirect:/store/shopping-cart";
+		}
 		for (CartDetailEntity c : listCart) {
 			if (c.getQuantity() > c.getProduct().getQuantity()) {
 				attributes.addFlashAttribute("message",
@@ -738,7 +763,24 @@ public class GiftController {
 		pagedListHolder.setPage(page);
 		pagedListHolder.setMaxLinkedPages(3);
 		pagedListHolder.setPageSize(8);
-
+		
+		if(httpSession.getAttribute("listRecentSearch") != null) {
+			List<String> lrs = (List<String>) httpSession.getAttribute("listRecentSearch");
+			boolean existed = false;
+			for(String keyw: lrs) {
+				if(keyw.equals(keyword)) {
+					existed = true;
+				}
+			}
+			if(!existed) {
+				lrs.add(0, keyword);
+			}
+			httpSession.setAttribute("listRecentSearch", lrs);
+		}else {
+			List<String> lrs = new ArrayList<String>();
+			lrs.add(0, keyword);
+			httpSession.setAttribute("listRecentSearch", lrs);
+		}
 		model.addAttribute("pagedListHolder", pagedListHolder);
 		return "store/search-result";
 	}
@@ -882,10 +924,10 @@ public class GiftController {
 
 		String id = (String) query.uniqueResult();
 		if (id == null || id.equals("")) {
-			return "O0001";
+			return "O0000000001";
 		}
 		int x = Integer.parseInt(id.substring(1)) + 1;
-		String base = "O0000";
+		String base = "O000000000";
 		String base2 = base.substring(0, base.length() - String.valueOf(x).length());
 		String newId = base2 + String.valueOf(x);
 		return newId;
