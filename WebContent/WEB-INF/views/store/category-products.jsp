@@ -19,6 +19,11 @@
 					
 				</div>
 				<hr class="border-none bg-indigo-400" style="height: 1px;">
+				<c:if test="${pagedListHolder.pageList.size()==0}">
+							<p class="mt-5">Chưa có sản phẩm thuộc thể loại này.</p>
+							<p class="mb-2">Nhấn vào <a href="${applicationScope.storeIndexPage}"
+							class="inline-block font-bold text-indigo-400 hover:text-indigo-200 transition-colors">đây</a> để quay lại trang chủ.</p>
+						</c:if>
 			</div>
 			
 			<div class="new-product__list flex flex-wrap">

@@ -20,18 +20,18 @@
 					<!-- Slides -->
 					<div class="swiper-slide">
 						<a href="#" class="w-full"><img
-							src="<c:url value='/resources/store/assets/img/BannerM5.png'/>"
-							alt=""></a>
+							src="<c:url value='/resources/store/assets/img/storeSpring21Banner3.png'/>"
+							alt="" class="w-full h-full"></a>
 					</div>
 					<div class="swiper-slide">
 						<a href="#" class="w-full"><img
-							src="<c:url value='/resources/store/assets/img/sb_1612181109_394.png'/>"
-							alt=""></a>
+							src="<c:url value='/resources/store/assets/img/storeSpring21Banner.png'/>"
+							alt="" class="w-full h-full"></a>
 					</div>
 					<div class="swiper-slide">
 						<a href="#" class="w-full"><img
-							src="<c:url value='/resources/store/assets/img/T9_Banner web.png'/>"
-							alt=""></a>
+							src="<c:url value='/resources/store/assets/img/storeSpring21Banner2.png'/>"
+							alt="" class="w-full h-full"></a>
 					</div>
 				</div>
 				<!-- If we need pagination -->
@@ -43,11 +43,11 @@
 
 			</div>
 			<div class="slider__right flex flex-col flex-1 ml-2">
-				<a href="#" class="w-full mb-2"><img
-					src="<c:url value='/resources/store/assets/img/Youtube - 1_tuan_mua_do_cute.jpg'/>"
-					alt=""></a> <a href="#" class="w-full"><img
-					src="<c:url value='/resources/store/assets/img/sb_1622297902_958.jpg'/>"
-					alt=""></a>
+				<a href="#" class="w-full mb-2 h-1/2"><img
+					src="<c:url value='/resources/store/assets/img/sideBanner.png'/>"
+					alt="" class="w-full h-full"></a> <a href="#" class="w-full h-1/2"><img
+					src="<c:url value='/resources/store/assets/img/sideBanner2.png'/>"
+					alt="" class="w-full h-full"></a>
 			</div>
 		</div>
 		<div class="main__new-product section px-32 my-16">
