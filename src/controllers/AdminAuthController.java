@@ -12,6 +12,7 @@ import javax.transaction.Transactional;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.validator.constraints.Email;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -27,7 +28,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
+import entities.AccountEntity;
 import entities.AdminEntity;
+import entities.CategoryEntity;
 import models.Account;
 import models.Login;
 
@@ -45,20 +48,17 @@ public class AdminAuthController {
 	public String renderLoginPage(HttpServletRequest request, ModelMap model) {
 		HttpSession session = request.getSession();
 		if (session.getAttribute("admin") != null) {
-			/*
-			 * String referer = request.getHeader("Ref"); System.out.println(referer);
-			 * return "redirect:" + referer;
-			 */
+			return "redirect:/admin/dashboard";
 		}
 
-		model.addAttribute("account", new AdminEntity());
+		model.addAttribute("account", new AccountEntity());
 		model.addAttribute("title", "Admin Đăng nhập");
 		return viewsDirectory + "login";
 	}
 
 	@RequestMapping(value = "login", method = RequestMethod.POST)
 	public String login(RedirectAttributes redirectAttributes, ModelMap model, HttpServletRequest request,
-			@Validated @ModelAttribute("account") AdminEntity account, BindingResult errors) {
+			@Validated @ModelAttribute("account") AccountEntity account, BindingResult errors) {
 		/*
 		 * String username = request.getParameter("username"); String password =
 		 * request.getParameter("password");
@@ -83,17 +83,17 @@ public class AdminAuthController {
 			String password = account.getPassword();
 
 			Session session = factory.getCurrentSession();
-			String hql = "FROM AdminEntity WHERE username = '" + username + "' AND password = '" + password + "'";
+			String hql = "FROM AccountEntity WHERE username = '" + username + "' AND password = '" + password + "'";
 			Query query = session.createQuery(hql);
 
 			if (!query.list().isEmpty()) {
-				AdminEntity admin = (AdminEntity) query.list().get(0);
+				AccountEntity admin = (AccountEntity) query.list().get(0);
 				HttpSession session2 = request.getSession();
-				session2.setAttribute("admin", admin.getUsername());
+				session2.setAttribute("admin", admin.getId());
 				return "redirect:/admin/dashboard";
 				// return new RedirectView(request.getContextPath() + "/admin/dashboard");
 			}
-			
+
 			else {
 				model.addAttribute("message", "Tên đăng nhập hoặc mật khẩu không đúng");
 				model.addAttribute("title", "Admin Đăng nhập");
@@ -116,29 +116,58 @@ public class AdminAuthController {
 
 	@RequestMapping("forgot-password")
 	public String renderForgotPasswordPage(ModelMap model) {
+		AdminEntity admin = new AdminEntity();
+
+		model.addAttribute("admin", admin);
 		model.addAttribute("title", "Admin Lost Password");
 		return viewsDirectory + "forgot-password";
 	}
 
 	@RequestMapping(value = "forgot-password", method = RequestMethod.POST)
-	public String getRecoveryCode(ModelMap model, HttpServletRequest request, @RequestParam(value = "id") String id,
-			@RequestParam(value = "username") String username, @RequestParam(value = "email") String email) {
-		model.addAttribute("title", "Admin Lost Password");
+	public String getRecoveryCode(ModelMap model, HttpServletRequest request,
+			@ModelAttribute("admin") AdminEntity admin, BindingResult errors) {
 
-		Session session = factory.getCurrentSession();
-		String hql = "SELECT * FROM Admin JOIN AdminInfo ON Admin.id = AdminInfo.userId WHERE username = '" + username + "' AND Admin.id = '" + id + "' AND AdminInfo.email = '" +  email + "'";
-		Query query = session.createQuery(hql);
-
-		if (!query.list().isEmpty()) {
-			AdminEntity admin = (AdminEntity) query.list().get(0);
-			HttpSession session2 = request.getSession();
-			session2.setAttribute("admin", admin.getUsername());
-			return "redirect:/admin/dashboard";
-		} else {
-			return "redirect:/admin/login";
+		int errorCount = 0;
+		if (admin.getId().isEmpty()) {
+			errors.rejectValue("id", "admin", "AdminID không được để trống!");
+			model.addAttribute("idValid", "is-invalid");
+			errorCount++;
 		}
 
-		/* return viewsDirectory + "forgot-password"; */
+		if (admin.getAccount().getUsername().isEmpty()) {
+			errors.rejectValue("account.username", "category", "Tên đăng nhập không được để trống!");
+			model.addAttribute("usernameValid", "is-invalid");
+			errorCount++;
+		}
+
+		if (admin.getEmail().isEmpty()) {
+			errors.rejectValue("email", "category", "Email không được để trống!");
+			model.addAttribute("emailValid", "is-invalid");
+			errorCount++;
+		}
+
+		if (errors.hasErrors()) {
+			model.addAttribute("admin", admin);
+			model.addAttribute("title", "Admin Lost Password");
+			return viewsDirectory + "forgot-password";
+		}
+
+		else {
+			Session session = factory.openSession();
+			String hql = "FROM AdminEntity WHERE account.username = '" + admin.getAccount().getUsername() + "' AND id = '" + admin.getId() + "' AND email = '" + admin.getEmail() + "'";
+			Query query = session.createQuery(hql);
+			System.out.println(query.list().size());
+			//session.close();
+
+			if (!query.list().isEmpty()) {
+				AdminEntity admin2 = (AdminEntity) query.list().get(0);
+				admin2.getAccount().setRecovery(generateId(5));
+				updateDB(admin2);
+				return viewsDirectory + "reset-password";
+			} else {
+				return "redirect:/admin/login";
+			}
+		}
 	}
 
 	@RequestMapping("logout")
@@ -147,6 +176,31 @@ public class AdminAuthController {
 		session.setAttribute("admin", null);
 		return "redirect:/admin/login";
 	}
+	
+	public void updateDB(Object entity) {
+		Session session = factory.openSession();
+		Transaction t = session.beginTransaction();
+		try {
+			session.merge(entity);
+			t.commit();
+			System.out.println("Updated");
+
+		} catch (Exception e) {
+			t.rollback();
+			System.out.println("Error");
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+	}
+	
+	/*
+	 * public AdminInfoEntity getAdmin(AdminInfoEntity admin) { Session session =
+	 * factory.openSession(); String hql = "FROM CategoryEntity WHERE id = '" + id +
+	 * "'"; Query query = session. CategoryEntity category = (CategoryEntity)
+	 * query.list().get(0); session.close(); return category; }
+	 */
+	
 
 	public static String generateId(int targetStringLength) {
 		int leftLimit = 48; // numeral '0'

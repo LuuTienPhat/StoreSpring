@@ -27,5 +27,4 @@
 		base-package="controllers, models" />
 	
 	<mvc:resources mapping="/resources/**" location="/resources/" />
-	<mvc:resources mapping="/files/**" location="/files/" />
 </beans>

@@ -1,13 +1,12 @@
-package entities;
 
-import java.util.List;
+
+package entities;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -19,17 +18,24 @@ public class AdminEntity {
 	@Id
 	@Column(name = "id")
 	private String id;
-	@NotBlank(message = "Không được để trống")
-	@Column(name = "username", unique = true)
-	private String username;
-	@NotBlank(message = "Không được để trống")
-	@Column(name = "password")
-	private String password;
-	@Column(name = "recovery")
-	private String recovery;
+	@Column(name = "firstname")
+	private String firstname;
+	@Column(name = "lastname")
+	private String lastname;
+	@Column(name = "birthday")
+	private String birthday;
+	@Column(name = "gender")
+	private String gender;
+	@Column(name = "email")
+	private String email;
+	@Column(name = "phone")
+	private String phone;
+	@Column(name = "address")
+	private String address;
 	
-	@OneToOne(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-	private AdminInfoEntity admin;
+	@OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id", referencedColumnName = "id")
+	private AccountEntity account;
 	
 	public String getId() {
 		return id;
@@ -37,34 +43,58 @@ public class AdminEntity {
 	public void setId(String id) {
 		this.id = id;
 	}
-	public String getUsername() {
-		return username;
+	public String getFirstname() {
+		return firstname;
 	}
-	public void setUsername(String username) {
-		this.username = username;
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
 	}
-	public String getPassword() {
-		return password;
+	public String getLastname() {
+		return lastname;
 	}
-	public void setPassword(String password) {
-		this.password = password;
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
 	}
-	public String getRecovery() {
-		return recovery;
+	public String getBirthday() {
+		return birthday;
 	}
-	public void setRecovery(String recovery) {
-		this.recovery = recovery;
+	public void setBirthday(String birthday) {
+		this.birthday = birthday;
+	}
+	public String getGender() {
+		return gender;
+	}
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public String getPhone() {
+		return phone;
+	}
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	public AccountEntity getAccount() {
+		return account;
+	}
+	public void setAccount(AccountEntity account) {
+		this.account = account;
 	}
 	
-	public AdminInfoEntity getAdmin() {
-		return admin;
-	}
-	public void setAdmin(AdminInfoEntity admin) {
-		this.admin = admin;
-	}
 	public AdminEntity() {
 		// TODO Auto-generated constructor stub
-		super();
+		this.account = new AccountEntity();
 	}
-	
 }
+

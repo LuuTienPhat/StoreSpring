@@ -15,7 +15,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.hibernate.annotations.Cascade;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
@@ -56,8 +55,10 @@ public class ProductEntity {
 	private List<OrderDetailEntity> orderDetails;
 
 	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-	//@Cascade({ CascadeType.ALL, CascadeType.DELETE_ORPHAN })
 	private List<ImageEntity> images;
+	
+	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+	private List<InvoiceDetailEntity> invoiceDetails;
 
 	public String getId() {
 		return id;
@@ -137,5 +138,9 @@ public class ProductEntity {
 
 	public void setCartDetails(List<CartDetailEntity> cartDetails) {
 		this.cartDetails = cartDetails;
+	}
+	
+	public ProductEntity() {
+		// TODO Auto-generated constructor stub
 	}
 }
