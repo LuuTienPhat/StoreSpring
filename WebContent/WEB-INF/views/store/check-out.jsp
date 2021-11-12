@@ -30,59 +30,117 @@
 	transform: translateY(-8px);
 	color: white;
 }
+
+@import
+	url('https://fonts.googleapis.com/css2?family=Catamaran:wght@100;200;300;400;500;600;700;800;900&family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap')
+	;
+
+.main-container {
+	width: 90%;
+	max-width: 350px;
+	margin: 50px auto;
+}
+
+.select-item {
+	width: 100%;
+	font-family: 'Montserrat', sans-serif;
+	margin: 15px auto;
+	position: relative;
+}
+
+.select-item>label {
+	display: block;
+	font-size: 18px;
+}
+
+.select-item>select {
+	margin-top: 10px;
+	width: 100%;
+	font-family: 'Montserrat', sans-serif;
+	font-size: 16px;
+	line-height: 36px;
+	height: 36px;
+	border-radius: 3px;
+	outline: none;
+	background: none;
+	box-shadow: none;
+	border: 1px solid rgb(175, 175, 175);
+}
+
+.select-item>span {
+	position: absolute;
+	width: 22px;
+	height: 22px;
+	right: 22px;
+	top: 38px;
+	display: none;
+	z-index: 5;
+}
+
+.select-item>span>img {
+	width: 100%;
+	height: 100%;
+}
 </style>
 </head>
 
 <body>
 	<%@include file="/WEB-INF/views/store/include/store-header.jsp"%>
 	<main class="main">
-        <div class="main__new-product px-32 mb-12 mt-6">
-            <div class="mb-5 font-bold">
-                <a href="${applicationScope.storeIndexPage}" class="hover:text-indigo-400 transition-colors">Trang
-                    chủ</a> > <span class="text-indigo-400">Hồ sơ cá nhân</span>
-            </div>
-            <div class="">
+		<div class="main__new-product px-32 mb-12 mt-6">
+			<div class="mb-5 font-bold">
+				<a href="${applicationScope.shoppingCartPage}"
+					class="hover:text-indigo-400 transition-colors">Giỏ hàng</a> > <span
+					class="text-indigo-400">Thanh toán</span>
+			</div>
+			<div class="">
 
-                <f:form action="store/shopping-cart/check-out" class="w-full flex flex-wrap check-out-wrapper" method="post"
-                    modelAttribute="order">
-                    <div class="sign-up-form-container border-2 border-gray-200 w-full flex-1">
-                        <div class="my-3 px-4 font-bold">1. THÔNG TIN NGƯỜI NHẬN</div>
-                        <div class="px-4">
-                            <hr class="">
-                        </div>
-                        <div class="p-4">
-                            <div class="flex input-wrapper">
-                                <label for="" class="mr-3">Họ tên: <span class="text-red-500">(*)</span></label>
-                                <div class="w-full">
-                                    <f:input type="text" path="shipName" id=""
-                                        class="w-full p-2 border-2 border-gray-300 rounded-md mb-3" placeholder="Họ (*)"
-                                        value="${customerEntity.firstname} ${customerEntity.lastname}" />
-                                    <f:errors path="shipName" cssClass="error" element="div" />
-                                </div>
+				<f:form action="store/shopping-cart/check-out"
+					class="w-full flex flex-wrap check-out-wrapper" method="post"
+					modelAttribute="order">
+					<div
+						class="sign-up-form-container border-2 border-gray-200 w-full flex-1">
+						<div class="my-3 px-4 font-bold">1. THÔNG TIN NGƯỜI NHẬN</div>
+						<div class="px-4">
+							<hr class="">
+						</div>
+						<div class="p-4">
+							<div class="flex input-wrapper">
+								<label for="" class="mr-3">Họ tên: <span
+									class="text-red-500">(*)</span></label>
+								<div class="w-full">
+									<f:input type="text" path="shipName" id=""
+										class="w-full p-2 border-2 border-gray-300 rounded-md mb-3"
+										placeholder="Họ (*)"
+										value="${customerEntity.firstname} ${customerEntity.lastname}" />
+									<f:errors path="shipName" cssClass="error" element="div" />
+								</div>
 
-                            </div>
+							</div>
 
-                            <div class="flex input-wrapper">
-                                <label for="" class="mr-3">Điện thoại: <span class="text-red-500">(*)</span></label>
-                                <div class="w-full">
-                                    <f:input type="text" path="shipPhone" id=""
-                                        class="w-full p-2 border-2 border-gray-300 rounded-md mb-3"
-                                        placeholder="Điện thoại (*)" value="${customerEntity.phone}" />
-                                    <f:errors path="shipPhone" cssClass="error" element="div" />
-                                </div>
+							<div class="flex input-wrapper">
+								<label for="" class="mr-3">Điện thoại: <span
+									class="text-red-500">(*)</span></label>
+								<div class="w-full">
+									<f:input type="text" path="shipPhone" id=""
+										class="w-full p-2 border-2 border-gray-300 rounded-md mb-3"
+										placeholder="Điện thoại (*)" value="${customerEntity.phone}" />
+									<f:errors path="shipPhone" cssClass="error" element="div" />
+								</div>
 
-                            </div>
-                            <div class="flex input-wrapper">
-                                <label for="" class="mr-3">Email: <span class="text-red-500">(*)</span></label>
-                                <div class="w-full">
-                                    <f:input type="text" path="shipEmail" id=""
-                                        class="w-full p-2 border-2 border-gray-300 rounded-md mb-3"
-                                        placeholder="Email (*)" value="${customerEntity.email}" />
-                                    <f:errors path="shipEmail" cssClass="error" element="div" />
-                                </div>
+							</div>
+							<div class="flex input-wrapper">
+								<label for="" class="mr-3">Email: <span
+									class="text-red-500">(*)</span></label>
+								<div class="w-full">
+									<f:input type="text" path="shipEmail" id=""
+										class="w-full p-2 border-2 border-gray-300 rounded-md mb-3"
+										placeholder="Email (*)" value="${customerEntity.email}" />
+									<f:errors path="shipEmail" cssClass="error" element="div" />
+								</div>
 
-                            </div>
-                            <%-- <div class="flex input-wrapper">
+							</div>
+							<%-- <div class="flex input-wrapper">
                                 <label for="" class="mr-3">Tỉnh/Thành phố: <span
                                         class="text-red-500">(*)</span></label>
                                 <div class="w-full">
@@ -157,7 +215,7 @@
                                 </div>
 
                             </div> --%>
-                            <%-- <div class="flex input-wrapper">
+							<%-- <div class="flex input-wrapper">
                                 <label for="" class="mr-3">Quận/ Huyện: <span class="text-red-500">(*)</span></label>
                                 <div class="w-full">
                                     <f:select id="districtId" path="district"
@@ -169,101 +227,110 @@
 
 
                             </div> --%>
-                            <div class="flex input-wrapper">
-                                <label for="" class="mr-3">Địa chỉ chi tiết: <span
-                                        class="text-red-500">(*)</span></label>
-                                <div class="w-full">
-                                    <f:input type="text" path="shipAddress" id=""
-                                        class="w-full p-2 border-2 border-gray-300 rounded-md mb-3"
-                                        placeholder="Địa chỉ chi tiết (*)" value="${customerEntity.address}" />
-                                    <f:errors path="shipAddress" cssClass="error" element="div" />
-                                </div>
-
-                            </div>
-                            <div class="flex input-wrapper">
-                                <label for="" class="mr-3">Ghi chú: <!-- <span class="text-red-500">(*)</span> --></label>
-                                <div class="w-full">
-                                    <f:textarea type="text" path="shipNote" id=""
-                                        class="w-full p-2 border-2 border-gray-300 rounded-md mb-3"
-                                        placeholder="Ghi chú" value="${customerEntity.address}"/>
-                                    <f:errors path="shipNote" cssClass="error" element="div" />
-                                </div>
-
-                            </div>
-                        </div>
-
-                    </div>
 
 
-                    <div class="border-2 border-gray-200 w-full flex-1">
-                        <div class="my-3 px-4 font-bold">2. THÔNG TIN GIỎ HÀNG</div>
-                        <div class="px-4">
-                            <hr class="">
-                        </div>
-                        <div class="w-full p-4">
-                            <table class="cart-list__table mb-4">
-                                <thead>
-                                    <tr class="card-list__table-header font-bold">
-                                        <th>Tên</th>
-                                        <th>Số lượng</th>
-                                        <th>Thành tiền</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                <c:forEach var="c" items="${cartDetails}">
-                                <tr class="card-list__table-item">
-                                        <!-- desc = tên sản phẩm + màu sắc + kích cỡ (nếu có) -->
-                                        <td class="card-list__table-desc" style="text-align: left !important;"><a
-                                                href="${applicationScope.productDetailPage}/${c.product.id}" class="hover:text-indigo-400">${c.product.name}</a>
-                                            <br>
-                                            <div class="cart-list__price">Đơn giá: <span
-                                                    class="font-bold"><fmt:setLocale value="vi_VN" scope="session" />
-                              <fmt:formatNumber value="${c.product.price}" type="currency" /></span></div>
-                                        </td>
-                                        <td class="cart-list__quantity">
-                                            ${c.quantity}
-                                        </td>
-                                        <td class="card-list__total font-bold"><fmt:setLocale value="vi_VN" scope="session" />
-                              <fmt:formatNumber value="${c.quantity*c.product.price}" type="currency" /></td>
-                                    </tr>
-                                
-                                </c:forEach>
-                                    
-                                </tbody>
-                            </table>
-                            <div class="flex justify-between border-t my-1 py-2">
-                                <span class="">Tạm tính</span>
-                                <span class="font-bold"><fmt:setLocale value="vi_VN" scope="session" />
-                              <fmt:formatNumber value="${cartDetailsTotal}" type="currency" /></span>
-                            </div>
-                            <div class="flex justify-between border-t my-1 py-2">
-                                <span class="">Phí vận chuyển</span>
-                                <span class="font-bold">30.000đ</span>
-                            </div>
-                            <div class="flex justify-between border-t my-1 py-2">
-                                <span class="">Tổng cộng</span>
-                                <span class="font-bold"><fmt:setLocale value="vi_VN" scope="session" />
-                              <fmt:formatNumber value="${cartDetailsTotal + 30000}" type="currency" /></span>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="w-full flex justify-end">
-                        <button
-                            class="px-4 py-2 my-2 font-bold bg-indigo-300 hover:bg-indigo-400 transition-colors text-white rounded-md">Thanh
-                            toán</button>
-                    </div>
 
-                </f:form>
-            </div>
+							<div class="flex input-wrapper">
+								<label for="" class="mr-3">Địa chỉ chi tiết: <span
+									class="text-red-500">(*)</span></label>
+								<div class="w-full">
+									<f:input type="text" path="shipAddress" id=""
+										class="w-full p-2 border-2 border-gray-300 rounded-md mb-3"
+										placeholder="Địa chỉ chi tiết (*)"
+										value="${customerEntity.address}" />
+									<f:errors path="shipAddress" cssClass="error" element="div" />
+								</div>
 
-        </div>
-    </main>
+							</div>
+							<div class="flex input-wrapper">
+								<label for="" class="mr-3">Ghi chú: <!-- <span class="text-red-500">(*)</span> --></label>
+								<div class="w-full">
+									<f:textarea type="text" path="shipNote" id=""
+										class="w-full p-2 border-2 border-gray-300 rounded-md mb-3"
+										placeholder="Ghi chú" value="${customerEntity.address}" />
+									<f:errors path="shipNote" cssClass="error" element="div" />
+								</div>
+
+							</div>
+						</div>
+
+					</div>
+
+
+					<div class="border-2 border-gray-200 w-full flex-1">
+						<div class="my-3 px-4 font-bold">2. THÔNG TIN GIỎ HÀNG</div>
+						<div class="px-4">
+							<hr class="">
+						</div>
+						<div class="w-full p-4">
+							<table class="cart-list__table mb-4">
+								<thead>
+									<tr class="card-list__table-header font-bold">
+										<th>Tên</th>
+										<th>Số lượng</th>
+										<th>Thành tiền</th>
+									</tr>
+								</thead>
+								<tbody>
+									<c:forEach var="c" items="${cartDetails}">
+										<tr class="card-list__table-item">
+											<!-- desc = tên sản phẩm + màu sắc + kích cỡ (nếu có) -->
+											<td class="card-list__table-desc"
+												style="text-align: left !important;"><a
+												href="${applicationScope.productDetailPage}/${c.product.id}"
+												class="hover:text-indigo-400">${c.product.name}</a> <br>
+												<div class="cart-list__price">
+													Đơn giá: <span class="font-bold"><fmt:setLocale
+															value="vi_VN" scope="session" /> <fmt:formatNumber
+															value="${c.product.price}" type="currency" /></span>
+												</div></td>
+											<td class="cart-list__quantity">${c.quantity}</td>
+											<td class="card-list__total font-bold"><fmt:setLocale
+													value="vi_VN" scope="session" /> <fmt:formatNumber
+													value="${c.quantity*c.product.price}" type="currency" /></td>
+										</tr>
+
+									</c:forEach>
+
+								</tbody>
+							</table>
+							<div class="flex justify-between border-t my-1 py-2">
+								<span class="">Tạm tính</span> <span class="font-bold"><fmt:setLocale
+										value="vi_VN" scope="session" /> <fmt:formatNumber
+										value="${cartDetailsTotal}" type="currency" /></span>
+							</div>
+							<div class="flex justify-between border-t my-1 py-2">
+								<span class="">Phí vận chuyển</span> <span class="font-bold"><fmt:setLocale
+										value="vi_VN" scope="session" /> <fmt:formatNumber
+										value="0" type="currency" /></span>
+							</div>
+							<div class="flex justify-between border-t my-1 py-2">
+								<span class="">Tổng cộng</span> <span class="font-bold"><fmt:setLocale
+										value="vi_VN" scope="session" /> <fmt:formatNumber
+										value="${cartDetailsTotal + 0}" type="currency" /></span>
+							</div>
+						</div>
+					</div>
+
+					<div class="w-full flex justify-end">
+						<button
+							class="px-4 py-2 my-2 font-bold bg-indigo-300 hover:bg-indigo-400 transition-colors text-white rounded-md">Thanh
+							toán</button>
+					</div>
+
+				</f:form>
+				
+			</div>
+
+		</div>
+	</main>
 	<%@include file="/WEB-INF/views/store/include/store-footer.jsp"%>
-
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 	<script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
 	<!-- <script src="./assets/js/main.js"></script> -->
 	<script src="<c:url value='/resources/store/assets/js/main.js'/>"></script>
+	<script src="<c:url value='/resources/store/assets/js/check-out.js'/>"></script>
 	<!-- <script src="./assets/js/sign-up.js"></script> -->
 	<%-- 	<script src="<c:url value='/resources/store/assets/js/sign-up.js'/>"></script> --%>
 	<script type="text/javascript">
