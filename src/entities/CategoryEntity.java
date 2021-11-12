@@ -34,7 +34,7 @@ public class CategoryEntity {
 	@Column(name = "description")
 	private String description;
 
-	@OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "category", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
 	private List<ProductEntity> products;
 
 	public String getId() {

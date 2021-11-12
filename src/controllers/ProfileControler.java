@@ -16,7 +16,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import entities.AdminEntity;
+import entities.AccountEntity;
 import entities.ProductEntity;
 import models.UploadFile;
 
@@ -40,7 +40,7 @@ public class ProfileControler {
 	public String renderProfilePage(ModelMap model, HttpSession session) throws IOException {
 		
 		String id = session.getAttribute("admin").toString();
-		AdminEntity admin = getAdmin(id);
+		AccountEntity admin = getAdmin(id);
 		
 		model.addAttribute("admin", admin);
 		model.addAttribute("title", "Thông tin");
@@ -54,21 +54,21 @@ public class ProfileControler {
 	}
 	
 	// GET PRODUCTS
-		public List<AdminEntity> getAdmins() throws IOException {
+		public List<AccountEntity> getAdmins() throws IOException {
 			Session session = factory.openSession();
 			String hql = "FROM AdminEntity";
 			Query query = session.createQuery(hql);
-			List<AdminEntity> admins = query.list();
+			List<AccountEntity> admins = query.list();
 			session.close();
 			return admins;
 		}
 
 		// GET PRODUCT WITH ID
-		public AdminEntity getAdmin(String id) throws IOException {
+		public AccountEntity getAdmin(String id) throws IOException {
 			Session session = factory.openSession();
 			String hql = "FROM AdminEntity WHERE id = '" + id + "'";
 			Query query = session.createQuery(hql);
-			AdminEntity admin = (AdminEntity) query.list().get(0);
+			AccountEntity admin = (AccountEntity) query.list().get(0);
 			session.close();
 			return admin;
 		}

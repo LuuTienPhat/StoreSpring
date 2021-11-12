@@ -1,5 +1,6 @@
 package entities;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -80,5 +81,30 @@ public class InvoiceEntity {
 		// TODO Auto-generated constructor stub
 		this.invoiceType = new InvoiceTypeEntity();
 		this.admin = new AdminEntity();
+		this.invoiceDetails = new ArrayList<InvoiceDetailEntity>();
+	}
+
+	public boolean hasProduct(String productId) {
+		for (InvoiceDetailEntity invoiceDetail : invoiceDetails) {
+			if (invoiceDetail.getProduct().getId().equals(productId))
+				return true;
+		}
+		return false;
+	}
+	
+	public int getQuantity(String productId) {
+		for (InvoiceDetailEntity invoiceDetail : invoiceDetails) {
+			if (invoiceDetail.getProduct().getId().equals(productId))
+				return invoiceDetail.getQuantity();
+		}
+		return 0;
+	}
+	
+	public float getPrice(String productId) {
+		for (InvoiceDetailEntity invoiceDetail : invoiceDetails) {
+			if (invoiceDetail.getProduct().getId().equals(productId))
+				return invoiceDetail.getPrice();
+		}
+		return 0;
 	}
 }

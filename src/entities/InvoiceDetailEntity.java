@@ -27,6 +27,9 @@ public class InvoiceDetailEntity {
 	@Column(name = "quantity")
 	private int quantity;
 
+	@Column(name = "price")
+	private float price;
+
 	public int getId() {
 		return id;
 	}
@@ -57,6 +60,14 @@ public class InvoiceDetailEntity {
 
 	public void setProduct(ProductEntity product) {
 		this.product = product;
+	}
+
+	public float getPrice() {
+		return price;
+	}
+
+	public void setPrice(float price) {
+		this.price = price;
 	}
 
 	public InvoiceDetailEntity() {
