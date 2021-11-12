@@ -13,18 +13,15 @@
             <div class="mx-3">
                 <h3 class="text-md">HÀ NỘI</h3>
                 <ul class="list-disc pl-6 text-sm">
-                    <li class="">81 Bà Triệu, Hai Bà Trưng</li>
-                    <li class="">226 Nguyễn Trãi, Nam Từ Liêm (gần ĐH Hà Nội)</li>
-                    <li class="">81 Bà Triệu, Hai Bà Trưng</li>
-                    <li class="">81 Bà Triệu, Hai Bà Trưng</li>
+                    <li class="">122 Hoàng Quốc Việt, Q.Cầu Giấy, Hà Nội</li>
+                    <li class="">Km10, Đường Nguyễn Trãi, Q.Hà Đông, Hà Nội</li>
                 </ul>
             </div>
             <div class="mx-3">
                 <h3 class="text-md">TP.HỒ CHÍ MINH</h3>
                 <ul class="list-disc pl-6 text-sm">
-                    <li class="">92 Hồ Tùng Mậu, P.Bến Nghé, Q1</li>
-                    <li class="">708 Sư Vạn Hạnh, P.12, Q.10 (đối diện chéo Vạn Hạnh Mall)</li>
-                    <li class="">87 Bàu Cát, P.14, Q.Tân Bình (khúc giao Nguyễn Hồng Đào)</li>
+                    <li class="">11 Nguyễn Đình Chiểu, P. Đa Kao, Q.1 TP, Hồ Chí Minh</li>
+                    <li class="">97 Man Thiện, P. Hiệp Phú, Q.9, TP Hồ Chí Minh</li>
                 </ul>
             </div>
 

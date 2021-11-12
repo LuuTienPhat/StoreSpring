@@ -101,19 +101,20 @@
 						<a href="" id="search-link"><i
 							class="fa fa-search p-2 bg-indigo-300 hover:bg-indigo-400 text-white rounded-r-md hover:text-white"></i></a>
 					</form>
-					<ul class="flex">
-						<!-- <li><a href="#" class="pr-2 py-1 block hover:text-indigo-300 transition-colors">Gấu bông</a></li>
-                        <li><a href="#" class="px-2 py-1 block hover:text-indigo-300 transition-colors">Văn phòng phẩm</a>
-                        </li>
-                        <li><a href="#" class="px-2 py-1 block hover:text-indigo-300 transition-colors">Vòng tay</a></li>
-                        <li><a href="#" class="px-2 py-1 block hover:text-indigo-300 transition-colors">Kẹp tóc</a></li>
-                        <li><a href="#" class="px-2 py-1 block hover:text-indigo-300 transition-colors">Ví</a></li>
-                        <li><a href="#" class="px-2 py-1 block hover:text-indigo-300 transition-colors">Idol</a></li> -->
-						<c:forEach var="category" begin="2" end="4" step="1"
+					<ul class="flex" style="height: 30px">
+						<%-- <c:forEach var="category" begin="2" end="4" step="1"
 							items="${sessionScope.listCategory}">
 							<li><a href="store/category/${category.id}"
 								class="px-2 py-1 block hover:text-indigo-300 transition-colors">${category.name}</a></li>
+						</c:forEach> --%>
+						<c:if test="${sessionScope.listRecentSearch !=null}">
+						<c:forEach var="key"
+							items="${sessionScope.listRecentSearch}">
+							<li><a href="store/search/${key}"
+								class="px-2 py-1 block hover:text-indigo-300 transition-colors">${key}</a></li>
 						</c:forEach>
+						</c:if>
+						
 					</ul>
 				</div>
 				<div class="nav__log-in flex justify-between items-center">
@@ -166,227 +167,6 @@
 			<div class="nav__bottom-header hidden w-full"></div>
 			<ul class="flex items-center">
 				<!-- <li class="nav__submenu-container relative">
-                    <div class="cursor-pointer px-2 py-3 flex justify-between border-b-2 border-white">
-                        <a href="#" class="block font-bold text-sm hover:text-indigo-400 transition-colors">Tất cả</a>
-                        <i class="fa fa-chevron-down flex-1 nav__submenu-container pr-2 hidden"></i>
-                    </div>
-
-                    <div class="submenu absolute">
-                        <ul class="bg-indigo-200 w-44">
-                            <li><a href="#"
-                                    class="py-2 px-3 block font-bold border-b-2 border-white text-sm hover:text-indigo-400">Sub
-                                    menu item</a></li>
-                            <li><a href="#"
-                                    class="py-2 px-3 block font-bold border-b-2 border-white text-sm hover:text-indigo-400">Sub
-                                    menu item</a></li>
-                            <li><a href="#"
-                                    class="py-2 px-3 block font-bold border-b-2 border-white text-sm hover:text-indigo-400">Sub
-                                    menu item</a></li>
-                            <li><a href="#" class="py-1 px-3 block font-bold hover:text-indigo-400 text-sm">Sub menu item</a></li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="nav__submenu-container relative">
-                    <div class="cursor-pointer px-2 py-3 flex justify-between border-b-2 border-white">
-                        <a href="#" class="block font-bold text-sm hover:text-indigo-400 transition-colors">Gấu bông</a>
-                        <i class="fa fa-chevron-down flex-1 nav__submenu-container pr-2 hidden"></i>
-                    </div>
-                    <div class="submenu absolute">
-                        <ul class="bg-indigo-200 w-44">
-                            <li><a href="#"
-                                    class="py-2 px-3 block font-bold border-b-2 border-white text-sm hover:text-indigo-400">Sub
-                                    menu item</a></li>
-                            <li><a href="#"
-                                    class="py-2 px-3 block font-bold border-b-2 border-white text-sm hover:text-indigo-400">Sub
-                                    menu item</a></li>
-                            <li><a href="#"
-                                    class="py-2 px-3 block font-bold border-b-2 border-white text-sm hover:text-indigo-400">Sub
-                                    menu item</a></li>
-                            <li><a href="#" class="py-1 px-3 block font-bold hover:text-indigo-400 text-sm">Sub menu item</a></li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="nav__submenu-container relative">
-                    <div class="cursor-pointer px-2 py-3 flex justify-between border-b-2 border-white">
-                        <a href="#" class="block font-bold text-sm hover:text-indigo-400 transition-colors">Túi ví</a>
-                        <i class="fa fa-chevron-down flex-1 nav__submenu-container pr-2 hidden"></i>
-                    </div>
-                    <div class="submenu absolute">
-                        <ul class="bg-indigo-200 w-44">
-                            <li><a href="#"
-                                    class="py-2 px-3 block font-bold border-b-2 border-white text-sm hover:text-indigo-400">Sub
-                                    menu item</a></li>
-                            <li><a href="#"
-                                    class="py-2 px-3 block font-bold border-b-2 border-white text-sm hover:text-indigo-400">Sub
-                                    menu item</a></li>
-                            <li><a href="#"
-                                    class="py-2 px-3 block font-bold border-b-2 border-white text-sm hover:text-indigo-400">Sub
-                                    menu item</a></li>
-                            <li><a href="#" class="py-1 px-3 block font-bold hover:text-indigo-400 text-sm">Sub menu item</a></li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="nav__submenu-container relative">
-                    <div class="cursor-pointer px-2 py-3 flex justify-between border-b-2 border-white">
-                        <a href="#" class="block font-bold text-sm hover:text-indigo-400 transition-colors">Văn phòng phẩm</a>
-                        <i class="fa fa-chevron-down flex-1 nav__submenu-container pr-2 hidden"></i>
-                    </div>
-                    <div class="submenu absolute">
-                        <ul class="bg-indigo-200 w-44">
-                            <li><a href="#"
-                                    class="py-2 px-3 block font-bold border-b-2 border-white text-sm hover:text-indigo-400">Sub
-                                    menu item</a></li>
-                            <li><a href="#"
-                                    class="py-2 px-3 block font-bold border-b-2 border-white text-sm hover:text-indigo-400">Sub
-                                    menu item</a></li>
-                            <li><a href="#"
-                                    class="py-2 px-3 block font-bold border-b-2 border-white text-sm hover:text-indigo-400">Sub
-                                    menu item</a></li>
-                            <li><a href="#" class="py-1 px-3 block font-bold hover:text-indigo-400 text-sm">Sub menu item</a></li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="nav__submenu-container relative">
-                    <div class="cursor-pointer px-2 py-3 flex justify-between border-b-2 border-white">
-                        <a href="#" class="block font-bold text-sm hover:text-indigo-400 transition-colors">Điện tử</a>
-                        <i class="fa fa-chevron-down flex-1 nav__submenu-container pr-2 hidden"></i>
-                    </div>
-                    <div class="submenu absolute">
-                        <ul class="bg-indigo-200 w-44">
-                            <li><a href="#"
-                                    class="py-2 px-3 block font-bold border-b-2 border-white text-sm hover:text-indigo-400">Sub
-                                    menu item</a></li>
-                            <li><a href="#"
-                                    class="py-2 px-3 block font-bold border-b-2 border-white text-sm hover:text-indigo-400">Sub
-                                    menu item</a></li>
-                            <li><a href="#"
-                                    class="py-2 px-3 block font-bold border-b-2 border-white text-sm hover:text-indigo-400">Sub
-                                    menu item</a></li>
-                            <li><a href="#" class="py-1 px-3 block font-bold hover:text-indigo-400 text-sm">Sub menu item</a></li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="nav__submenu-container relative">
-                    <div class="cursor-pointer px-2 py-3 flex justify-between border-b-2 border-white">
-                        <a href="#" class="block font-bold text-sm hover:text-indigo-400 transition-colors">Phụ kiện thời trang</a>
-                        <i class="fa fa-chevron-down flex-1 nav__submenu-container pr-2 hidden"></i>
-                    </div>
-                    <div class="submenu absolute">
-                        <ul class="bg-indigo-200 w-44">
-                            <li><a href="#"
-                                    class="py-2 px-3 block font-bold border-b-2 border-white text-sm hover:text-indigo-400">Sub
-                                    menu item</a></li>
-                            <li><a href="#"
-                                    class="py-2 px-3 block font-bold border-b-2 border-white text-sm hover:text-indigo-400">Sub
-                                    menu item</a></li>
-                            <li><a href="#"
-                                    class="py-2 px-3 block font-bold border-b-2 border-white text-sm hover:text-indigo-400">Sub
-                                    menu item</a></li>
-                            <li><a href="#" class="py-1 px-3 block font-bold hover:text-indigo-400 text-sm">Sub menu item</a></li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="nav__submenu-container relative">
-                    <div class="cursor-pointer px-2 py-3 flex justify-between border-b-2 border-white">
-                        <a href="#" class="block font-bold text-sm hover:text-indigo-400 transition-colors">Đồ gia dụng</a>
-                        <i class="fa fa-chevron-down flex-1 nav__submenu-container pr-2 hidden"></i>
-                    </div>
-                    <div class="submenu absolute">
-                        <ul class="bg-indigo-200 w-44">
-                            <li><a href="#"
-                                    class="py-2 px-3 block font-bold border-b-2 border-white text-sm hover:text-indigo-400">Sub
-                                    menu item</a></li>
-                            <li><a href="#"
-                                    class="py-2 px-3 block font-bold border-b-2 border-white text-sm hover:text-indigo-400">Sub
-                                    menu item</a></li>
-                            <li><a href="#"
-                                    class="py-2 px-3 block font-bold border-b-2 border-white text-sm hover:text-indigo-400">Sub
-                                    menu item</a></li>
-                            <li><a href="#" class="py-1 px-3 block font-bold hover:text-indigo-400 text-sm">Sub menu item</a></li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="nav__submenu-container relative">
-                    <div class="cursor-pointer px-2 py-3 flex justify-between border-b-2 border-white">
-                        <a href="#" class="block font-bold text-sm hover:text-indigo-400 transition-colors">Trang điểm</a>
-                        <i class="fa fa-chevron-down flex-1 nav__submenu-container pr-2 hidden"></i>
-                    </div>
-                    <div class="submenu absolute">
-                        <ul class="bg-indigo-200 w-44">
-                            <li><a href="#"
-                                    class="py-2 px-3 block font-bold border-b-2 border-white text-sm hover:text-indigo-400">Sub
-                                    menu item</a></li>
-                            <li><a href="#"
-                                    class="py-2 px-3 block font-bold border-b-2 border-white text-sm hover:text-indigo-400">Sub
-                                    menu item</a></li>
-                            <li><a href="#"
-                                    class="py-2 px-3 block font-bold border-b-2 border-white text-sm hover:text-indigo-400">Sub
-                                    menu item</a></li>
-                            <li><a href="#" class="py-1 px-3 block font-bold hover:text-indigo-400 text-sm">Sub menu item</a></li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="nav__submenu-container relative">
-                    <div class="cursor-pointer px-2 py-3 flex justify-between border-b-2 border-white">
-                        <a href="#" class="block font-bold text-sm hover:text-indigo-400 transition-colors">Du lịch</a>
-                        <i class="fa fa-chevron-down flex-1 nav__submenu-container pr-2 hidden"></i>
-                    </div>
-                    <div class="submenu absolute">
-                        <ul class="bg-indigo-200 w-44">
-                            <li><a href="#"
-                                    class="py-2 px-3 block font-bold border-b-2 border-white text-sm hover:text-indigo-400">Sub
-                                    menu item</a></li>
-                            <li><a href="#"
-                                    class="py-2 px-3 block font-bold border-b-2 border-white text-sm hover:text-indigo-400">Sub
-                                    menu item</a></li>
-                            <li><a href="#"
-                                    class="py-2 px-3 block font-bold border-b-2 border-white text-sm hover:text-indigo-400">Sub
-                                    menu item</a></li>
-                            <li><a href="#" class="py-1 px-3 block font-bold hover:text-indigo-400 text-sm">Sub menu item</a></li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="nav__submenu-container relative">
-                    <div class="cursor-pointer px-2 py-3 flex justify-between border-b-2 border-white">
-                        <a href="#" class="block font-bold text-sm hover:text-indigo-400 transition-colors">Đồ chơi</a>
-                        <i class="fa fa-chevron-down flex-1 nav__submenu-container pr-2 hidden"></i>
-                    </div>
-                    <div class="submenu absolute">
-                        <ul class="bg-indigo-200 w-44">
-                            <li><a href="#"
-                                    class="py-2 px-3 block font-bold border-b-2 border-white text-sm hover:text-indigo-400">Sub
-                                    menu item</a></li>
-                            <li><a href="#"
-                                    class="py-2 px-3 block font-bold border-b-2 border-white text-sm hover:text-indigo-400">Sub
-                                    menu item</a></li>
-                            <li><a href="#"
-                                    class="py-2 px-3 block font-bold border-b-2 border-white text-sm hover:text-indigo-400">Sub
-                                    menu item</a></li>
-                            <li><a href="#" class="py-1 px-3 block font-bold hover:text-indigo-400 text-sm">Sub menu item</a></li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="nav__submenu-container relative">
-                    <div class="cursor-pointer px-2 py-3 flex justify-between border-b-2 border-white">
-                        <a href="#" class="block font-bold text-sm hover:text-indigo-400 transition-colors">Trang trí</a>
-                        <i class="fa fa-chevron-down flex-1 nav__submenu-container pr-2 hidden"></i>
-                    </div>
-                    <div class="submenu absolute">
-                        <ul class="bg-indigo-200 w-44">
-                            <li><a href="#"
-                                    class="py-2 px-3 block font-bold border-b-2 border-white text-sm hover:text-indigo-400">Sub
-                                    menu item</a></li>
-                            <li><a href="#"
-                                    class="py-2 px-3 block font-bold border-b-2 border-white text-sm hover:text-indigo-400">Sub
-                                    menu item</a></li>
-                            <li><a href="#"
-                                    class="py-2 px-3 block font-bold border-b-2 border-white text-sm hover:text-indigo-400">Sub
-                                    menu item</a></li>
-                            <li><a href="#" class="py-1 px-3 block font-bold hover:text-indigo-400 text-sm">Sub menu item</a></li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="nav__submenu-container relative">
                     <div class="cursor-pointer px-2 py-3 flex justify-between border-b-2 border-white">
                         <a href="#" class="block font-bold text-sm hover:text-indigo-400 transition-colors">Idol</a>
                         <i class="fa fa-chevron-down flex-1 nav__submenu-container pr-2 hidden"></i>
