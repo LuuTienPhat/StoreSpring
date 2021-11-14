@@ -32,7 +32,7 @@
 }
 
 .ordered-list {
-	height: 700px;
+	height: 660px;
 	overflow-y: scroll;
 }
 </style>
@@ -77,13 +77,6 @@
 					</div>
 				</div>
 				<div class="sign-up-form-container border-2 border-gray-200 flex-1">
-					<%-- 			<div class="flex">
-				<a href="${applicationScope.signInPage}"
-					class="switch-to-sign-in w-full py-2 relative text-xl text-indigo-400 text-center">ĐĂNG
-					NHẬP</a><a href="${applicationScope.signUpPage}"
-					class="switch-to-sign-up w-full py-2 relative text-xl text-indigo-400 text-center active-show-after">ĐĂNG
-					KÝ</a>
-			</div> --%>
 					<div class="my-3 px-4 font-bold">ĐƠN HÀNG ĐÃ MUA</div>
 					<div class="px-4">
 						<hr class="">
@@ -97,8 +90,7 @@
 									lại trang chủ</a> để mua sắm.
 							</p>
 						</c:if>
-						
-						<table class="cart-list__table mb-4">
+						<%-- <table class="cart-list__table mb-4">
 							<thead>
 								<tr class="card-list__table-header font-bold">
 									<th>Tên</th>
@@ -107,12 +99,9 @@
 								</tr>
 							</thead>
 							<c:forEach var="order" items="${listOrder}" varStatus="loop">
-							
 								<p class="">${loop.index+1}.</p>
-
 								<tbody>
 									<c:forEach var="c" items="${order.orderDetails}">
-
 										<tr class="card-list__table-item">
 											<td class="card-list__table-desc"
 												style="text-align: left !important;"><a
@@ -128,19 +117,49 @@
 													value="vi_VN" scope="session" /> <fmt:formatNumber
 													value="${c.quantity*c.product.price}" type="currency" /></td>
 										</tr>
-
 									</c:forEach>
-									
 								</tbody>
-									<div class="flex justify-between border-t my-1 py-2">
-										<span class="">Tổng cộng</span> <span class="font-bold"><fmt:setLocale
-												value="vi_VN" scope="session" /> <fmt:formatNumber
-												value="${order.orderTotal}" type="currency" /></span>
-									</div>
-									<div class="w-full border-b border-black"></div>
-									
+
+								<div class="w-full flex justify-between border-t my-1 py-2">
+									<span class="">Tổng cộng</span> <span class="font-bold"><fmt:setLocale
+											value="vi_VN" scope="session" /> <fmt:formatNumber
+											value="${order.orderTotal}" type="currency" /></span>
+								</div>
+								<div class="w-full border-b border-black"></div>
 							</c:forEach>
-						</table>
+						</table> --%>
+						<div class="order-row flex justify-between">
+							<div class="order-cell flex-1 p-2 border">Sản phẩm</div>
+							<div class="order-cell w-1/6 p-2 border text-center align-middle">Số lượng</div>
+							<div class="order-cell w-1/5 p-2 border text-center align-middle">Thành tiền</div>
+						</div>
+						<c:forEach var="order" items="${listOrder}" varStatus="loop">
+							<p class="p-2 text-indigo-400 font-bold">- ${loop.index+1}.</p>
+							
+								<c:forEach var="c" items="${order.orderDetails}">
+								<div class="order-row flex">
+									<div class="order-cell flex-1 p-2 border"><a
+												href="${applicationScope.productDetailPage}/${c.product.id}"
+												class="hover:text-indigo-400">${c.product.name}</a><br>
+												<div class="cart-list__price text-sm">
+													Đơn giá: <span class="font-bold"><fmt:setLocale
+															value="vi_VN" scope="session" /> <fmt:formatNumber
+															value="${c.product.price}" type="currency" /></span>
+												</div></div>
+									<div class="order-cell w-1/6 p-2 border text-center align-middle">${c.quantity}</div>
+									<div class="order-cell w-1/5 p-2 border text-center align-middle"><fmt:setLocale
+													value="vi_VN" scope="session" /> <fmt:formatNumber
+													value="${c.quantity*c.product.price}" type="currency" /></div>
+								</div>
+								</c:forEach>
+							
+							<div class="w-full flex justify-between my-1 p-2">
+									<span class="">Tổng cộng:</span><span class="font-bold"><fmt:setLocale
+											value="vi_VN" scope="session" /><fmt:formatNumber
+											value="${order.orderTotal}" type="currency" /></span>
+								</div>
+								<div class="w-full border-b border-black"></div>
+						</c:forEach>
 					</div>
 				</div>
 			</div>
@@ -150,6 +169,8 @@
 
 	<!-- <script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script> -->
 	<!-- <script src="./assets/js/main.js"></script> -->
+	<script
+		src="<c:url value='/resources/store/assets/js/swiper-bundle.min.js'/>"></script>
 	<script src="<c:url value='/resources/store/assets/js/main.js'/>"></script>
 	<!-- <script src="./assets/js/sign-up.js"></script> -->
 	<%-- 	<script src="<c:url value='/resources/store/assets/js/sign-up.js'/>"></script> --%>

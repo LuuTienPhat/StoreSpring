@@ -26,6 +26,8 @@
         transform: translateX(0);
         transition: all .3s ease-out;
     }
+	@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300&display=swap');
+	*{font-family: 'Source Sans Pro', sans-serif;}
 </style>
 <body>
 	<div class="overcoat"></div>
