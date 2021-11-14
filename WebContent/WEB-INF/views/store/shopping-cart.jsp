@@ -11,7 +11,7 @@
 	<%@include file="/WEB-INF/views/store/include/store-header.jsp"%>
 	<main class="main">
 		<div class="cart-list__container main__new-product px-32 my-6">
-		<h3 class="text-indigo-400 font-bold mb-4 text-3xl">GIỎ HÀNG CỦA BẠN</h3>
+		<h3 class="text-indigo-400 font-bold mb-4 text-xl">GIỎ HÀNG CỦA BẠN</h3>
 				<hr class="border-none bg-indigo-400 mb-4" style="height: 1px;">
 					<c:if test="${listCartDetail.size()==0}">
 							<p>Bạn không có sản phẩm nào trong giỏ hàng.</p>
@@ -95,96 +95,54 @@
 			</h3>
 			<div class="section__heading mb-8  mt-16">
 				<h3>
-					<a href="#"
-						class="hover:text-indigo-300 transition-colors text-3xl font-bold">Các
-						sản phẩm đã xem</a>
+					<span href="#"
+						class="<!-- hover:text-indigo-300 --> transition-colors text-3xl font-bold">Các
+						sản phẩm đã xem</span>
 				</h3>
 			</div>
 
 
 			<div class="visited-product flex flex-wrap">
-				<div class="item w-1/5 px-3 mb-4">
-					<div class="relative item-menu-container overflow-hidden">
-						<a href="#" class="block overflow-hidden"> <img
-							src="<c:url value='/resources/store/assets/img/sp1.jpeg'/>"
-							alt="" class="transform hover:scale-110 transition-all "></a>
+				<c:if test="${sessionScope.listRecentViewProducts != null}">
+					<c:forEach var="p" items="${sessionScope.listRecentViewProducts}">
+						<div class="item w-1/5 px-3 mb-4 flex flex-col justify-between">
+						<div>
+							<div class="relative item-menu-container overflow-hidden">
+								<a href="${applicationScope.productDetailPage}/${p.id}"
+									class="block overflow-hidden">
+									<img src="${p.images[0].image}"
+									alt="${p.id}" class="transform hover:scale-110 transition-all " /></a>
 
-						<div
-							class="flex justify-center bg-indigo-300 items-center py-2 absolute item__menu w-full">
-							<a href="#"><i
-								class="fa text-2xl fa-heart text-white hover:text-indigo-400"></i></a>
-							<div class="border-l-2 border-white h-7 mx-2"></div>
-							<a href="#"><i
-								class="fa text-2xl fa-cart-plus text-white hover:text-indigo-400"></i></a>
+								<div
+									class="flex justify-center bg-indigo-300 items-center py-2 absolute item__menu w-full">
+									<!-- <a href="#"><i
+										class="fa text-2xl fa-heart text-white hover:text-indigo-400 transition-colors"></i></a>
+									<div class="border-l-2 border-white h-7 mx-2"></div> -->
+									<a href="store/shopping-cart/insert-into-cart/${p.id}"><i
+										class="fa text-2xl fa-cart-plus text-white hover:text-indigo-400 transition-colors"></i></a>
+								</div>
+							</div>
+							<a href="${applicationScope.productDetailPage}/${p.id}"
+								class="item__name block hover:text-indigo-300 transition-colors font-bold my-2">${p.name}</a>
 						</div>
-					</div>
-					<a href="#"
-						class="item__name block hover:text-indigo-300 transition-colors font-bold my-2">Squishy
-						MJ Momo duck nháy mắt 7cm</a> <span class="item__price font-bold">50000đ</span>
-				</div>
-				<div class="item w-1/5 px-3 mb-4">
-					<div class="relative item-menu-container overflow-hidden">
-						<a href="#" class="block overflow-hidden"> <img
-							src="<c:url value='/resources/store/assets/img/sp1.jpeg'/>"
-							alt="" class="transform hover:scale-110 transition-all "></a>
-
-						<div
-							class="flex justify-center bg-indigo-300 items-center py-2 absolute item__menu w-full">
-							<a href="#"><i
-								class="fa text-2xl fa-heart text-white hover:text-indigo-400"></i></a>
-							<div class="border-l-2 border-white h-7 mx-2"></div>
-							<a href="#"><i
-								class="fa text-2xl fa-cart-plus text-white hover:text-indigo-400"></i></a>
+						<div>
+						<span class="item__price font-bold"><fmt:setLocale value="vi_VN" scope="session" />
+                              <fmt:formatNumber value="${p.price}" type="currency" /></span>
+                              <c:if test="${p.quantity <= 0}">
+                              <span class="px-1 ml-1 bg-gray-500 text-white">Hết hàng</span>
+                              </c:if>
 						</div>
+						<%-- <span class="item__price font-bold"><fmt:setLocale value="vi_VN" scope="session" />
+                              <fmt:formatNumber value="${p.price}" type="currency" /></span> --%>
 					</div>
-					<a href="#"
-						class="item__name block hover:text-indigo-300 transition-colors font-bold my-2">Squishy
-						MJ Momo duck nháy mắt 7cm</a> <span class="item__price font-bold">50000đ</span>
-				</div>
-				<div class="item w-1/5 px-3 mb-4">
-					<div class="relative item-menu-container overflow-hidden">
-						<a href="#" class="block overflow-hidden"> <img
-							src="<c:url value='/resources/store/assets/img/sp1.jpeg'/>"
-							alt="" class="transform hover:scale-110 transition-all "></a>
-
-						<div
-							class="flex justify-center bg-indigo-300 items-center py-2 absolute item__menu w-full">
-							<a href="#"><i
-								class="fa text-2xl fa-heart text-white hover:text-indigo-400"></i></a>
-							<div class="border-l-2 border-white h-7 mx-2"></div>
-							<a href="#"><i
-								class="fa text-2xl fa-cart-plus text-white hover:text-indigo-400"></i></a>
-						</div>
-					</div>
-					<a href="#"
-						class="item__name block hover:text-indigo-300 transition-colors font-bold my-2">Squishy
-						MJ Momo duck nháy mắt 7cm</a> <span class="item__price font-bold">50000đ</span>
-				</div>
-				<div class="item w-1/5 px-3 mb-4">
-					<div class="relative item-menu-container overflow-hidden">
-						<a href="#" class="block overflow-hidden"> <img
-							src="<c:url value='/resources/store/assets/img/sp1.jpeg'/>"
-							alt="" class="transform hover:scale-110 transition-all "></a>
-
-						<div
-							class="flex justify-center bg-indigo-300 items-center py-2 absolute item__menu w-full">
-							<a href="#"><i
-								class="fa text-2xl fa-heart text-white hover:text-indigo-400"></i></a>
-							<div class="border-l-2 border-white h-7 mx-2"></div>
-							<a href="#"><i
-								class="fa text-2xl fa-cart-plus text-white hover:text-indigo-400"></i></a>
-						</div>
-					</div>
-					<a href="#"
-						class="item__name block hover:text-indigo-300 transition-colors font-bold my-2">Squishy
-						MJ Momo duck nháy mắt 7cm</a> <span class="item__price font-bold">50000đ</span>
-				</div>
+					</c:forEach>
+				</c:if>
 			</div>
 		</div>
 	</main>
 
 	<%@include file="/WEB-INF/views/store/include/store-footer.jsp"%>
-	<script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
+	<!-- <script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script> -->
 	<!-- <script src="./assets/js/main.js"></script> -->
 	<script src="<c:url value='/resources/store/assets/js/main.js'/>"></script>
 	<!-- <script src="./assets/js/cart.js"></script> -->

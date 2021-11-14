@@ -88,7 +88,7 @@
 	<%@include file="/WEB-INF/views/store/include/store-header.jsp"%>
 	<main class="main">
 		<div class="main__new-product px-32 mb-12 mt-6">
-			<div class="mb-5 font-bold">
+			<div class="mb-5 font-bold text-xl">
 				<a href="${applicationScope.shoppingCartPage}"
 					class="hover:text-indigo-400 transition-colors">Giỏ hàng</a> > <span
 					class="text-indigo-400">Thanh toán</span>
@@ -229,15 +229,13 @@
                             </div> --%>
 
 
-
-
 							<div class="flex input-wrapper">
-								<label for="" class="mr-3">Địa chỉ chi tiết: <span
+								<label for="" class="mr-3">Địa chỉ: <span
 									class="text-red-500">(*)</span></label>
 								<div class="w-full">
 									<f:input type="text" path="shipAddress" id=""
 										class="w-full p-2 border-2 border-gray-300 rounded-md mb-3"
-										placeholder="Địa chỉ chi tiết (*)"
+										placeholder="Địa chỉ (*)"
 										value="${customerEntity.address}" />
 									<f:errors path="shipAddress" cssClass="error" element="div" />
 								</div>
@@ -248,7 +246,7 @@
 								<div class="w-full">
 									<f:textarea type="text" path="shipNote" id=""
 										class="w-full p-2 border-2 border-gray-300 rounded-md mb-3"
-										placeholder="Ghi chú" value="${customerEntity.address}" />
+										placeholder="Ghi chú (không bắt buộc)" value="" />
 									<f:errors path="shipNote" cssClass="error" element="div" />
 								</div>
 
@@ -326,11 +324,12 @@
 		</div>
 	</main>
 	<%@include file="/WEB-INF/views/store/include/store-footer.jsp"%>
-	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-	<script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
+	<!-- <script src="https://unpkg.com/axios/dist/axios.min.js"></script> -->
+	<!-- <script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script> -->
+<%-- 	<script src="<c:url value='/resources/store/assets/js/swiper-bundle.min.js'/>"></script> --%>
 	<!-- <script src="./assets/js/main.js"></script> -->
 	<script src="<c:url value='/resources/store/assets/js/main.js'/>"></script>
-	<script src="<c:url value='/resources/store/assets/js/check-out.js'/>"></script>
+	<%-- <script src="<c:url value='/resources/store/assets/js/check-out.js'/>"></script> --%>
 	<!-- <script src="./assets/js/sign-up.js"></script> -->
 	<%-- 	<script src="<c:url value='/resources/store/assets/js/sign-up.js'/>"></script> --%>
 	<script type="text/javascript">

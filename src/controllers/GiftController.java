@@ -184,17 +184,20 @@ public class GiftController {
 		} else if (!validateEmail(customer.getEmail().trim())) {
 			errors.rejectValue("email", "customer", "Email không đúng định dạng!");
 		}
-		if (customer.getCity().trim().equals("0")) {
-			errors.rejectValue("city", "customer", "Vui lòng chọn Tỉnh/ Thành phố!");
-		}
-		if (customer.getDistrict().trim().equals("0")) {
-			errors.rejectValue("district", "customer", "Vui lòng chọn Quận/ Huyện!");
-		}
-		if (customer.getCommune().trim().equals("0")) {
-			errors.rejectValue("commune", "customer", "Vui lòng chọn Xã/ Phường!");
-		}
-		if (customer.getSpecificAddress().trim().length() == 0) {
-			errors.rejectValue("specificAddress", "customer", "Vui lòng nhập địa chỉ chi tiết!");
+//		if (customer.getCity().trim().equals("0")) {
+//			errors.rejectValue("city", "customer", "Vui lòng chọn Tỉnh/ Thành phố!");
+//		}
+//		if (customer.getDistrict().trim().equals("0")) {
+//			errors.rejectValue("district", "customer", "Vui lòng chọn Quận/ Huyện!");
+//		}
+//		if (customer.getCommune().trim().equals("0")) {
+//			errors.rejectValue("commune", "customer", "Vui lòng chọn Xã/ Phường!");
+//		}
+//		if (customer.getSpecificAddress().trim().length() == 0) {
+//			errors.rejectValue("specificAddress", "customer", "Vui lòng nhập địa chỉ chi tiết!");
+//		}
+		if (customer.getFullAddress().trim().length() == 0) {
+			errors.rejectValue("fullAddress", "customer", "Vui lòng nhập địa chỉ!");
 		}
 		if (customer.getPassword().trim().length() == 0) {
 			errors.rejectValue("password", "customer", "Vui lòng nhập mật khẩu!");
@@ -290,21 +293,24 @@ public class GiftController {
 		} else if (!validateEmail(customer.getEmail().trim())) {
 			errors.rejectValue("email", "customer", "Email không đúng định dạng!");
 		}
-		if (customer.getCity().trim().length() == 0) {
-			errors.rejectValue("city", "customer", "Vui lòng chọn tỉnh, thành phố!");
-		}
-		if (customer.getDistrict().trim().length() == 0) {
-			errors.rejectValue("district", "customer", "Vui lòng chọn quận huyện!");
-		}
-		if (customer.getSpecificAddress().trim().length() == 0) {
-			errors.rejectValue("specificAddress", "customer", "Vui lòng nhập địa chỉ chi tiết!");
-		}
+//		if (customer.getCity().trim().length() == 0) {
+//			errors.rejectValue("city", "customer", "Vui lòng chọn tỉnh, thành phố!");
+//		}
+//		if (customer.getDistrict().trim().length() == 0) {
+//			errors.rejectValue("district", "customer", "Vui lòng chọn quận huyện!");
+//		}
+//		if (customer.getSpecificAddress().trim().length() == 0) {
+//			errors.rejectValue("specificAddress", "customer", "Vui lòng nhập địa chỉ chi tiết!");
+//		}
 //		if (customer.getPassword().trim().length() == 0) {
 //			errors.rejectValue("password", "customer", "Vui lòng nhập mật khẩu!");
 //		}
 //		if (!customer.getPassword().trim().equals(customer.getConfirmPassword().trim())) {
 //			errors.rejectValue("confirmPassword", "customer", "Xác nhận mật khẩu không khớp!");
 //		}
+		if (customer.getFullAddress().trim().length() == 0) {
+			errors.rejectValue("fullAddress", "customer", "Vui lòng nhập địa chỉ!");
+		}
 		if (errors.hasErrors()) {
 			model.addAttribute("message", "Vui lòng sửa các lỗi sau đây!");
 //			attributes.addFlashAttribute("message", "Vui lòng sửa các lỗi sau đây!");
@@ -314,8 +320,10 @@ public class GiftController {
 			ce.setFirstname(customer.getFirstName().trim());
 			ce.setLastname(customer.getLastName().trim());
 			ce.setPhone(customer.getTelephone().trim());
-			ce.setAddress(customer.getSpecificAddress().trim() + ", " + customer.getDistrict().trim() + ", "
-					+ customer.getCity().trim());
+//			ce.setAddress(customer.getSpecificAddress().trim() + ", " + customer.getDistrict().trim() + ", "
+//					+ customer.getCity().trim());
+			ce.setAddress(customer.getFullAddress());
+			
 			ce.setEmail(customer.getEmail().trim());
 			System.out.println("still ok");
 //			model.addAttribute("message", "Chúc mừng, bạn đã nhập đúng!");
@@ -469,6 +477,8 @@ public class GiftController {
 			oe.setShipAddress(order.getShipAddress());
 			oe.setShipName(order.getShipName());
 			oe.setShipPhone(order.getShipPhone());
+			oe.setShipNote(order.getShipNote());
+			oe.setState(0);
 //			/
 //			add new properties for order later
 			if(this.checkOutHibernate(oe, this.getListCartDetail(this.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername"))))){
@@ -568,7 +578,6 @@ public class GiftController {
 			t.rollback();
 			return false;
 		} finally {
-			
 			session.close();
 		}
 		for(ProductEntity p : listProductToBeUpdate) {
@@ -908,10 +917,10 @@ public class GiftController {
 
 		String id = (String) query.uniqueResult();
 		if (id == null || id.equals("")) {
-			return "C0001";
+			return "U0001";
 		}
 		int x = Integer.parseInt(id.substring(1)) + 1;
-		String base = "C0000";
+		String base = "U0000";
 		String base2 = base.substring(0, base.length() - String.valueOf(x).length());
 		String newId = base2 + String.valueOf(x);
 		return newId;

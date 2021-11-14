@@ -41,7 +41,7 @@
 	width: 22px;
 	height: 22px;
 	right: 22px;
-	top: 20px;
+	top: 12px;
 	display: none;
 	z-index: 5;
 }
@@ -94,7 +94,7 @@
 					class="w-full p-2 border-2 border-gray-300 rounded-md mb-3"
 					placeholder="Email (*)" />
 				<f:errors path="email" cssClass="error" element="div" />
-				<div class="select-item">
+				<%-- 				<div class="select-item">
 					<f:select
 						class="w-full p-2 border-2 border-gray-300 rounded-md mb-3"
 						id="city-province" path="city">
@@ -187,7 +187,7 @@
 						alt="loading-icon"></span>
 				</div>
 				<f:errors path="commune" cssClass="error" element="div" />
-
+ --%>
 				<%-- <f:select id="cityId" path="city"
 					class="w-full p-2 border-2 border-gray-300 rounded-md mb-3">
 					<f:option value="NONE" label="Tỉnh/Thành phố *" />
@@ -261,14 +261,18 @@
 					<f:option value="None" label="Quận/ Huyện*" />
 				</f:select>
 				<f:errors path="district" cssClass="error" element="div" /> --%>
-				<f:input type="text" path="specificAddress" id="specific-address"
+				<%-- 				<f:input type="text" path="specificAddress" id="specific-address"
 					class="w-full p-2 border-2 border-gray-300 rounded-md mb-3"
 					placeholder="Địa chỉ chi tiết (*)" />
-				<f:errors path="specificAddress" cssClass="error" element="div" />
+				<f:errors path="specificAddress" cssClass="error" element="div" /> --%>
 
+				<%-- 				<f:input type="text" path="fullAddress" id="full-address"
+					class="w-full p-2 border-2 border-gray-300 rounded-md mb-3" /> --%>
 				<f:input type="text" path="fullAddress" id="full-address"
-					class="w-full p-2 border-2 border-gray-300 rounded-md mb-3" />
-				<script>
+					class="w-full p-2 border-2 border-gray-300 rounded-md mb-3"
+					placeholder="Địa chỉ (*)" />
+				<f:errors path="fullAddress" cssClass="error" element="div" />
+				<!-- <script>
 					const fullAddressInput = document.querySelector("#full-address");
 					const citySelect = document.querySelector("#city-province");
 					const districtSelect = document.querySelector("#district-town");
@@ -284,7 +288,7 @@
 					districtSelect.addEventListener("change", updateFullAddress);
 					communeSelect.addEventListener("change", updateFullAddress);
 					specificInput.addEventListener("input", updateFullAddress);
-				</script>
+				</script> -->
 
 				<f:input type="password" path="password" id=""
 					class="w-full p-2 border-2 border-gray-300 rounded-md mb-3"
@@ -306,11 +310,12 @@
 
 	</main>
 	<%@include file="/WEB-INF/views/store/include/store-footer.jsp"%>
-	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-	<script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
+<!-- 	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script> -->
+<%-- 	<script src="<c:url value='/resources/store/assets/js/swiper-bundle.min.js'/>"></script> --%>
 	<!-- <script src="./assets/js/main.js"></script> -->
 	<script src="<c:url value='/resources/store/assets/js/main.js'/>"></script>
-	<script src="<c:url value='/resources/store/assets/js/check-out.js'/>"></script>
+	<%-- <script src="<c:url value='/resources/store/assets/js/check-out.js'/>"></script> --%>
 	<!-- <script src="./assets/js/sign-up.js"></script> -->
 	<script src="<c:url value='/resources/store/assets/js/sign-up.js'/>"></script>
 	<script type="text/javascript">
