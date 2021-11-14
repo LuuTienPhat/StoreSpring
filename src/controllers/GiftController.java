@@ -47,29 +47,32 @@ public class GiftController {
 	@Autowired
 	SessionFactory factory;
 	@Autowired
-	Mailer mailer; 
+	Mailer mailer;
+
 	@RequestMapping("")
 	public String store(ModelMap model, HttpSession httpSession) {
 		httpSession.setAttribute("listCategory", this.getListCategory());
 		model.addAttribute("list", this.getListProduct());
-		if((httpSession.getAttribute("customerUsername")!=null)) {
+		if ((httpSession.getAttribute("customerUsername") != null)) {
 			int sum = 0;
-			for (CartDetailEntity c : this.getCustomerByUsername((String) httpSession.getAttribute("customerUsername")).getCartDetails()) {
+			for (CartDetailEntity c : this.getCustomerByUsername((String) httpSession.getAttribute("customerUsername"))
+					.getCartDetails()) {
 				sum = sum + c.getQuantity();
 			}
 			System.out.println(sum);
 			httpSession.setAttribute("customerTotalQuantity", sum);
 		}
-		
+
 		return "store/index";
 	}
 
 	@RequestMapping("/")
 	public String store2(ModelMap model, HttpSession httpSession) {
 		httpSession.setAttribute("listCategory", this.getListCategory());
-		if(httpSession.getAttribute("customerUsername")!=null) {
+		if (httpSession.getAttribute("customerUsername") != null) {
 			int sum = 0;
-			for (CartDetailEntity c : this.getCustomerByUsername((String) httpSession.getAttribute("customerUsername")).getCartDetails()) {
+			for (CartDetailEntity c : this.getCustomerByUsername((String) httpSession.getAttribute("customerUsername"))
+					.getCartDetails()) {
 				sum = sum + c.getQuantity();
 			}
 			System.out.println(sum);
@@ -82,19 +85,19 @@ public class GiftController {
 	@RequestMapping("/product-detail/{productId}")
 	public String productDetail2(@PathVariable("productId") String productId, ModelMap model, HttpSession httpSession) {
 		httpSession.setAttribute("listCategory", this.getListCategory());
-		if(httpSession.getAttribute("listRecentViewProducts") != null) {
+		if (httpSession.getAttribute("listRecentViewProducts") != null) {
 			List<ProductEntity> lpe = (List<ProductEntity>) httpSession.getAttribute("listRecentViewProducts");
 			boolean existed = false;
-			for(ProductEntity pe: lpe) {
-				if(pe.getId().equals(productId)) {
+			for (ProductEntity pe : lpe) {
+				if (pe.getId().equals(productId)) {
 					existed = true;
 				}
 			}
-			if(!existed) {
+			if (!existed) {
 				lpe.add(0, this.getProduct(productId));
 			}
 			httpSession.setAttribute("listRecentViewProducts", lpe);
-		}else {
+		} else {
 			List<ProductEntity> lpe = new ArrayList<ProductEntity>();
 			lpe.add(0, this.getProduct(productId));
 			httpSession.setAttribute("listRecentViewProducts", lpe);
@@ -323,7 +326,7 @@ public class GiftController {
 //			ce.setAddress(customer.getSpecificAddress().trim() + ", " + customer.getDistrict().trim() + ", "
 //					+ customer.getCity().trim());
 			ce.setAddress(customer.getFullAddress());
-			
+
 			ce.setEmail(customer.getEmail().trim());
 			System.out.println("still ok");
 //			model.addAttribute("message", "Chúc mừng, bạn đã nhập đúng!");
@@ -346,11 +349,13 @@ public class GiftController {
 				this.getCustomerByUsername((String) httpSession.getAttribute("customerUsername")));
 		return "store/user-change-password";
 	}
+
 	@RequestMapping(value = "/user-info/order-history")
 	public String orderHistory(HttpSession httpSession, ModelMap model) {
 		httpSession.setAttribute("listCategory", this.getListCategory());
-		model.addAttribute("listOrder", this.getCustomerOrder(this.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername"))));
-		
+		model.addAttribute("listOrder", this
+				.getCustomerOrder(this.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername"))));
+
 		return "store/order-history";
 	}
 
@@ -397,7 +402,7 @@ public class GiftController {
 		httpSession.setAttribute("listCategory", this.getListCategory());
 		List<CartDetailEntity> listCart = this
 				.getListCartDetail(this.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername")));
-		if(listCart.size()==0) {
+		if (listCart.size() == 0) {
 			attributes.addFlashAttribute("message", "Không có sản phẩm nào trong giỏ hàng!");
 			return "redirect:/store/shopping-cart";
 		}
@@ -408,9 +413,10 @@ public class GiftController {
 				return "redirect:/store/shopping-cart";
 			}
 		}
-		if(httpSession.getAttribute("customerUsername")!=null) {
+		if (httpSession.getAttribute("customerUsername") != null) {
 			int sum = 0;
-			for (CartDetailEntity c : this.getCustomerByUsername((String) httpSession.getAttribute("customerUsername")).getCartDetails()) {
+			for (CartDetailEntity c : this.getCustomerByUsername((String) httpSession.getAttribute("customerUsername"))
+					.getCartDetails()) {
 				sum = sum + c.getQuantity();
 			}
 			System.out.println(sum);
@@ -431,7 +437,7 @@ public class GiftController {
 		return "store/check-out";
 	}
 
-	@RequestMapping(value = "/shopping-cart/check-out", method=RequestMethod.POST)
+	@RequestMapping(value = "/shopping-cart/check-out", method = RequestMethod.POST)
 	public String checkOut2(HttpSession httpSession, ModelMap model, @ModelAttribute("order") OrderModel order,
 			BindingResult errors, RedirectAttributes attributes) {
 		httpSession.setAttribute("listCategory", this.getListCategory());
@@ -451,27 +457,29 @@ public class GiftController {
 		if (order.getShipAddress().trim().length() == 0) {
 			errors.rejectValue("shipAddress", "order", "Vui lòng nhập địa chỉ chi tiết!");
 		}
-		
+
 		if (errors.hasErrors()) {
 			model.addAttribute("message", "Vui lòng sửa các lỗi sau đây!");
 //			attributes.addFlashAttribute("message", "Vui lòng sửa các lỗi sau đây!");
-			List <CartDetailEntity> cartDetails = this.getListCartDetail(this.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername")));
+			List<CartDetailEntity> cartDetails = this.getListCartDetail(
+					this.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername")));
 			model.addAttribute("cartDetails", cartDetails);
-			float total=0;
-			for(CartDetailEntity c: cartDetails) {
-				total = total + c.getQuantity()*c.getProduct().getPrice();
+			float total = 0;
+			for (CartDetailEntity c : cartDetails) {
+				total = total + c.getQuantity() * c.getProduct().getPrice();
 			}
-			model.addAttribute("cartDetailsTotal", total);		
+			model.addAttribute("cartDetailsTotal", total);
 			return "store/check-out";
 		} else {
 			OrderEntity oe = new OrderEntity();
-			oe.setCustomerId(this.getCustomerIdByUserName((String)httpSession.getAttribute("customerUsername")));
+			oe.setCustomerId(this.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername")));
 			oe.setId(this.createTheNextOrderId());
 			oe.setOrderDate(new Date());
-			List <CartDetailEntity> cartDetails = this.getListCartDetail(this.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername")));
-			float total=0;
-			for(CartDetailEntity c: cartDetails) {
-				total = total + c.getQuantity()*c.getProduct().getPrice();
+			List<CartDetailEntity> cartDetails = this.getListCartDetail(
+					this.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername")));
+			float total = 0;
+			for (CartDetailEntity c : cartDetails) {
+				total = total + c.getQuantity() * c.getProduct().getPrice();
 			}
 			oe.setOrderTotal(total);
 			oe.setShipAddress(order.getShipAddress());
@@ -481,38 +489,44 @@ public class GiftController {
 			oe.setState(0);
 //			/
 //			add new properties for order later
-			if(this.checkOutHibernate(oe, this.getListCartDetail(this.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername"))))){
+			if (this.checkOutHibernate(oe, this.getListCartDetail(
+					this.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername"))))) {
 				attributes.addFlashAttribute("message", "Đặt hàng thành công!");
-				String body = "<h3  style='margin: 8px 0;'>Thông tin người nhận</h3><p  style='margin: 4px 0;'>Tên: "+ order.getShipName() +", SĐT: "+order.getShipPhone()+"</p><p  style='margin: 4px 0;'>Địa chỉ:"+order.getShipAddress()+"</p>";
+				String body = "<h3  style='margin: 8px 0;'>Thông tin người nhận</h3><p  style='margin: 4px 0;'>Tên: "
+						+ order.getShipName() + ", SĐT: " + order.getShipPhone()
+						+ "</p><p  style='margin: 4px 0;'>Địa chỉ:" + order.getShipAddress() + "</p>";
 				body = body + "<h3  style='margin: 8px 0;'>Thông tin đơn hàng</h3>"
 						+ "<table style='width: 400px;border: 1px solid black;"
-						+ "  border-collapse: collapse;'> <thead>"
-						+ "						<tr>"
+						+ "  border-collapse: collapse;'> <thead>" + "						<tr>"
 						+ "							<th style='border: 1px solid black;border-collapse: collapse; padding: 0 4px;'>Sản phẩm</th>"
 						+ "							<th style='border: 1px solid black;border-collapse: collapse; padding: 0 4px;'>Số lượng</th>"
 						+ "							<th style='border: 1px solid black;border-collapse: collapse; padding: 0 4px;'>Tổng</th>"
-						+ "						</tr>"
-						+ "					</thead>";
-				for(CartDetailEntity cde: cartDetails) {
+						+ "						</tr>" + "					</thead>";
+				for (CartDetailEntity cde : cartDetails) {
 					body = body + "<tr>"
-								+ "<td style='border: 1px solid black;border-collapse: collapse;padding-left:4px;'><p style='margin: 4px 0 0 0;'>"+cde.getProduct().getName()+"</p>"
-								+ "<p style='margin: 0 0 4px 0;'>"+cde.getProduct().getPrice()+" đ</p></td>"
-								+ "<td style='text-align: center;border: 1px solid black;border-collapse: collapse;'>"+cde.getQuantity()+"</td>"
-								+ "<td style='text-align: center;border: 1px solid black;border-collapse: collapse;'>"+(cde.getQuantity()*cde.getProduct().getPrice())+" đ</td>"
-							+ "</tr>";
+							+ "<td style='border: 1px solid black;border-collapse: collapse;padding-left:4px;'><p style='margin: 4px 0 0 0;'>"
+							+ cde.getProduct().getName() + "</p>" + "<p style='margin: 0 0 4px 0;'>"
+							+ cde.getProduct().getPrice() + " đ</p></td>"
+							+ "<td style='text-align: center;border: 1px solid black;border-collapse: collapse;'>"
+							+ cde.getQuantity() + "</td>"
+							+ "<td style='text-align: center;border: 1px solid black;border-collapse: collapse;'>"
+							+ (cde.getQuantity() * cde.getProduct().getPrice()) + " đ</td>" + "</tr>";
 				}
-				body = body + "<tr><td colspan='3' style='text-align: right;border: 1px solid black;border-collapse: collapse;'>"+total+" đ</td></tr></table>";
-				try{ 
-					mailer.send("storespring21@gmail.com", order.getShipEmail().trim(), "Thông báo hệ thống đã xác nhận đơn hàng của quý khách.", body);
-					System.out.println("Gửi email thành công!"); 
-					} catch(Exception ex){ 
-						System.out.println("Gửi email thất bại!"); 
-					}
+				body = body
+						+ "<tr><td colspan='3' style='text-align: right;border: 1px solid black;border-collapse: collapse;'>"
+						+ total + " đ</td></tr></table>";
+				try {
+					mailer.send("storespring21@gmail.com", order.getShipEmail().trim(),
+							"Thông báo hệ thống đã xác nhận đơn hàng của quý khách.", body);
+					System.out.println("Gửi email thành công!");
+				} catch (Exception ex) {
+					System.out.println("Gửi email thất bại!");
+				}
 				return "redirect:/";
-			}else{
+			} else {
 				model.addAttribute("message", "Đặt hàng thất bại!");
 				model.addAttribute("cartDetails", cartDetails);
-				model.addAttribute("cartDetailsTotal", total);	
+				model.addAttribute("cartDetailsTotal", total);
 				return "store/check-out";
 			}
 //			model.addAttribute("message", "Chúc mừng, bạn đã nhập đúng!");
@@ -564,12 +578,13 @@ public class GiftController {
 			ode.setQuantity(cartDetailEntity.getQuantity());
 			listODE.add(ode);
 		}
+		boolean updateFlag = false;
 		try {
 			session.save(order);
 			for (CartDetailEntity cartDetailEntity : listCartDetail) {
 				session.delete(cartDetailEntity);
 			}
-			for(OrderDetailEntity ode: listODE) {
+			for (OrderDetailEntity ode : listODE) {
 				session.save(ode);
 			}
 
@@ -579,10 +594,13 @@ public class GiftController {
 			return false;
 		} finally {
 			session.close();
+			updateFlag = true;
 		}
-		for(ProductEntity p : listProductToBeUpdate) {
-			if(!updateProductQuantity(p.getId(), p.getQuantity())) {
-				return false;
+		if (updateFlag==true) {
+			for (ProductEntity p : listProductToBeUpdate) {
+				if (!updateProductQuantity(p.getId(), p.getQuantity())) {
+					return false;
+				}
 			}
 		}
 		return true;
@@ -645,7 +663,14 @@ public class GiftController {
 	}
 
 	@RequestMapping(value = "/shopping-cart/update", method = RequestMethod.POST)
-	public String update(HttpServletRequest request, ModelMap model, HttpSession httpSession, RedirectAttributes attributes) {
+	public String update(HttpServletRequest request, ModelMap model, HttpSession httpSession,
+			RedirectAttributes attributes) {
+		List<CartDetailEntity> listCart = this
+				.getListCartDetail(this.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername")));
+		if (listCart.size() == 0) {
+			attributes.addFlashAttribute("message", "Không có sản phẩm nào trong giỏ hàng!");
+			return "redirect:/store/shopping-cart";
+		}
 		httpSession.setAttribute("listCategory", this.getListCategory());
 		String[] product_ids = request.getParameterValues("product_id");
 		String[] quantities = request.getParameterValues("quantity");
@@ -688,6 +713,7 @@ public class GiftController {
 		query.setParameter("quantity", Integer.parseInt(quantity));
 		return query.executeUpdate() > 0;
 	}
+
 	public boolean updateProductQuantity(String productId, int quantity) {
 		Session session = factory.getCurrentSession();
 		String hql = "UPDATE ProductEntity p SET p.quantity=:quantity WHERE p.id=:productId";
@@ -698,14 +724,14 @@ public class GiftController {
 	}
 
 	@RequestMapping("/shopping-cart/insert-into-cart/{productId}")
-	public String insertToCart(String customerId, @PathVariable("productId") String productId,
-			HttpSession httpSession, RedirectAttributes attributes) {
+	public String insertToCart(String customerId, @PathVariable("productId") String productId, HttpSession httpSession,
+			RedirectAttributes attributes) {
 		httpSession.setAttribute("listCategory", this.getListCategory());
 		Session session = factory.openSession();
 		Transaction t = session.beginTransaction();
 		CartDetailEntity cde = new CartDetailEntity(
 				this.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername")), (productId));
-		if(this.isProductOutOfStock(productId)) {
+		if (this.isProductOutOfStock(productId)) {
 			attributes.addFlashAttribute("message", "Sản phẩm hiện hết hàng");
 			return "redirect:/store/shopping-cart";
 		}
@@ -728,7 +754,8 @@ public class GiftController {
 			} else {
 				System.out.println(
 						"Exit; increase quantity by 1 unsuccessful \n because amount of that product incart is equal to its amount in product!");
-				attributes.addFlashAttribute("message", "Số lượng của sản phẩm này trong giỏ đã bằng tồn kho");
+				attributes.addFlashAttribute("message",
+						"Số lượng của sản phẩm này trong giỏ đã bằng tồn kho");
 				return "redirect:/store/shopping-cart";
 			}
 
@@ -772,20 +799,20 @@ public class GiftController {
 		pagedListHolder.setPage(page);
 		pagedListHolder.setMaxLinkedPages(3);
 		pagedListHolder.setPageSize(8);
-		
-		if(httpSession.getAttribute("listRecentSearch") != null) {
+
+		if (httpSession.getAttribute("listRecentSearch") != null) {
 			List<String> lrs = (List<String>) httpSession.getAttribute("listRecentSearch");
 			boolean existed = false;
-			for(String keyw: lrs) {
-				if(keyw.equals(keyword)) {
+			for (String keyw : lrs) {
+				if (keyw.equals(keyword)) {
 					existed = true;
 				}
 			}
-			if(!existed) {
+			if (!existed) {
 				lrs.add(0, keyword);
 			}
 			httpSession.setAttribute("listRecentSearch", lrs);
-		}else {
+		} else {
 			List<String> lrs = new ArrayList<String>();
 			lrs.add(0, keyword);
 			httpSession.setAttribute("listRecentSearch", lrs);
@@ -798,7 +825,8 @@ public class GiftController {
 		Session session = factory.getCurrentSession();
 		String hql = "SELECT c.id.product_id FROM CartDetailEntity c WHERE c.id.customer_id =:customerId and c.id.product_id=:productId";
 		Query query = session.createQuery(hql);
-		query.setParameter("customerId", this.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername")));
+		query.setParameter("customerId",
+				this.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername")));
 		query.setParameter("productId", product_id);
 		String productId = (String) query.uniqueResult();
 		return product_id.equals(productId);
@@ -814,13 +842,15 @@ public class GiftController {
 		int quantity = (int) query.uniqueResult();
 		return quantity;
 	}
+
 	public boolean isProductOutOfStock(String product_id) {
 		Session session = factory.getCurrentSession();
 		String hql = "SELECT p.quantity FROM ProductEntity p WHERE p.id =:productId";
 		Query query = session.createQuery(hql);
 		int product = (int) query.setParameter("productId", product_id).uniqueResult();
-		return product<=0;
+		return product <= 0;
 	}
+
 	public boolean isCartItemMaximumAmountOfProduct(String product_id, HttpSession httpSession) {
 		Session session = factory.getCurrentSession();
 		String hql = "SELECT c.quantity FROM CartDetailEntity c WHERE c.id.customer_id =:customerId and c.id.product_id=:productId";
@@ -933,7 +963,7 @@ public class GiftController {
 
 		String id = (String) query.uniqueResult();
 		if (id == null || id.equals("")) {
-			return "O0000000001";
+			return "O000000001";
 		}
 		int x = Integer.parseInt(id.substring(1)) + 1;
 		String base = "O000000000";
@@ -959,6 +989,7 @@ public class GiftController {
 		List<ProductEntity> list = query.setMaxResults(16).list();
 		return list;
 	}
+
 	public List<OrderEntity> getCustomerOrder(String customerId) {
 		/* System.out.println("getListCartDetail"); */
 		Session session = factory.getCurrentSession();
@@ -967,6 +998,7 @@ public class GiftController {
 		List<OrderEntity> list = query.list();
 		return list;
 	}
+
 	public List<ProductEntity> getAllProducts() {
 		/* System.out.println("getListCartDetail"); */
 		Session session = factory.getCurrentSession();
