@@ -205,6 +205,9 @@
         
 <!-- ========== All JS files linkup ========= -->
 <%@include file="/WEB-INF/views/admin/includes/footer/script.jsp"%>
+
+<!-- ========== Notyf JS linkup ========= -->
+<%@include file="/WEB-INF/views/admin/includes/footer/notyf.jsp"%>
     
 </body>
 

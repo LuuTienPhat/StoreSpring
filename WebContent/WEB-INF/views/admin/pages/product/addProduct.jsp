@@ -67,7 +67,7 @@
                                         <div class="row mb-4">
                                             <div class="col-6">
                                                 <label for="unit">Đơn vị tính</label>
-                                                <form:input type="unit" value="cái" class="form-control" path="unit" id="unit" placeholder="Nhập đơn vị tính" />
+                                                <form:input type="unit" class="form-control" path="unit" id="unit" placeholder="Nhập đơn vị tính" />
                                             </div>
                                             <div class="col-6">
                                                 <label for="price">Giá tiền</label>
@@ -128,7 +128,7 @@
         <!-- ========== All JS files linkup ========= -->
         <%@include file="/WEB-INF/views/admin/includes/footer/script.jsp"%>
 
-        <!-- ========== All JS files linkup ========= -->
+        <!-- ========== Notyf JS linkup ========= -->
         <%@include file="/WEB-INF/views/admin/includes/footer/notyf.jsp"%>
     </body>
 </html>

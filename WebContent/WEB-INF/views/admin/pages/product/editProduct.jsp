@@ -17,10 +17,6 @@
 <!-- ========== All CSS files linkup ========= -->
 <%@include file="/WEB-INF/views/admin/includes/header/styles.jsp"%>
 
-<script
-	src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-
 </head>
 
 <body>
@@ -253,6 +249,9 @@
         
 <!-- ========== All JS files linkup ========= -->
 <%@include file="/WEB-INF/views/admin/includes/footer/script.jsp"%>
+
+<!-- ========== Notyf JS linkup ========= -->
+<%@include file="/WEB-INF/views/admin/includes/footer/notyf.jsp"%>
     
 </body>
 
