@@ -2,54 +2,69 @@ package models;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
+import javax.servlet.ServletContext;
 
 import org.springframework.web.multipart.MultipartFile;
 
 public class UploadFile {
-	private String basePath;
-	
-	public String getBasePath() {
-		return basePath;
+	private String uploadServerPath;
+	private String uploadResourcePath;
+
+	// GET ABSOLUTE PATH OF RESOURCE UPLOAD FOLDER ON METADATA
+	public String getUploadPathOnServer(ServletContext context) {
+		return context.getRealPath("resources/uploads/");
 	}
 
-	public void setBasePath(String basePath) {
-		this.basePath = basePath;
+	// GET ABSOLUTE PATH OF RESOURCE UPLOAD FOLDER
+	public String getUploadPath() {
+		return uploadResourcePath;
 	}
-	
+
+	// GET RELATIVE PATH OF RESOURCE UPLOAD FOLDER
+	public String getRelativeUploadPath() {
+		return "resources/uploads/";
+	}
+
+	public void setUploadResourcePathOnServer(ServletContext context) {
+		this.uploadServerPath = context.getRealPath("resources/uploads/");
+	}
+
+	public void setUploadResourcePath(String uploadResourcePath) {
+		this.uploadResourcePath = uploadResourcePath;
+	}
+
+	// GET FILE EXTENSION
 	public static String getExtension(String path) {
-	    int lastIndexOf = path.lastIndexOf(".");
-	    if (lastIndexOf == -1) {
-	        return ""; // empty extension
-	    }
-	    return path.substring(lastIndexOf);
+		int lastIndexOf = path.lastIndexOf(".");
+		if (lastIndexOf == -1) {
+			return ""; // empty extension
+		}
+		return path.substring(lastIndexOf);
 	}
-	
-	public static String getCategoryBasePath() {
-	    return "resources/upload/categories/";
-	}
-	
-	public static String getProductBasePath() {
-	    return "resources/upload/products/";
-	}
-	
-	public static String getProjectPath() {
-	    return "D:/eclipse-workspace/StoreSpring/";
-	}
-	
-	public static String getResourcePath() {
-	    return "D:/eclipse-workspace/StoreSpring/";
-	}
-	
-	public static String getUploadPath() {
-	    return "D:/eclipse-workspace/StoreSpring/";
-	}
-	
+
+	// WRITE FILE
 	public static void writeFile(File file, MultipartFile image) throws IOException {
 		BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(file));
 		stream.write(image.getBytes());
 		stream.close();
+	}
+
+	// DELETE DIRECTORY HAS CONTENTS
+	public static boolean deleteDirectory(File dir) {
+		if (dir.isDirectory()) {
+			File[] children = dir.listFiles();
+			for (int i = 0; i < children.length; i++) {
+				boolean success = deleteDirectory(children[i]);
+				if (!success) {
+					return false;
+				}
+			}
+		}
+		// either file or an empty directory
+		System.out.println("removing file or directory : " + dir.getName());
+		return dir.delete();
 	}
 }
