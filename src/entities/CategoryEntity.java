@@ -3,6 +3,7 @@ package entities;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -31,7 +32,7 @@ public class CategoryEntity {
 	@Column(name = "description")
 	private String description;
 
-	@OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "category", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
 	private List<ProductEntity> products;
 
 	public String getId() {

@@ -94,14 +94,14 @@
                     <div class="card card-body border-0 shadow">
                         <h2 class="h5 mb-4">Thông tin sản phẩm</h2>
                         <form:form action ="${applicationScope.productPage }/edit/${product.id}" method = "post" modelAttribute="product" enctype="multipart/form-data">
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
                                     <div>
                                         <label for="first_name">#</label>
                                         <form:input class="form-control" id="id" type="text" value="${product.id}" path="id" readonly="true" />
                                     </div>
                                 </div>
-                                <div class="col-md-6 mb-3">
+                                <div class="col-md-6">
                                     <div>
                                         <label for="last_name">Tên sản phẩm</label>
                                         <div class="input-group">
@@ -119,14 +119,14 @@
                                 </div>
                             </div>
                             
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
                                     <div>
                                         <label for="quantity">Số lượng</label>
                                         <form:input class="form-control" id="quantity" path = "quantity" type="text" value = "${product.quantity }" />
                                     </div>
                                 </div>
-                                <div class="col-md-6 mb-3">
+                                <div class="col-md-6">
                                     <div>
                                         <label for="unit">Đơn vị tính</label>
                                         <form:input class="form-control" id="unit" path = "unit" type="text" value = "${product.unit}" />
@@ -134,8 +134,8 @@
                                 </div>
                             </div>
                             
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
                                     <div>
                                         <label for="price">Giá tiền</label>
                                         <div class="input-group">
@@ -149,7 +149,7 @@
                                     	</div>
                                     </div>
                                 </div>
-                                <div class="col-md-6 mb-3">
+                                <div class="col-md-6">
                                     <div>
                                         <label for="unit">Danh mục</label>
                                         <form:select path="category.id"  class="form-select ${categoryValid }" id="category" aria-describedby="catgoryHelp" >
@@ -161,8 +161,33 @@
                                 </div>
                             </div>
                             
-                            <div class="row align-items-center">
-                                <div class="col-md-12 mb-3">
+                            <div class="mb-3 d-flex overflow-auto pt-4 flex-nowrap" id="preview-images">
+								<c:forEach items="${product.images}" var="image" varStatus="i">
+									<div class='position-relative mr-2 me-3 animate__animated animate__fadeIn' style='height: 150px; width: 150px; flex: 0 0 auto'>
+                                  		<i class='bi bi-x-circle-fill position-absolute top-0 start-100 translate-middle text-danger h5' onclick='removeFileFromFileList(this)' data-id="${i.index}"></i>
+                                  	<img src='${image.image }' width='150' height='150' id="image"/>
+                                  </div>
+									<%-- <img src="${image.image }" width='150' height='150' id="image" data-id="${i.index}"/> --%>
+								</c:forEach>
+							</div>
+
+					          <div class="row mb-3">
+					           <label for="formFile" class="form-label">Chọn file hình ảnh</label>
+					           <form:input class="form-control" type="file" id="images" path="images" accept="image/*" multiple="multiple" />
+					           <small class="form-text text-muted">Chỉ nhận file ảnh, kích thước tối đa 20MB</small>
+					          </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="">Mô tả</label>
+                                        <form:textarea class="form-control" id="description" path="description" rows="4"></form:textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row align-items-center mb-3">
+                                <div class="col-md-12">
                                     <label for="birthday">Ngày thêm</label>
                                     <div class="input-group">
                                         <span class="input-group-text">
@@ -176,18 +201,10 @@
                                 </div>
                             </div>
                             
-                            <div class="row">
-                                <div class="col-md-12 mb-3">
-                                    <div class="form-group">
-                                        <label for="">Mô tả</label>
-                                        <form:textarea class="form-control" id="description" path="description" rows="4"></form:textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="mt-3">
+                            <div class="mt-4">
                                 <button class="btn btn-gray-800 mt-2 animate-up-2" type="submit">Lưu</button>
                             </div>
-                        
+                            
                     </div>
                 </div>
                 
@@ -196,7 +213,7 @@
                         <div class="col-12 mb-4">
                             <div class="card shadow border-0 text-center p-0">
                                 <div class="rounded-top">
-                               		<img src="${product.images.size() != 0 ? product.images[0].image : '' }" class="img-fluid" style="height: 100%;" alt="${product.name}" />  		
+                               		<img src="${product.images.size() != 0 ? product.images[0].image : '' }" class="img-fluid" style="height: 100%;" alt="${product.name}" id="hero-image"/>  		
                                 </div>
                                 <div class="card-body pb-5">
                                     <!-- <img src="../assets/img/team/profile-picture-1.jpg" class="avatar-xl rounded-circle mx-auto mt-n7 mb-4" alt="Neil Portrait"> -->
@@ -215,21 +232,21 @@
                              </div>
                         </div>
                         
-                        <div class="col-12">
+                        <!-- <div class="col-12">
                             <div class="card card-body border-0 shadow">
                                 <h2 class="h5 mb-4">Đổi ảnh sản phẩm</h2>
                                 <div class="d-flex align-items-center">
-                                    <!-- <div class="me-3">
+                                    <div class="me-3">
                                         Avatar
                                         <img class="rounded avatar-xl" src="../assets/img/profile-cover.jpg" alt="change cover">
-                                    </div> -->
+                                    </div>
                                     <div class="file-field">
                                         <div class="d-flex justify-content-xl-center ms-xl-3">
                                             <div class="d-flex">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-paperclip icon text-gray-500 me-2" viewBox="0 0 16 16">
 												  <path d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0V3z"/>
 												</svg>
-                                                <input type="file" name="image" >
+                                                <input type="file" name="image">
                                                 <div class="d-md-block text-left">
                                                     <div class="fw-normal text-dark mb-1">Chọn hình ảnh</div>
                                                     <div class="text-gray small">JPG, GIF hoặc PNG. Kích thước tối đa 800K</div>
@@ -239,13 +256,70 @@
                                      </div>                                        
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         </form:form>
                     </div>
                 </div>
             </div>
 		<%@include file="/WEB-INF/views/admin/includes/footer/footer.jsp"%>
         </main>
+        
+        <script type="text/javascript">
+           var previewImage = document.getElementById("preview-images");
+           var imageUpload = document.getElementById("images");
+           var imageElements = document.querySelectorAll("#image");
+           var heroImage = document.getElementById("hero-image");
+           
+           let index = 1;
+           let dt = new DataTransfer();
+           for(let imageEle of imageElements) {
+           	let url = imageEle.src;
+               let fileName = "${product.id}_" + index + "." + imageEle.src.slice((imageEle.src.lastIndexOf(".") - 1 >>> 0) + 2);
+               fetch(url, { mode: "cors" }).then(async (response) => {
+                   const contentType = response.headers.get("content-type");
+                   const blob = await response.blob();
+                   const file = new File([blob], fileName, { contentType });
+                   dt.items.add(file);
+                   imageUpload.files = dt.files;
+                 });
+               index++;
+           }
+
+           imageUpload.onchange = () => {
+             updatePreviewImage(imageUpload.files);
+           };
+
+           const updatePreviewImage = (files) => {
+             let imgElement = "";
+             let index = 0;
+             for (let file of files) {
+               if (file) {
+                 imgElement += "<div class='position-relative mr-2 me-3 animate__animated animate__fadeIn' style='height: 150px; width: 150px; flex: 0 0 auto'>";
+                 imgElement += "<i class='bi bi-x-circle-fill position-absolute top-0 start-100 translate-middle text-danger h5' onclick='removeFileFromFileList(this)' data-id='" + index + "'></i>";
+                 imgElement += "<img src='" + URL.createObjectURL(file) + "' width='150' height='150'/></div>";
+               }
+               index++;
+             }
+             previewImage.innerHTML = imgElement;
+             if(files.length == 0) heroImage.src = "unknow";
+             else heroImage.src = URL.createObjectURL(files[0]);
+           };
+           
+           const removeFileFromFileList = (e) => {
+               let index = parseInt(e.dataset.id);
+               const dt = new DataTransfer();
+               const input = document.getElementById("images");
+               const { files } = input;
+
+               for (let i = 0; i < files.length; i++) {
+                 const file = files[i];
+                 if (index !== i) dt.items.add(file); // here you exclude the file. thus removing it.
+               }
+
+               input.files = dt.files; // Assign the updates list
+               updatePreviewImage(input.files);
+             };
+           </script>
         
 <!-- ========== All JS files linkup ========= -->
 <%@include file="/WEB-INF/views/admin/includes/footer/script.jsp"%>

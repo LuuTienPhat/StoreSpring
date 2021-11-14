@@ -66,7 +66,7 @@
                       clip-rule="evenodd"></path>
                   </svg>
                 </div> -->
-              <div class=" col-md-3 col-sm-4 col-12">\
+              <div class=" col-md-3 col-sm-4 col-12">
                 <c:choose>
                 	<c:when test="${product.images.size() != 0 }">
               			<img src="${product.images[0].image }" class="img-fluid" style="height: 100%;" alt="${product.name}" />  		
