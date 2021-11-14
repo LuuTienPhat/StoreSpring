@@ -35,6 +35,8 @@ public class OrderEntity {
 	private String shipAddress;
 	@Column(name = "ship_city")
 	private String shipCity;
+	@Column(name = "ship_note")
+	private String shipNote;
 	@Column(name = "state")
 	private int state;
 
@@ -107,6 +109,14 @@ public class OrderEntity {
 
 	public void setShipCity(String shipCity) {
 		this.shipCity = shipCity;
+	}
+	
+	public String getShipNote() {
+		return shipNote;
+	}
+
+	public void setShipNote(String shipNote) {
+		this.shipNote = shipNote;
 	}
 
 	public int getState() {

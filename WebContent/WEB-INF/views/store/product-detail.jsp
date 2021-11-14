@@ -15,9 +15,9 @@
 		<div class="product__detail">
 			<div class="product-navigation font-bold mb-5">
 				<a href="store/all"
-					class="inline-block font-bold text-sm hover:text-indigo-400 transition-colors">Tất
+					class="inline-block font-bold text-xl hover:text-indigo-400 transition-colors">Tất
 					cả</a> > <a href="store/category/${product.category.id}"
-					class="inline-block font-bold text-sm text-indigo-500 hover:text-indigo-400 transition-colors">${product.category.name}</a>
+					class="inline-block font-bold text-xl text-indigo-500 hover:text-indigo-400 transition-colors">${product.category.name}</a>
 			</div>
 			<div class="flex detail__wrapper">
 				<a href="${applicationScope.productDetailPage}/${product.id}"
@@ -28,10 +28,10 @@
 					<div class="flex justify-between">
 						<h6 class="mb-2 text-gray-500">Mã sản phẩm: ${product.id}</h6>
 						<div class="flex">
-							<i
+							<!-- <i
 								class="fa fa-share-alt text-2xl hover:text-indigo-400 text-2xl mr-2 cursor-pointer"></i>
 							<i
-								class="fa fa-heart hover:text-indigo-400 text-2xl cursor-pointer"></i>
+								class="fa fa-heart hover:text-indigo-400 text-2xl cursor-pointer"></i> -->
 						</div>
 					</div>
 					<div>
@@ -107,7 +107,7 @@
 			<div class="section__heading mb-8  mt-16">
 				<h3>
 					<span href="#"
-						class="hover:text-indigo-300 transition-colors text-3xl font-bold">Các
+						class="<!-- hover:text-indigo-300 --> transition-colors text-3xl font-bold">Các
 						sản phẩm đã xem</span>
 				</h3>
 			</div>
@@ -124,9 +124,9 @@
 
 								<div
 									class="flex justify-center bg-indigo-300 items-center py-2 absolute item__menu w-full">
-									<a href="#"><i
+									<!-- <a href="#"><i
 										class="fa text-2xl fa-heart text-white hover:text-indigo-400 transition-colors"></i></a>
-									<div class="border-l-2 border-white h-7 mx-2"></div>
+									<div class="border-l-2 border-white h-7 mx-2"></div> -->
 									<a href="store/shopping-cart/insert-into-cart/${p.id}"><i
 										class="fa text-2xl fa-cart-plus text-white hover:text-indigo-400 transition-colors"></i></a>
 								</div>

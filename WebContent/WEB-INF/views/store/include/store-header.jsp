@@ -107,11 +107,13 @@
 							<li><a href="store/category/${category.id}"
 								class="px-2 py-1 block hover:text-indigo-300 transition-colors">${category.name}</a></li>
 						</c:forEach> --%>
+						<li><span
+								class="py-1 block"><i class="fas fa-history mr-1"></i>Tìm kiếm gần đây:</span></li>
 						<c:if test="${sessionScope.listRecentSearch !=null}">
 						<c:forEach var="key"
 							items="${sessionScope.listRecentSearch}">
 							<li><a href="store/search/${key}"
-								class="px-2 py-1 block hover:text-indigo-300 transition-colors">${key}</a></li>
+								class="px-2 py-1 block hover:text-indigo-300 italic transition-colors">${key}</a></li>
 						</c:forEach>
 						</c:if>
 						

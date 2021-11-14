@@ -70,9 +70,9 @@
 
 								<div
 									class="flex justify-center bg-indigo-300 items-center py-2 absolute item__menu w-full">
-									<a href="#"><i
+									<!-- <a href="#"><i
 										class="fa text-2xl fa-heart text-white hover:text-indigo-400 transition-colors"></i></a>
-									<div class="border-l-2 border-white h-7 mx-2"></div>
+									<div class="border-l-2 border-white h-7 mx-2"></div> -->
 									<a href="store/shopping-cart/insert-into-cart/${p.id}"><i
 										class="fa text-2xl fa-cart-plus text-white hover:text-indigo-400 transition-colors"></i></a>
 								</div>
@@ -280,8 +280,8 @@
 		</div>
 	</main>
 	<%@include file="/WEB-INF/views/store/include/store-footer.jsp"%>
-
-	<script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
+	<script src="<c:url value='/resources/store/assets/js/swiper-bundle.min.js'/>"></script>
+	<!-- <script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script> -->
 	<!-- <script src="./assets/js/main.js"></script> -->
 	<script src="<c:url value='/resources/store/assets/js/main.js'/>"></script>
 </body>

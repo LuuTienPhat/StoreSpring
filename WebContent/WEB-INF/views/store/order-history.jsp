@@ -30,7 +30,8 @@
 	transform: translateY(-8px);
 	color: white;
 }
-.ordered-list{
+
+.ordered-list {
 	height: 700px;
 	overflow-y: scroll;
 }
@@ -41,10 +42,10 @@
 	<%@include file="/WEB-INF/views/store/include/store-header.jsp"%>
 	<main class="main">
 		<div class="main__new-product px-32 mb-12 mt-6">
-			<div class="mb-5 font-bold">
-				<a href="${applicationScope.storeIndexPage}"
-					class="hover:text-indigo-400 transition-colors">Trang chủ</a> > <span
-					class="text-indigo-400">Hồ sơ cá nhân</span>
+			<div class="mb-5 font-bold text-xl">
+				<a href="${applicationScope.userInfoPage}"
+					class="hover:text-indigo-400 transition-colors">Hồ sơ cá nhân</a>
+				> <span class="text-indigo-400">Lịch sử mua hàng</span>
 			</div>
 			<div class="flex justify-between info-wrapper">
 				<div class="p-4 pt-0 border-2 mr-4 border-gray-200 user-info-nav">
@@ -90,23 +91,28 @@
 					<div class="px-4 ordered-list">
 						<c:if test="${listOrder.size()==0}">
 							<p>Bạn chưa có đơn hàng nào.</p>
-							<p class="mb-2"><a href="${applicationScope.storeIndexPage}"
-							class="inline-block font-bold text-indigo-400 hover:text-indigo-200 transition-colors">Quay lại trang chủ</a> để mua sắm.</p>
+							<p class="mb-2">
+								<a href="${applicationScope.storeIndexPage}"
+									class="inline-block font-bold text-indigo-400 hover:text-indigo-200 transition-colors">Quay
+									lại trang chủ</a> để mua sắm.
+							</p>
 						</c:if>
+						
 						<table class="cart-list__table mb-4">
-								<thead>
-									<tr class="card-list__table-header font-bold">
-										<th>Tên</th>
-										<th>Số lượng</th>
-										<th>Thành tiền</th>
-									</tr>
-								</thead>
-						<c:forEach var="order" items="${listOrder}" varStatus="loop">
-							<p class="">${loop.index+1}.</p>
+							<thead>
+								<tr class="card-list__table-header font-bold">
+									<th>Tên</th>
+									<th>Số lượng</th>
+									<th>Thành tiền</th>
+								</tr>
+							</thead>
+							<c:forEach var="order" items="${listOrder}" varStatus="loop">
 							
+								<p class="">${loop.index+1}.</p>
+
 								<tbody>
 									<c:forEach var="c" items="${order.orderDetails}">
-										
+
 										<tr class="card-list__table-item">
 											<td class="card-list__table-desc"
 												style="text-align: left !important;"><a
@@ -122,18 +128,18 @@
 													value="vi_VN" scope="session" /> <fmt:formatNumber
 													value="${c.quantity*c.product.price}" type="currency" /></td>
 										</tr>
-										
-									</c:forEach>
 
+									</c:forEach>
+									
 								</tbody>
-							
-							<div class="flex justify-between border-t my-1 py-2">
-											<span class="">Tổng cộng</span> <span class="font-bold"><fmt:setLocale
-													value="vi_VN" scope="session" /> <fmt:formatNumber
-													value="${order.orderTotal}" type="currency" /></span>
-										</div>
-										<div class="w-full border-b border-black"></div>
-						</c:forEach>
+									<div class="flex justify-between border-t my-1 py-2">
+										<span class="">Tổng cộng</span> <span class="font-bold"><fmt:setLocale
+												value="vi_VN" scope="session" /> <fmt:formatNumber
+												value="${order.orderTotal}" type="currency" /></span>
+									</div>
+									<div class="w-full border-b border-black"></div>
+									
+							</c:forEach>
 						</table>
 					</div>
 				</div>
@@ -142,7 +148,7 @@
 	</main>
 	<%@include file="/WEB-INF/views/store/include/store-footer.jsp"%>
 
-	<script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
+	<!-- <script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script> -->
 	<!-- <script src="./assets/js/main.js"></script> -->
 	<script src="<c:url value='/resources/store/assets/js/main.js'/>"></script>
 	<!-- <script src="./assets/js/sign-up.js"></script> -->
