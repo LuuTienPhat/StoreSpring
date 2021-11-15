@@ -90,8 +90,8 @@
 		<div class="main__new-product px-32 mb-12 mt-6">
 			<div class="mb-5 font-bold text-xl">
 				<a href="${applicationScope.shoppingCartPage}"
-					class="hover:text-indigo-400 transition-colors">Giỏ hàng</a> > <span
-					class="text-indigo-400">Thanh toán</span>
+					class="hover:text-indigo-500 transition-colors">Giỏ hàng</a> > <span
+					class="text-indigo-500">Thanh toán</span>
 			</div>
 			<div class="">
 
@@ -277,7 +277,7 @@
 											<td class="card-list__table-desc"
 												style="text-align: left !important;"><a
 												href="${applicationScope.productDetailPage}/${c.product.id}"
-												class="hover:text-indigo-400">${c.product.name}</a> <br>
+												class="hover:text-indigo-500">${c.product.name}</a> <br>
 												<div class="cart-list__price">
 													Đơn giá: <span class="font-bold"><fmt:setLocale
 															value="vi_VN" scope="session" /> <fmt:formatNumber
@@ -313,7 +313,7 @@
 
 					<div class="w-full flex justify-end">
 						<button
-							class="px-4 py-2 my-2 font-bold bg-indigo-300 hover:bg-indigo-400 transition-colors text-white rounded-md">Thanh
+							class="px-4 py-2 my-2 font-bold bg-indigo-400 hover:bg-indigo-500 transition-colors text-white rounded-md">Thanh
 							toán</button>
 					</div>
 

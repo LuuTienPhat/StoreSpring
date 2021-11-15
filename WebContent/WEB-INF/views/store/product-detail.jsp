@@ -15,9 +15,9 @@
 		<div class="product__detail">
 			<div class="product-navigation font-bold mb-5">
 				<a href="store/all"
-					class="inline-block font-bold text-xl hover:text-indigo-400 transition-colors">Tất
+					class="inline-block font-bold text-xl hover:text-indigo-500 transition-colors">Tất
 					cả</a> > <a href="store/category/${product.category.id}"
-					class="inline-block font-bold text-xl text-indigo-500 hover:text-indigo-400 transition-colors">${product.category.name}</a>
+					class="inline-block font-bold text-xl text-indigo-600 hover:text-indigo-500 transition-colors">${product.category.name}</a>
 			</div>
 			<div class="flex detail__wrapper">
 				<a href="${applicationScope.productDetailPage}/${product.id}"
@@ -29,9 +29,9 @@
 						<h6 class="mb-2 text-gray-500">Mã sản phẩm: ${product.id}</h6>
 						<div class="flex">
 							<!-- <i
-								class="fa fa-share-alt text-2xl hover:text-indigo-400 text-2xl mr-2 cursor-pointer"></i>
+								class="fa fa-share-alt text-2xl hover:text-indigo-500 text-2xl mr-2 cursor-pointer"></i>
 							<i
-								class="fa fa-heart hover:text-indigo-400 text-2xl cursor-pointer"></i> -->
+								class="fa fa-heart hover:text-indigo-500 text-2xl cursor-pointer"></i> -->
 						</div>
 					</div>
 					<div>
@@ -70,10 +70,10 @@
 						</div> --%>
 						<div class="flex my-4 border-gray-300 border-b-2 pb-5">
 							<a href = "store/shopping-cart/insert-into-cart/${product.id}"
-								class="w-full text-center py-2 font-bold bg-indigo-300 hover:bg-indigo-400 transition-colors text-white rounded-md mr-4 add-to-cart">THÊM
+								class="w-full text-center py-2 font-bold bg-indigo-400 hover:bg-indigo-500 transition-colors text-white rounded-md mr-4 add-to-cart">THÊM
 								VÀO GIỎ HÀNG</a>
 							<button
-								class="w-full text-center py-2 font-bold bg-indigo-300 hover:bg-indigo-400 transition-colors text-white rounded-md buy-now">MUA
+								class="w-full text-center py-2 font-bold bg-indigo-400 hover:bg-indigo-500 transition-colors text-white rounded-md buy-now">MUA
 								NGAY</button>
 						</div>
 					</form>
@@ -107,7 +107,7 @@
 			<div class="section__heading mb-8  mt-16">
 				<h3>
 					<span href="#"
-						class="<!-- hover:text-indigo-300 --> transition-colors text-3xl font-bold">Các
+						class="<!-- hover:text-indigo-400 --> transition-colors text-3xl font-bold">Các
 						sản phẩm đã xem</span>
 				</h3>
 			</div>
@@ -123,16 +123,16 @@
 									alt="${p.id}" class="transform hover:scale-110 transition-all " /></a>
 
 								<div
-									class="flex justify-center bg-indigo-300 items-center py-2 absolute item__menu w-full">
+									class="flex justify-center bg-indigo-400 items-center py-2 absolute item__menu w-full">
 									<!-- <a href="#"><i
-										class="fa text-2xl fa-heart text-white hover:text-indigo-400 transition-colors"></i></a>
+										class="fa text-2xl fa-heart text-white hover:text-indigo-500 transition-colors"></i></a>
 									<div class="border-l-2 border-white h-7 mx-2"></div> -->
 									<a href="store/shopping-cart/insert-into-cart/${p.id}"><i
-										class="fa text-2xl fa-cart-plus text-white hover:text-indigo-400 transition-colors"></i></a>
+										class="fa text-2xl fa-cart-plus text-white hover:text-indigo-500 transition-colors"></i></a>
 								</div>
 							</div>
 							<a href="${applicationScope.productDetailPage}/${p.id}"
-								class="item__name block hover:text-indigo-300 transition-colors font-bold my-2">${p.name}</a>
+								class="item__name block hover:text-indigo-400 transition-colors font-bold my-2">${p.name}</a>
 						</div>
 						<div>
 						<span class="item__price font-bold"><fmt:setLocale value="vi_VN" scope="session" />

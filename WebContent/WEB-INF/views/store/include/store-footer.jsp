@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <footer>
-        <div class="section px-32 py-5 bg-indigo-300 flex text-white font-medium">
+        <div class="section px-32 py-5 bg-indigo-400 flex text-white font-medium">
             <div class="mr-3 flex flex-col">
                 <span class="text-md">Hotline</span>
                 <span class="text-xl mb-4">0987654321</span>
