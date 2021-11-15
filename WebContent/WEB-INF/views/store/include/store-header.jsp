@@ -67,15 +67,15 @@
 	
 	<header class="header">
 		<ul class="nav__top flex justify-end bg-indigo-400">
-			<li><a href="#"
+			<li><a href="#store-address"
 				class="px-4 py-1 block font-bold hover:text-indigo-500 transition-colors">HỆ
 					THỐNG CỬA HÀNG</a></li>
 			<li><a href="#"
 				class="px-4 py-1 block font-bold hover:text-indigo-500 transition-colors">VỀ
-					MOJI</a></li>
-			<li><a href="#"
+					STORE SPRING 21</a></li>
+<!-- 			<li><a href="#"
 				class="px-4 py-1 block font-bold hover:text-indigo-500 transition-colors">TUYỂN
-					DỤNG</a></li>
+					DỤNG</a></li> -->
 		</ul>
 		<div class="nav__middle flex justify-between px-32 items-center">
 			<div class="nav__middle-left flex justify-between items-center">
