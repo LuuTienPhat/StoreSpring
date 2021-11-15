@@ -21,20 +21,20 @@ public class OrderEntity {
 	private String id;
 	@Column(name = "customer_id")
 	private String customerId;
-	@Column(name = "order_total")
-	private float orderTotal;
+	/*
+	 * @Column(name = "order_total") private float orderTotal;
+	 */
 	@Column(name = "order_date")
 	private Date orderDate;
-	@Column(name = "shipped_date")
-	private Date shippedDate;
+	/*
+	 * @Column(name = "shipped_date") private Date shippedDate;
+	 */
 	@Column(name = "ship_name")
 	private String shipName;
 	@Column(name = "ship_phone")
 	private String shipPhone;
 	@Column(name = "ship_address")
 	private String shipAddress;
-	@Column(name = "ship_city")
-	private String shipCity;
 	@Column(name = "ship_note")
 	private String shipNote;
 	@Column(name = "state")
@@ -71,13 +71,12 @@ public class OrderEntity {
 		this.orderDate = orderDate;
 	}
 
-	public Date getShippedDate() {
-		return shippedDate;
-	}
-
-	public void setShippedDate(Date shippedDate) {
-		this.shippedDate = shippedDate;
-	}
+	/*
+	 * public Date getShippedDate() { return shippedDate; }
+	 * 
+	 * public void setShippedDate(Date shippedDate) { this.shippedDate =
+	 * shippedDate; }
+	 */
 
 	public String getShipName() {
 		return shipName;
@@ -103,14 +102,6 @@ public class OrderEntity {
 		this.shipAddress = shipAddress;
 	}
 
-	public String getShipCity() {
-		return shipCity;
-	}
-
-	public void setShipCity(String shipCity) {
-		this.shipCity = shipCity;
-	}
-	
 	public String getShipNote() {
 		return shipNote;
 	}
@@ -143,12 +134,40 @@ public class OrderEntity {
 		this.customer = customer;
 	}
 
-	public float getOrderTotal() {
-		return orderTotal;
+	/*
+	 * public float getOrderTotal() { return orderTotal; }
+	 * 
+	 * public void setOrderTotal(float orderTotal) { this.orderTotal = orderTotal; }
+	 */
+
+	public OrderEntity() {
+		// TODO Auto-generated constructor stub
 	}
 
-	public void setOrderTotal(float orderTotal) {
-		this.orderTotal = orderTotal;
+	// GET TOTAL PRICE OF ORDER
+	public float getTotalPrice() {
+		float totalPrice = 0;
+		for (OrderDetailEntity orderDetail : orderDetails) {
+			totalPrice += (orderDetail.getProduct().getPrice() * orderDetail.getQuantity());
+		}
+		return totalPrice;
 	}
-	
+
+	// GET TOTAL QUANTITY OF ORDER
+	public int getTotalQuantity() {
+		int totalQuantity = 0;
+		for (OrderDetailEntity orderDetail : orderDetails) {
+			totalQuantity += orderDetail.getQuantity();
+		}
+		return totalQuantity;
+	}
+
+	// GET QUANTITY OF CHOSEN PRODUCT IN ORDER
+	public int getQuantity(String productId) {
+		for (OrderDetailEntity orderDetail : orderDetails) {
+			if (orderDetail.getProduct().getId().equals(productId))
+				return orderDetail.getQuantity();
+		}
+		return 0;
+	}
 }
