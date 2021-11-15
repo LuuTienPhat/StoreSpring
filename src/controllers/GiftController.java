@@ -481,7 +481,7 @@ public class GiftController {
 			for (CartDetailEntity c : cartDetails) {
 				total = total + c.getQuantity() * c.getProduct().getPrice();
 			}
-			oe.setOrderTotal(total);
+			//oe.setOrderTotal(total);
 			oe.setShipAddress(order.getShipAddress());
 			oe.setShipName(order.getShipName());
 			oe.setShipPhone(order.getShipPhone());
