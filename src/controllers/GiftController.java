@@ -51,11 +51,12 @@ public class GiftController {
 
 	@RequestMapping("")
 	public String store(ModelMap model, HttpSession httpSession) {
-		httpSession.setAttribute("listCategory", this.getListCategory());
-		model.addAttribute("list", this.getListProduct());
+		Methods method = new Methods(factory);
+		httpSession.setAttribute("listCategory", method.getListCategory());
+		model.addAttribute("list", method.getListProduct());
 		if ((httpSession.getAttribute("customerUsername") != null)) {
 			int sum = 0;
-			for (CartDetailEntity c : this.getCustomerByUsername((String) httpSession.getAttribute("customerUsername"))
+			for (CartDetailEntity c : method.getCustomerByUsername((String) httpSession.getAttribute("customerUsername"))
 					.getCartDetails()) {
 				sum = sum + c.getQuantity();
 			}
@@ -68,23 +69,25 @@ public class GiftController {
 
 	@RequestMapping("/")
 	public String store2(ModelMap model, HttpSession httpSession) {
-		httpSession.setAttribute("listCategory", this.getListCategory());
+		Methods method = new Methods(factory);
+		httpSession.setAttribute("listCategory", method.getListCategory());
 		if (httpSession.getAttribute("customerUsername") != null) {
 			int sum = 0;
-			for (CartDetailEntity c : this.getCustomerByUsername((String) httpSession.getAttribute("customerUsername"))
+			for (CartDetailEntity c : method.getCustomerByUsername((String) httpSession.getAttribute("customerUsername"))
 					.getCartDetails()) {
 				sum = sum + c.getQuantity();
 			}
 			System.out.println(sum);
 			httpSession.setAttribute("customerTotalQuantity", sum);
 		}
-		model.addAttribute("list", this.getListProduct());
+		model.addAttribute("list", method.getListProduct());
 		return "store/index";
 	}
 
 	@RequestMapping("/product-detail/{productId}")
 	public String productDetail2(@PathVariable("productId") String productId, ModelMap model, HttpSession httpSession) {
-		httpSession.setAttribute("listCategory", this.getListCategory());
+		Methods method = new Methods(factory);
+		httpSession.setAttribute("listCategory", method.getListCategory());
 		if (httpSession.getAttribute("listRecentViewProducts") != null) {
 			List<ProductEntity> lpe = (List<ProductEntity>) httpSession.getAttribute("listRecentViewProducts");
 			boolean existed = false;
@@ -94,29 +97,31 @@ public class GiftController {
 				}
 			}
 			if (!existed) {
-				lpe.add(0, this.getProduct(productId));
+				lpe.add(0, method.getProduct(productId));
 			}
 			httpSession.setAttribute("listRecentViewProducts", lpe);
 		} else {
 			List<ProductEntity> lpe = new ArrayList<ProductEntity>();
-			lpe.add(0, this.getProduct(productId));
+			lpe.add(0, method.getProduct(productId));
 			httpSession.setAttribute("listRecentViewProducts", lpe);
 		}
-		model.addAttribute("product", this.getProduct(productId));
-		System.out.println(productId + "; " + this.getProduct(productId).getName());
+		model.addAttribute("product", method.getProduct(productId));
+		System.out.println(productId + "; " + method.getProduct(productId).getName());
 		return "store/product-detail";
 	}
 
 	@RequestMapping(value = "/sign-in")
 	public String signIn(ModelMap model, HttpSession httpSession) {
-		httpSession.setAttribute("listCategory", this.getListCategory());
+		Methods method = new Methods(factory);
+		httpSession.setAttribute("listCategory", method.getListCategory());
 		model.addAttribute("account", new CustomerLoginAccountModel());
 		return "store/sign-in";
 	}
 
 	@RequestMapping(value = "/log-out")
 	public String logOut(ModelMap model, HttpSession httpSession) {
-		httpSession.setAttribute("listCategory", this.getListCategory());
+		Methods method = new Methods(factory);
+		httpSession.setAttribute("listCategory", method.getListCategory());
 		httpSession.removeAttribute("customerUsername");
 		return "redirect:/";
 	}
@@ -124,10 +129,11 @@ public class GiftController {
 	@RequestMapping(value = "/sign-in", method = RequestMethod.POST)
 	public String signIn(@ModelAttribute("account") CustomerLoginAccountModel account, ModelMap model,
 			BindingResult errors, HttpSession httpSession, RedirectAttributes attributes) {
-		httpSession.setAttribute("listCategory", this.getListCategory());
-		if (!isCustomerWithUsernameExit(account.getUsername())) {
+		Methods method = new Methods(factory);
+		httpSession.setAttribute("listCategory", method.getListCategory());
+		if (!method.isCustomerWithUsernameExit(account.getUsername())) {
 			errors.rejectValue("username", "account", "Tên đăng nhập không tồn tại!");
-		} else if (!account.getPassword().equals(getPasswordOfCustomerWithUsername(account.getUsername()))) {
+		} else if (!account.getPassword().equals(method.getPasswordOfCustomerWithUsername(account.getUsername()))) {
 			errors.rejectValue("password", "account", "Mật khẩu không đúng!");
 		}
 		if (errors.hasErrors()) {
@@ -137,7 +143,7 @@ public class GiftController {
 		} else {
 			httpSession.setAttribute("customerUsername", account.getUsername());
 			int sum = 0;
-			for (CartDetailEntity c : this.getCustomerByUsername(account.getUsername()).getCartDetails()) {
+			for (CartDetailEntity c : method.getCustomerByUsername(account.getUsername()).getCartDetails()) {
 				sum = sum + c.getQuantity();
 			}
 			System.out.println(sum);
@@ -149,8 +155,9 @@ public class GiftController {
 
 	@RequestMapping("/sign-up")
 	public String signUp(ModelMap model, HttpSession httpSession) {
-		httpSession.setAttribute("listCategory", this.getListCategory());
-		System.out.println(this.createTheNextCustomerId());
+		Methods method = new Methods(factory);
+		httpSession.setAttribute("listCategory", method.getListCategory());
+		System.out.println(method.createTheNextCustomerId());
 		model.addAttribute("customer", new CustomerValidateModel());
 		return "store/sign-up";
 	}
@@ -158,12 +165,13 @@ public class GiftController {
 	@RequestMapping(value = "/sign-up", method = RequestMethod.POST)
 	public String signUp(ModelMap model, @ModelAttribute("customer") CustomerValidateModel customer,
 			BindingResult errors, HttpSession httpSession, RedirectAttributes attributes) {
-		httpSession.setAttribute("listCategory", this.getListCategory());
+		Methods method = new Methods(factory);
+		httpSession.setAttribute("listCategory", method.getListCategory());
 		if (customer.getUsername().trim().length() == 0) {
 			errors.rejectValue("username", "customer", "Vui lòng nhập tên đăng nhập!");
 		} else if (customer.getUsername().trim().length() < 4) {
 			errors.rejectValue("username", "customer", "Tên đăng nhập tối thiểu 4 ký tự!");
-		} else if (isCustomerWithUsernameExit(customer.getUsername().trim())) {
+		} else if (method.isCustomerWithUsernameExit(customer.getUsername().trim())) {
 			errors.rejectValue("username", "customer", "Tên đăng nhập đã tồn tại!");
 		}
 		if (customer.getFirstName().trim().length() == 0) {
@@ -213,7 +221,7 @@ public class GiftController {
 			return "store/sign-up";
 		} else {
 			CustomerEntity ce = new CustomerEntity();
-			ce.setId(createTheNextCustomerId().trim());
+			ce.setId(method.createTheNextCustomerId().trim());
 			ce.setUsername(customer.getUsername().trim());
 			ce.setPassword(customer.getPassword().trim());
 			ce.setFirstname(customer.getFirstName().trim());
@@ -224,7 +232,7 @@ public class GiftController {
 			ce.setAddress(customer.getFullAddress());
 			ce.setEmail(customer.getEmail().trim());
 //			model.addAttribute("message", "Chúc mừng, bạn đã nhập đúng!");
-			if (this.insertCustomer(ce)) {
+			if (method.insertCustomer(ce)) {
 				attributes.addFlashAttribute("message", "Đăng ký thành công!");
 				httpSession.setAttribute("customerUsername", ce.getUsername());
 				System.out.println("Thêm thành công");
@@ -240,9 +248,10 @@ public class GiftController {
 	@RequestMapping("/category/{categoryId}")
 	public String category(ModelMap model, @PathVariable("categoryId") String categoryId, HttpServletRequest request,
 			HttpSession httpSession) {
-		httpSession.setAttribute("listCategory", this.getListCategory());
-		model.addAttribute("list", getListProductBycategory(categoryId));
-		PagedListHolder pagedListHolder = new PagedListHolder(getListProductBycategory(categoryId));
+		Methods method = new Methods(factory);
+		httpSession.setAttribute("listCategory", method.getListCategory());
+		model.addAttribute("list", method.getListProductBycategory(categoryId));
+		PagedListHolder pagedListHolder = new PagedListHolder(method.getListProductBycategory(categoryId));
 		int page = ServletRequestUtils.getIntParameter(request, "p", 0);
 		pagedListHolder.setPage(page);
 		pagedListHolder.setMaxLinkedPages(3);
@@ -255,17 +264,19 @@ public class GiftController {
 
 	@RequestMapping("/user-info")
 	public String userInfo(HttpSession httpSession, ModelMap model) {
-		httpSession.setAttribute("listCategory", this.getListCategory());
+		Methods method = new Methods(factory);
+		httpSession.setAttribute("listCategory", method.getListCategory());
 		model.addAttribute("customer", new CustomerValidateModel());
 		model.addAttribute("customerEntity",
-				this.getCustomerByUsername((String) httpSession.getAttribute("customerUsername")));
+				method.getCustomerByUsername((String) httpSession.getAttribute("customerUsername")));
 		return "store/user-info";
 	}
 
 	@RequestMapping(value = "/user-info", method = RequestMethod.POST)
 	public String userInfo2(ModelMap model, @ModelAttribute("customer") CustomerValidateModel customer,
 			BindingResult errors, HttpSession httpSession, RedirectAttributes attributes) {
-		httpSession.setAttribute("listCategory", this.getListCategory());
+		Methods method = new Methods(factory);
+		httpSession.setAttribute("listCategory", method.getListCategory());
 		/*
 		 * if (customer.getUsername().trim().length() == 0) {
 		 * errors.rejectValue("username", "customer", "Vui lòng nhập tên đăng nhập!"); }
@@ -330,7 +341,7 @@ public class GiftController {
 			ce.setEmail(customer.getEmail().trim());
 			System.out.println("still ok");
 //			model.addAttribute("message", "Chúc mừng, bạn đã nhập đúng!");
-			if (this.updateCustomerDetail(ce, httpSession)) {
+			if (method.updateCustomerDetail(ce, httpSession)) {
 				System.out.println("Cập nhật thành công");
 				model.addAttribute("message", "Cập nhật thông tin thành công!");
 				return "store/user-info";
@@ -343,18 +354,20 @@ public class GiftController {
 
 	@RequestMapping(value = "/user-info/change-password")
 	public String changePassword(HttpSession httpSession, ModelMap model) {
-		httpSession.setAttribute("listCategory", this.getListCategory());
+		Methods method = new Methods(factory);
+		httpSession.setAttribute("listCategory", method.getListCategory());
 		model.addAttribute("customer", new ChangePasswordModel());
 		model.addAttribute("customerEntity",
-				this.getCustomerByUsername((String) httpSession.getAttribute("customerUsername")));
+				method.getCustomerByUsername((String) httpSession.getAttribute("customerUsername")));
 		return "store/user-change-password";
 	}
 
 	@RequestMapping(value = "/user-info/order-history")
 	public String orderHistory(HttpSession httpSession, ModelMap model) {
-		httpSession.setAttribute("listCategory", this.getListCategory());
-		model.addAttribute("listOrder", this
-				.getCustomerOrder(this.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername"))));
+		Methods method = new Methods(factory);
+		httpSession.setAttribute("listCategory", method.getListCategory());
+		model.addAttribute("listOrder", method
+				.getCustomerOrder(method.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername"))));
 
 		return "store/order-history";
 	}
@@ -362,10 +375,11 @@ public class GiftController {
 	@RequestMapping(value = "/user-info/change-password", method = RequestMethod.POST)
 	public String changePassword2(ModelMap model, @ModelAttribute("customer") ChangePasswordModel customer,
 			BindingResult errors, HttpSession httpSession, RedirectAttributes attributes) {
-		httpSession.setAttribute("listCategory", this.getListCategory());
+		Methods method = new Methods(factory);
+		httpSession.setAttribute("listCategory", method.getListCategory());
 		if (customer.getOldPassword().trim().length() == 0) {
 			errors.rejectValue("oldPassword", "customer", "Vui lòng nhập mật khẩu cũ!");
-		} else if (!customer.getOldPassword().trim().equals(this
+		} else if (!customer.getOldPassword().trim().equals(method
 				.getCustomerByUsername((String) httpSession.getAttribute("customerUsername")).getPassword().trim())) {
 			errors.rejectValue("oldPassword", "customer", "Mật khẩu cũ không đúng!");
 		}
@@ -387,7 +401,7 @@ public class GiftController {
 			CustomerEntity ce = new CustomerEntity();
 			ce.setPassword(customer.getConfirmNewPassword());
 //			model.addAttribute("message", "Chúc mừng, bạn đã nhập đúng!");
-			if (this.updateCustomerPassword(ce, httpSession)) {
+			if (method.updateCustomerPassword(ce, httpSession)) {
 				System.out.println("Cập nhật mật khẩu thành công");
 				attributes.addFlashAttribute("message", "Cập nhật mật khẩu thành công!");
 			} else {
@@ -399,9 +413,10 @@ public class GiftController {
 
 	@RequestMapping(value = "/shopping-cart/check-out")
 	public String checkOut(HttpSession httpSession, ModelMap model, RedirectAttributes attributes) {
-		httpSession.setAttribute("listCategory", this.getListCategory());
-		List<CartDetailEntity> listCart = this
-				.getListCartDetail(this.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername")));
+		Methods method = new Methods(factory);
+		httpSession.setAttribute("listCategory", method.getListCategory());
+		List<CartDetailEntity> listCart = method
+				.getListCartDetail(method.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername")));
 		if (listCart.size() == 0) {
 			attributes.addFlashAttribute("message", "Không có sản phẩm nào trong giỏ hàng!");
 			return "redirect:/store/shopping-cart";
@@ -415,7 +430,7 @@ public class GiftController {
 		}
 		if (httpSession.getAttribute("customerUsername") != null) {
 			int sum = 0;
-			for (CartDetailEntity c : this.getCustomerByUsername((String) httpSession.getAttribute("customerUsername"))
+			for (CartDetailEntity c : method.getCustomerByUsername((String) httpSession.getAttribute("customerUsername"))
 					.getCartDetails()) {
 				sum = sum + c.getQuantity();
 			}
@@ -424,9 +439,9 @@ public class GiftController {
 		}
 		model.addAttribute("order", new OrderModel());
 		model.addAttribute("customerEntity",
-				this.getCustomerByUsername((String) httpSession.getAttribute("customerUsername")));
-		List<CartDetailEntity> cartDetails = this
-				.getListCartDetail(this.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername")));
+				method.getCustomerByUsername((String) httpSession.getAttribute("customerUsername")));
+		List<CartDetailEntity> cartDetails = method
+				.getListCartDetail(method.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername")));
 		model.addAttribute("cartDetails", cartDetails);
 		float total = 0;
 		for (CartDetailEntity c : cartDetails) {
@@ -440,7 +455,8 @@ public class GiftController {
 	@RequestMapping(value = "/shopping-cart/check-out", method = RequestMethod.POST)
 	public String checkOut2(HttpSession httpSession, ModelMap model, @ModelAttribute("order") OrderModel order,
 			BindingResult errors, RedirectAttributes attributes) {
-		httpSession.setAttribute("listCategory", this.getListCategory());
+		Methods method = new Methods(factory);
+		httpSession.setAttribute("listCategory", method.getListCategory());
 		if (order.getShipName().trim().length() == 0) {
 			errors.rejectValue("shipName", "order", "Vui lòng nhập họ!");
 		}
@@ -461,8 +477,8 @@ public class GiftController {
 		if (errors.hasErrors()) {
 			model.addAttribute("message", "Vui lòng sửa các lỗi sau đây!");
 //			attributes.addFlashAttribute("message", "Vui lòng sửa các lỗi sau đây!");
-			List<CartDetailEntity> cartDetails = this.getListCartDetail(
-					this.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername")));
+			List<CartDetailEntity> cartDetails = method.getListCartDetail(
+					method.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername")));
 			model.addAttribute("cartDetails", cartDetails);
 			float total = 0;
 			for (CartDetailEntity c : cartDetails) {
@@ -472,11 +488,11 @@ public class GiftController {
 			return "store/check-out";
 		} else {
 			OrderEntity oe = new OrderEntity();
-			oe.setCustomerId(this.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername")));
-			oe.setId(this.createTheNextOrderId());
+			oe.setCustomerId(method.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername")));
+			oe.setId(method.createTheNextOrderId());
 			oe.setOrderDate(new Date());
-			List<CartDetailEntity> cartDetails = this.getListCartDetail(
-					this.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername")));
+			List<CartDetailEntity> cartDetails = method.getListCartDetail(
+					method.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername")));
 			float total = 0;
 			for (CartDetailEntity c : cartDetails) {
 				total = total + c.getQuantity() * c.getProduct().getPrice();
@@ -489,8 +505,8 @@ public class GiftController {
 			oe.setState(0);
 //			/
 //			add new properties for order later
-			if (this.checkOutHibernate(oe, this.getListCartDetail(
-					this.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername"))))) {
+			if (method.checkOutHibernate(oe, method.getListCartDetail(
+					method.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername"))))) {
 				attributes.addFlashAttribute("message", "Đặt hàng thành công!");
 				String body = "<h3  style='margin: 8px 0;'>Thông tin người nhận</h3><p  style='margin: 4px 0;'>Tên: "
 						+ order.getShipName() + ", SĐT: " + order.getShipPhone()
@@ -535,8 +551,9 @@ public class GiftController {
 
 	@RequestMapping("/all")
 	public String allProduct(ModelMap model, HttpServletRequest request, HttpSession httpSession) {
-		httpSession.setAttribute("listCategory", this.getListCategory());
-		PagedListHolder pagedListHolder = new PagedListHolder(this.getAllProducts());
+		Methods method = new Methods(factory);
+		httpSession.setAttribute("listCategory", method.getListCategory());
+		PagedListHolder pagedListHolder = new PagedListHolder(method.getAllProducts());
 		int page = ServletRequestUtils.getIntParameter(request, "p", 0);
 		pagedListHolder.setPage(page);
 		pagedListHolder.setMaxLinkedPages(3);
@@ -549,17 +566,19 @@ public class GiftController {
 
 	@RequestMapping("/shopping-cart")
 	public String shoppingCart(ModelMap model, HttpSession httpSession) {
-		httpSession.setAttribute("listCategory", this.getListCategory());
-		model.addAttribute("listCartDetail",
-				getListCartDetail(this.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername"))));
+		Methods method = new Methods(factory);
+		httpSession.setAttribute("listCategory", method.getListCategory());
+		model.addAttribute("listCartDetail", method.
+				getListCartDetail(method.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername"))));
 		return "store/shopping-cart";
 	}
 
 	@RequestMapping(value = "/shopping-cart/delete/{productId}", method = RequestMethod.GET)
 	public String delete(@PathVariable("productId") String productId, HttpSession httpSession) {
-		httpSession.setAttribute("listCategory", this.getListCategory());
+		Methods method = new Methods(factory);
+		httpSession.setAttribute("listCategory", method.getListCategory());
 		System.out.println(productId);
-		if (deleteProductFromCartDetail(productId, httpSession)) {
+		if (method.deleteProductFromCartDetail(productId, httpSession)) {
 			System.out.println("Delete successful");
 		} else {
 			System.out.println("Delete unsuccessful");
@@ -570,17 +589,18 @@ public class GiftController {
 	@RequestMapping(value = "/shopping-cart/update", method = RequestMethod.POST)
 	public String update(HttpServletRequest request, ModelMap model, HttpSession httpSession,
 			RedirectAttributes attributes) {
-		List<CartDetailEntity> listCart = this
-				.getListCartDetail(this.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername")));
+		Methods method = new Methods(factory);
+		List<CartDetailEntity> listCart = method
+				.getListCartDetail(method.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername")));
 		if (listCart.size() == 0) {
 			attributes.addFlashAttribute("message", "Không có sản phẩm nào trong giỏ hàng!");
 			return "redirect:/store/shopping-cart";
 		}
-		httpSession.setAttribute("listCategory", this.getListCategory());
+		httpSession.setAttribute("listCategory", method.getListCategory());
 		String[] product_ids = request.getParameterValues("product_id");
 		String[] quantities = request.getParameterValues("quantity");
 		for (int i = 0; i < product_ids.length; i++) {
-			updateProductQuantityFromCartDetail(product_ids[i], quantities[i], httpSession);
+			method.updateProductQuantityFromCartDetail(product_ids[i], quantities[i], httpSession);
 		}
 		attributes.addFlashAttribute("message", "Cập nhật số lượng thành công.");
 		return "redirect:/store/shopping-cart";
@@ -589,23 +609,24 @@ public class GiftController {
 	@RequestMapping("/shopping-cart/insert-into-cart/{productId}")
 	public String insertToCart(String customerId, @PathVariable("productId") String productId, HttpSession httpSession,
 			RedirectAttributes attributes) {
-		httpSession.setAttribute("listCategory", this.getListCategory());
+		Methods method = new Methods(factory);
+		httpSession.setAttribute("listCategory", method.getListCategory());
 		Session session = factory.openSession();
 		Transaction t = session.beginTransaction();
 		CartDetailEntity cde = new CartDetailEntity(
-				this.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername")), (productId));
-		if (this.isProductOutOfStock(productId)) {
+				method.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername")), (productId));
+		if (method.isProductOutOfStock(productId)) {
 			attributes.addFlashAttribute("message", "Sản phẩm hiện hết hàng");
 			return "redirect:/store/shopping-cart";
 		}
-		if (cartItemIsExit(productId, httpSession)) {
+		if (method.cartItemIsExit(productId, httpSession)) {
 			System.out.println("Exist; increase quantity by 1!");
-			if (!isCartItemMaximumAmountOfProduct(productId, httpSession)) { // nếu số lượng tồn của sản phẩm k bằng số
+			if (!method.isCartItemMaximumAmountOfProduct(productId, httpSession)) { // nếu số lượng tồn của sản phẩm k bằng số
 																				// sản phẩm của
 				// product đó trong cart
 
-				if (updateProductQuantityFromCartDetail(productId,
-						String.valueOf(getQuantityOfCartItem(productId, httpSession) + 1), httpSession)) {
+				if (method.updateProductQuantityFromCartDetail(productId,
+						String.valueOf(method.getQuantityOfCartItem(productId, httpSession) + 1), httpSession)) {
 					System.out.println("Exit; increase quantity by 1 successful!");
 					attributes.addFlashAttribute("message", "Thêm thành công");
 					return "redirect:/store/shopping-cart";
@@ -654,10 +675,11 @@ public class GiftController {
 	@RequestMapping(value = "/search/{keyword}")
 	public String search(HttpServletRequest request, ModelMap model, @PathVariable("keyword") String keyword,
 			HttpSession httpSession) {
-		httpSession.setAttribute("listCategory", this.getListCategory());
+		Methods method = new Methods(factory);
+		httpSession.setAttribute("listCategory", method.getListCategory());
 		model.addAttribute("keyword", keyword);
 		System.out.println(keyword);
-		PagedListHolder pagedListHolder = new PagedListHolder(this.searchForProduct(keyword));
+		PagedListHolder pagedListHolder = new PagedListHolder(method.searchForProduct(keyword));
 		int page = ServletRequestUtils.getIntParameter(request, "p", 0);
 		pagedListHolder.setPage(page);
 		pagedListHolder.setMaxLinkedPages(3);
@@ -684,245 +706,6 @@ public class GiftController {
 		return "store/search-result";
 	}
 
-	public boolean updateCustomerDetail(CustomerEntity customer, HttpSession httpSession) {
-		Session session = factory.getCurrentSession();
-		String hql = "UPDATE CustomerEntity c SET c.firstname=:firstname, c.lastname=:lastname,"
-				+ "c.phone=:phone, c.address=:address, c.email=:email   WHERE c.id=:id";
-		Query query = session.createQuery(hql).setParameter("id",
-				this.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername")));
-		query.setParameter("firstname", customer.getFirstname());
-		query.setParameter("lastname", customer.getLastname());
-		query.setParameter("phone", customer.getPhone());
-		query.setParameter("address", customer.getAddress());
-		query.setParameter("email", customer.getEmail());
-		return query.executeUpdate() > 0;
-	}
-
-	public boolean updateCustomerPassword(CustomerEntity customer, HttpSession httpSession) {
-		Session session = factory.getCurrentSession();
-		String hql = "UPDATE CustomerEntity c SET c.password=:password WHERE c.id=:id";
-		Query query = session.createQuery(hql).setParameter("id",
-				this.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername")));
-		query.setParameter("password", customer.getPassword());
-		return query.executeUpdate() > 0;
-	}
-
-	public boolean updateProductQuantityFromCartDetail(String productId, String quantity, HttpSession httpSession) {
-		Session session = factory.getCurrentSession();
-		String hql = "UPDATE CartDetailEntity c SET c.quantity=:quantity WHERE c.id.customer_id=:customerId and c.id.product_id=:productId";
-		Query query = session.createQuery(hql).setParameter("customerId",
-				this.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername")));
-		query.setParameter("productId", productId);
-		query.setParameter("quantity", Integer.parseInt(quantity));
-		return query.executeUpdate() > 0;
-	}
-
-	public boolean updateProductQuantity(String productId, int quantity) {
-		Session session = factory.getCurrentSession();
-		String hql = "UPDATE ProductEntity p SET p.quantity=:quantity WHERE p.id=:productId";
-		Query query = session.createQuery(hql);
-		query.setParameter("productId", productId);
-		query.setParameter("quantity", quantity);
-		return query.executeUpdate() > 0;
-	}
-
-	public boolean deleteProductFromCartDetail(String productId, HttpSession httpSession) {
-		Session session = factory.getCurrentSession();
-		String hql = "DELETE FROM CartDetailEntity c WHERE c.id.customer_id=:customerId and c.id.product_id=:productId";
-		Query query = session.createQuery(hql).setParameter("customerId",
-				this.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername")));
-		query.setParameter("productId", productId);
-
-		return query.executeUpdate() > 0;
-	}
-
-	public List<CartDetailEntity> getListCartDetail(String customerId) {
-		Session session = factory.getCurrentSession();
-		String hql = "FROM CartDetailEntity c WHERE c.customer.id =:customerId";
-		Query query = session.createQuery(hql);
-
-		List<CartDetailEntity> list = query.setParameter("customerId", customerId).list();
-		return list;
-	}
-
-	public String getCustomerIdByUserName(String userName) {
-		Session session = factory.getCurrentSession();
-		String hql = "SELECT id FROM CustomerEntity c WHERE c.username =:userName";
-		Query query = session.createQuery(hql);
-		String customerId = (String) query.setParameter("userName", userName).uniqueResult();
-		return customerId;
-	}
-
-	public CustomerEntity getCustomerByUsername(String userName) {
-		Session session = factory.getCurrentSession();
-		String hql = "FROM CustomerEntity c WHERE c.username =:userName";
-		Query query = session.createQuery(hql);
-		CustomerEntity customer = (CustomerEntity) query.setParameter("userName", userName).uniqueResult();
-		return customer;
-	}
-
-	public List<ProductEntity> getListProduct() {
-		/* System.out.println("getListCartDetail"); */
-		Session session = factory.getCurrentSession();
-		String hql = "FROM ProductEntity";
-		Query query = session.createQuery(hql);
-		List<ProductEntity> list = query.list();
-		return list;
-	}
-
-	public boolean checkOutHibernate(OrderEntity order, List<CartDetailEntity> listCartDetail) {
-		Session session = factory.openSession();
-		Transaction t = session.beginTransaction();
-		List<ProductEntity> listProduct = this.getListProduct();
-
-		List<ProductEntity> listProductToBeUpdate = new ArrayList<ProductEntity>();
-
-		for (ProductEntity pe : listProduct) {
-			for (CartDetailEntity cde : listCartDetail) {
-				if (cde.getProduct().getId().trim().equals(pe.getId())) {
-//					System.out.println(pe.getQuantity() +"old quan: "+ pe.getName());
-					pe.setQuantity(pe.getQuantity() - cde.getQuantity());// new quantity after update
-//					System.out.println(pe.getQuantity() +"new quan: "+ pe.getName());
-					listProductToBeUpdate.add(pe);
-				}
-			}
-		}
-		List<OrderDetailEntity> listODE = new ArrayList<OrderDetailEntity>();
-		for (CartDetailEntity cartDetailEntity : listCartDetail) {
-			OrderDetailEntity ode = new OrderDetailEntity(order.getId(), cartDetailEntity.getProduct().getId());
-			ode.setQuantity(cartDetailEntity.getQuantity());
-			listODE.add(ode);
-		}
-		boolean updateFlag = false;
-		try {
-			session.save(order);
-			for (CartDetailEntity cartDetailEntity : listCartDetail) {
-				session.delete(cartDetailEntity);
-			}
-			for (OrderDetailEntity ode : listODE) {
-				session.save(ode);
-			}
-
-			t.commit();
-		} catch (Exception ex) {
-			t.rollback();
-			return false;
-		} finally {
-			session.close();
-			updateFlag = true;
-		}
-		if (updateFlag == true) {
-			for (ProductEntity p : listProductToBeUpdate) {
-				if (!updateProductQuantity(p.getId(), p.getQuantity())) {
-					return false;
-				}
-			}
-		}
-		return true;
-	}
-
-	public boolean cartItemIsExit(String product_id, HttpSession httpSession) {
-		Session session = factory.getCurrentSession();
-		String hql = "SELECT c.id.product_id FROM CartDetailEntity c WHERE c.id.customer_id =:customerId and c.id.product_id=:productId";
-		Query query = session.createQuery(hql);
-		query.setParameter("customerId",
-				this.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername")));
-		query.setParameter("productId", product_id);
-		String productId = (String) query.uniqueResult();
-		return product_id.equals(productId);
-	}
-
-	public int getQuantityOfCartItem(String product_id, HttpSession httpSession) {
-		Session session = factory.getCurrentSession();
-		String hql = "SELECT c.quantity FROM CartDetailEntity c WHERE c.id.customer_id =:customerId and c.id.product_id=:productId";
-		Query query = session.createQuery(hql);
-		query.setParameter("customerId",
-				this.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername")));
-		query.setParameter("productId", product_id);
-		int quantity = (int) query.uniqueResult();
-		return quantity;
-	}
-
-	public boolean isProductOutOfStock(String product_id) {
-		Session session = factory.getCurrentSession();
-		String hql = "SELECT p.quantity FROM ProductEntity p WHERE p.id =:productId";
-		Query query = session.createQuery(hql);
-		int product = (int) query.setParameter("productId", product_id).uniqueResult();
-		return product <= 0;
-	}
-
-	public boolean isCartItemMaximumAmountOfProduct(String product_id, HttpSession httpSession) {
-		Session session = factory.getCurrentSession();
-		String hql = "SELECT c.quantity FROM CartDetailEntity c WHERE c.id.customer_id =:customerId and c.id.product_id=:productId";
-		Query query = session.createQuery(hql);
-		query.setParameter("customerId",
-				this.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername")));
-		query.setParameter("productId", product_id);
-		int quantityOfCart = (int) query.uniqueResult();
-		System.out.println("quantity from cart: " + quantityOfCart);
-		hql = "SELECT c.product.quantity FROM CartDetailEntity c WHERE c.id.customer_id =:customerId and c.id.product_id=:productId";
-		query = session.createQuery(hql);
-		query.setParameter("customerId",
-				this.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername")));
-		query.setParameter("productId", product_id);
-		int quantityOfProduct = (int) query.uniqueResult();
-		System.out.println("quantity from product: " + quantityOfProduct);
-		return quantityOfCart >= quantityOfProduct;
-	}
-
-	public ProductEntity getProduct(String productId) {
-		Session session = factory.getCurrentSession();
-		String hql = "FROM ProductEntity p WHERE p.id =:productId";
-		Query query = session.createQuery(hql);
-
-		ProductEntity product = (ProductEntity) query.setParameter("productId", productId).uniqueResult();
-		return product;
-	}
-
-	public List<ProductEntity> getListProductBycategory(String categoryId) {
-		Session session = factory.getCurrentSession();
-		String hql = "FROM ProductEntity p WHERE p.category.id=:categoryId";
-		Query query = session.createQuery(hql);
-
-		List<ProductEntity> list = query.setParameter("categoryId", categoryId).list();
-		return list;
-	}
-
-	public boolean insertCustomer(CustomerEntity customer) {
-		Session session = factory.openSession();
-		Transaction t = session.beginTransaction();
-		try {
-			session.save(customer);
-			t.commit();
-			System.out.println("Insert successful!");
-
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			t.rollback();
-			System.out.println("Insert unsuccessful!");
-			return false;
-		} finally {
-			session.close();
-		}
-		return true;
-	}
-
-	public boolean isCustomerWithUsernameExit(String username) {
-		Session session = factory.getCurrentSession();
-		String hql = "FROM CustomerEntity c WHERE c.username=:username";
-		Query query = session.createQuery(hql);
-
-		CustomerEntity customer = (CustomerEntity) query.setParameter("username", username).uniqueResult();
-		return customer != null;
-	}
-
-	public String getPasswordOfCustomerWithUsername(String username) {
-		Session session = factory.getCurrentSession();
-		String hql = "SELECT c.password FROM CustomerEntity c WHERE c.username=:username";
-		Query query = session.createQuery(hql);
-		String password = (String) query.setParameter("username", username).uniqueResult();
-		return password;
-	}
 
 	public static final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
 			Pattern.CASE_INSENSITIVE);
@@ -939,81 +722,321 @@ public class GiftController {
 		Matcher matcher = VALID_VI_PHONE_NUMBER_REGEX.matcher(phoneNumber);
 		return matcher.find();
 	}
+//	public boolean updateCustomerDetail(CustomerEntity customer, HttpSession httpSession) {
+//		Session session = factory.getCurrentSession();
+//		String hql = "UPDATE CustomerEntity c SET c.firstname=:firstname, c.lastname=:lastname,"
+//				+ "c.phone=:phone, c.address=:address, c.email=:email   WHERE c.id=:id";
+//		Query query = session.createQuery(hql).setParameter("id",
+//				this.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername")));
+//		query.setParameter("firstname", customer.getFirstname());
+//		query.setParameter("lastname", customer.getLastname());
+//		query.setParameter("phone", customer.getPhone());
+//		query.setParameter("address", customer.getAddress());
+//		query.setParameter("email", customer.getEmail());
+//		return query.executeUpdate() > 0;
+//	}
+//
+//	public boolean updateCustomerPassword(CustomerEntity customer, HttpSession httpSession) {
+//		Session session = factory.getCurrentSession();
+//		String hql = "UPDATE CustomerEntity c SET c.password=:password WHERE c.id=:id";
+//		Query query = session.createQuery(hql).setParameter("id",
+//				this.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername")));
+//		query.setParameter("password", customer.getPassword());
+//		return query.executeUpdate() > 0;
+//	}
+//
+//	public boolean updateProductQuantityFromCartDetail(String productId, String quantity, HttpSession httpSession) {
+//		Session session = factory.getCurrentSession();
+//		String hql = "UPDATE CartDetailEntity c SET c.quantity=:quantity WHERE c.id.customer_id=:customerId and c.id.product_id=:productId";
+//		Query query = session.createQuery(hql).setParameter("customerId",
+//				this.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername")));
+//		query.setParameter("productId", productId);
+//		query.setParameter("quantity", Integer.parseInt(quantity));
+//		return query.executeUpdate() > 0;
+//	}
+//
+//	public boolean updateProductQuantity(String productId, int quantity) {
+//		Session session = factory.getCurrentSession();
+//		String hql = "UPDATE ProductEntity p SET p.quantity=:quantity WHERE p.id=:productId";
+//		Query query = session.createQuery(hql);
+//		query.setParameter("productId", productId);
+//		query.setParameter("quantity", quantity);
+//		return query.executeUpdate() > 0;
+//	}
+//
+//	public boolean deleteProductFromCartDetail(String productId, HttpSession httpSession) {
+//		Session session = factory.getCurrentSession();
+//		String hql = "DELETE FROM CartDetailEntity c WHERE c.id.customer_id=:customerId and c.id.product_id=:productId";
+//		Query query = session.createQuery(hql).setParameter("customerId",
+//				this.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername")));
+//		query.setParameter("productId", productId);
+//
+//		return query.executeUpdate() > 0;
+//	}
+//
+//	public List<CartDetailEntity> getListCartDetail(String customerId) {
+//		Session session = factory.getCurrentSession();
+//		String hql = "FROM CartDetailEntity c WHERE c.customer.id =:customerId";
+//		Query query = session.createQuery(hql);
+//
+//		List<CartDetailEntity> list = query.setParameter("customerId", customerId).list();
+//		return list;
+//	}
+//
+//	public String getCustomerIdByUserName(String userName) {
+//		Session session = factory.getCurrentSession();
+//		String hql = "SELECT id FROM CustomerEntity c WHERE c.username =:userName";
+//		Query query = session.createQuery(hql);
+//		String customerId = (String) query.setParameter("userName", userName).uniqueResult();
+//		return customerId;
+//	}
+//
+//	public CustomerEntity getCustomerByUsername(String userName) {
+//		Session session = factory.getCurrentSession();
+//		String hql = "FROM CustomerEntity c WHERE c.username =:userName";
+//		Query query = session.createQuery(hql);
+//		CustomerEntity customer = (CustomerEntity) query.setParameter("userName", userName).uniqueResult();
+//		return customer;
+//	}
+//
+//	public List<ProductEntity> getListProduct() {
+//		/* System.out.println("getListCartDetail"); */
+//		Session session = factory.getCurrentSession();
+//		String hql = "FROM ProductEntity";
+//		Query query = session.createQuery(hql);
+//		List<ProductEntity> list = query.list();
+//		return list;
+//	}
+//
+//	public boolean checkOutHibernate(OrderEntity order, List<CartDetailEntity> listCartDetail) {
+//		Session session = factory.openSession();
+//		Transaction t = session.beginTransaction();
+//		List<ProductEntity> listProduct = this.getListProduct();
+//
+//		List<ProductEntity> listProductToBeUpdate = new ArrayList<ProductEntity>();
+//
+//		for (ProductEntity pe : listProduct) {
+//			for (CartDetailEntity cde : listCartDetail) {
+//				if (cde.getProduct().getId().trim().equals(pe.getId())) {
+////					System.out.println(pe.getQuantity() +"old quan: "+ pe.getName());
+//					pe.setQuantity(pe.getQuantity() - cde.getQuantity());// new quantity after update
+////					System.out.println(pe.getQuantity() +"new quan: "+ pe.getName());
+//					listProductToBeUpdate.add(pe);
+//				}
+//			}
+//		}
+//		List<OrderDetailEntity> listODE = new ArrayList<OrderDetailEntity>();
+//		for (CartDetailEntity cartDetailEntity : listCartDetail) {
+//			OrderDetailEntity ode = new OrderDetailEntity(order.getId(), cartDetailEntity.getProduct().getId());
+//			ode.setQuantity(cartDetailEntity.getQuantity());
+//			listODE.add(ode);
+//		}
+//		boolean updateFlag = false;
+//		try {
+//			session.save(order);
+//			for (CartDetailEntity cartDetailEntity : listCartDetail) {
+//				session.delete(cartDetailEntity);
+//			}
+//			for (OrderDetailEntity ode : listODE) {
+//				session.save(ode);
+//			}
+//
+//			t.commit();
+//		} catch (Exception ex) {
+//			t.rollback();
+//			return false;
+//		} finally {
+//			session.close();
+//			updateFlag = true;
+//		}
+//		if (updateFlag == true) {
+//			for (ProductEntity p : listProductToBeUpdate) {
+//				if (!updateProductQuantity(p.getId(), p.getQuantity())) {
+//					return false;
+//				}
+//			}
+//		}
+//		return true;
+//	}
+//
+//	public boolean cartItemIsExit(String product_id, HttpSession httpSession) {
+//		Session session = factory.getCurrentSession();
+//		String hql = "SELECT c.id.product_id FROM CartDetailEntity c WHERE c.id.customer_id =:customerId and c.id.product_id=:productId";
+//		Query query = session.createQuery(hql);
+//		query.setParameter("customerId",
+//				this.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername")));
+//		query.setParameter("productId", product_id);
+//		String productId = (String) query.uniqueResult();
+//		return product_id.equals(productId);
+//	}
+//
+//	public int getQuantityOfCartItem(String product_id, HttpSession httpSession) {
+//		Session session = factory.getCurrentSession();
+//		String hql = "SELECT c.quantity FROM CartDetailEntity c WHERE c.id.customer_id =:customerId and c.id.product_id=:productId";
+//		Query query = session.createQuery(hql);
+//		query.setParameter("customerId",
+//				this.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername")));
+//		query.setParameter("productId", product_id);
+//		int quantity = (int) query.uniqueResult();
+//		return quantity;
+//	}
+//
+//	public boolean isProductOutOfStock(String product_id) {
+//		Session session = factory.getCurrentSession();
+//		String hql = "SELECT p.quantity FROM ProductEntity p WHERE p.id =:productId";
+//		Query query = session.createQuery(hql);
+//		int product = (int) query.setParameter("productId", product_id).uniqueResult();
+//		return product <= 0;
+//	}
+//
+//	public boolean isCartItemMaximumAmountOfProduct(String product_id, HttpSession httpSession) {
+//		Session session = factory.getCurrentSession();
+//		String hql = "SELECT c.quantity FROM CartDetailEntity c WHERE c.id.customer_id =:customerId and c.id.product_id=:productId";
+//		Query query = session.createQuery(hql);
+//		query.setParameter("customerId",
+//				this.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername")));
+//		query.setParameter("productId", product_id);
+//		int quantityOfCart = (int) query.uniqueResult();
+//		System.out.println("quantity from cart: " + quantityOfCart);
+//		hql = "SELECT c.product.quantity FROM CartDetailEntity c WHERE c.id.customer_id =:customerId and c.id.product_id=:productId";
+//		query = session.createQuery(hql);
+//		query.setParameter("customerId",
+//				this.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername")));
+//		query.setParameter("productId", product_id);
+//		int quantityOfProduct = (int) query.uniqueResult();
+//		System.out.println("quantity from product: " + quantityOfProduct);
+//		return quantityOfCart >= quantityOfProduct;
+//	}
+//
+//	public ProductEntity getProduct(String productId) {
+//		Session session = factory.getCurrentSession();
+//		String hql = "FROM ProductEntity p WHERE p.id =:productId";
+//		Query query = session.createQuery(hql);
+//
+//		ProductEntity product = (ProductEntity) query.setParameter("productId", productId).uniqueResult();
+//		return product;
+//	}
+//
+//	public List<ProductEntity> getListProductBycategory(String categoryId) {
+//		Session session = factory.getCurrentSession();
+//		String hql = "FROM ProductEntity p WHERE p.category.id=:categoryId";
+//		Query query = session.createQuery(hql);
+//
+//		List<ProductEntity> list = query.setParameter("categoryId", categoryId).list();
+//		return list;
+//	}
+//
+//	public boolean insertCustomer(CustomerEntity customer) {
+//		Session session = factory.openSession();
+//		Transaction t = session.beginTransaction();
+//		try {
+//			session.save(customer);
+//			t.commit();
+//			System.out.println("Insert successful!");
+//
+//		} catch (Exception ex) {
+//			ex.printStackTrace();
+//			t.rollback();
+//			System.out.println("Insert unsuccessful!");
+//			return false;
+//		} finally {
+//			session.close();
+//		}
+//		return true;
+//	}
+//
+//	public boolean isCustomerWithUsernameExit(String username) {
+//		Session session = factory.getCurrentSession();
+//		String hql = "FROM CustomerEntity c WHERE c.username=:username";
+//		Query query = session.createQuery(hql);
+//
+//		CustomerEntity customer = (CustomerEntity) query.setParameter("username", username).uniqueResult();
+//		return customer != null;
+//	}
+//
+//	public String getPasswordOfCustomerWithUsername(String username) {
+//		Session session = factory.getCurrentSession();
+//		String hql = "SELECT c.password FROM CustomerEntity c WHERE c.username=:username";
+//		Query query = session.createQuery(hql);
+//		String password = (String) query.setParameter("username", username).uniqueResult();
+//		return password;
+//	}
 
-	public String createTheNextCustomerId() {
-		Session session = factory.getCurrentSession();
-		String hql = "SELECT c.id FROM CustomerEntity c WHERE c.id=(SELECT MAX(cc.id) FROM CustomerEntity cc)";
-		Query query = session.createQuery(hql);
 
-		String id = (String) query.uniqueResult();
-		if (id == null || id.equals("")) {
-			return "U0001";
-		}
-		int x = Integer.parseInt(id.substring(1)) + 1;
-		String base = "U0000";
-		String base2 = base.substring(0, base.length() - String.valueOf(x).length());
-		String newId = base2 + String.valueOf(x);
-		return newId;
-	}
-
-	public String createTheNextOrderId() {
-		Session session = factory.getCurrentSession();
-		String hql = "SELECT o.id FROM OrderEntity o WHERE o.id=(SELECT MAX(oo.id) FROM OrderEntity oo)";
-		Query query = session.createQuery(hql);
-
-		String id = (String) query.uniqueResult();
-		if (id == null || id.equals("")) {
-			return "O000000001";
-		}
-		int x = Integer.parseInt(id.substring(1)) + 1;
-		String base = "O000000000";
-		String base2 = base.substring(0, base.length() - String.valueOf(x).length());
-		String newId = base2 + String.valueOf(x);
-		return newId;
-	}
-
-	public List<CategoryEntity> getListCategory() {
-		/* System.out.println("getListCartDetail"); */
-		Session session = factory.getCurrentSession();
-		String hql = "FROM CategoryEntity";
-		Query query = session.createQuery(hql);
-		List<CategoryEntity> list = query.list();
-		return list;
-	}
-
-	public List<ProductEntity> getTop16RecentProduct() {
-		/* System.out.println("getListCartDetail"); */
-		Session session = factory.getCurrentSession();
-		String hql = "FROM ProductEntity p ORDER BY p.dateAdded DESC";
-		Query query = session.createQuery(hql);
-		List<ProductEntity> list = query.setMaxResults(16).list();
-		return list;
-	}
-
-	public List<OrderEntity> getCustomerOrder(String customerId) {
-		/* System.out.println("getListCartDetail"); */
-		Session session = factory.getCurrentSession();
-		String hql = "FROM OrderEntity o WHERE o.customerId=:customerId ORDER BY o.orderDate DESC";
-		Query query = session.createQuery(hql).setParameter("customerId", customerId);
-		List<OrderEntity> list = query.list();
-		return list;
-	}
-
-	public List<ProductEntity> getAllProducts() {
-		/* System.out.println("getListCartDetail"); */
-		Session session = factory.getCurrentSession();
-		String hql = "FROM ProductEntity p ORDER BY p.dateAdded DESC";
-		Query query = session.createQuery(hql);
-		List<ProductEntity> list = query.list();
-		return list;
-	}
-
-	public List<ProductEntity> searchForProduct(String keyword) {
-		/* System.out.println("getListCartDetail"); */
-		Session session = factory.getCurrentSession();
-		String hql = "FROM ProductEntity p WHERE p.name LIKE :keyword OR p.category.name LIKE:keyword ORDER BY p.dateAdded DESC";
-		Query query = session.createQuery(hql).setParameter("keyword", "%" + keyword + "%");
-		List<ProductEntity> list = query.setParameter("keyword", "%" + keyword + "%").list();
-		return list;
-	}
+//	public String createTheNextCustomerId() {
+//		Session session = factory.getCurrentSession();
+//		String hql = "SELECT c.id FROM CustomerEntity c WHERE c.id=(SELECT MAX(cc.id) FROM CustomerEntity cc)";
+//		Query query = session.createQuery(hql);
+//
+//		String id = (String) query.uniqueResult();
+//		if (id == null || id.equals("")) {
+//			return "U0001";
+//		}
+//		int x = Integer.parseInt(id.substring(1)) + 1;
+//		String base = "U0000";
+//		String base2 = base.substring(0, base.length() - String.valueOf(x).length());
+//		String newId = base2 + String.valueOf(x);
+//		return newId;
+//	}
+//
+//	public String createTheNextOrderId() {
+//		Session session = factory.getCurrentSession();
+//		String hql = "SELECT o.id FROM OrderEntity o WHERE o.id=(SELECT MAX(oo.id) FROM OrderEntity oo)";
+//		Query query = session.createQuery(hql);
+//
+//		String id = (String) query.uniqueResult();
+//		if (id == null || id.equals("")) {
+//			return "O000000001";
+//		}
+//		int x = Integer.parseInt(id.substring(1)) + 1;
+//		String base = "O000000000";
+//		String base2 = base.substring(0, base.length() - String.valueOf(x).length());
+//		String newId = base2 + String.valueOf(x);
+//		return newId;
+//	}
+//
+//	public List<CategoryEntity> getListCategory() {
+//		/* System.out.println("getListCartDetail"); */
+//		Session session = factory.getCurrentSession();
+//		String hql = "FROM CategoryEntity";
+//		Query query = session.createQuery(hql);
+//		List<CategoryEntity> list = query.list();
+//		return list;
+//	}
+//
+//	public List<ProductEntity> getTop16RecentProduct() {
+//		/* System.out.println("getListCartDetail"); */
+//		Session session = factory.getCurrentSession();
+//		String hql = "FROM ProductEntity p ORDER BY p.dateAdded DESC";
+//		Query query = session.createQuery(hql);
+//		List<ProductEntity> list = query.setMaxResults(16).list();
+//		return list;
+//	}
+//
+//	public List<OrderEntity> getCustomerOrder(String customerId) {
+//		/* System.out.println("getListCartDetail"); */
+//		Session session = factory.getCurrentSession();
+//		String hql = "FROM OrderEntity o WHERE o.customerId=:customerId ORDER BY o.orderDate DESC";
+//		Query query = session.createQuery(hql).setParameter("customerId", customerId);
+//		List<OrderEntity> list = query.list();
+//		return list;
+//	}
+//
+//	public List<ProductEntity> getAllProducts() {
+//		/* System.out.println("getListCartDetail"); */
+//		Session session = factory.getCurrentSession();
+//		String hql = "FROM ProductEntity p ORDER BY p.dateAdded DESC";
+//		Query query = session.createQuery(hql);
+//		List<ProductEntity> list = query.list();
+//		return list;
+//	}
+//
+//	public List<ProductEntity> searchForProduct(String keyword) {
+//		/* System.out.println("getListCartDetail"); */
+//		Session session = factory.getCurrentSession();
+//		String hql = "FROM ProductEntity p WHERE p.name LIKE :keyword OR p.category.name LIKE:keyword ORDER BY p.dateAdded DESC";
+//		Query query = session.createQuery(hql).setParameter("keyword", "%" + keyword + "%");
+//		List<ProductEntity> list = query.setParameter("keyword", "%" + keyword + "%").list();
+//		return list;
+//	}
 }

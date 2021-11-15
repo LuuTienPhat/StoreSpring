@@ -69,12 +69,12 @@
 									alt="${p.id}" class="transform hover:scale-110 transition-all " /></a>
 
 								<div
-									class="flex justify-center bg-indigo-400 items-center py-2 absolute item__menu w-full">
+									class="flex justify-center bg-indigo-300 items-center py-1 absolute item__menu w-full">
 									<!-- <a href="#"><i
 										class="fa text-2xl fa-heart text-white hover:text-indigo-500 transition-colors"></i></a>
 									<div class="border-l-2 border-white h-7 mx-2"></div> -->
 									<a href="store/shopping-cart/insert-into-cart/${p.id}"><i
-										class="fa text-2xl fa-cart-plus text-white hover:text-indigo-500 transition-colors"></i></a>
+										class="fa text-2xl fa-cart-plus text-white hover:text-indigo-200 transition-colors"></i></a>
 								</div>
 							</div>
 							<a href="${applicationScope.productDetailPage}/${p.id}"
@@ -99,7 +99,7 @@
 				</div>
 			</div>
 
-			<div class="main__new-topic section mt-16">
+			<%-- <div class="main__new-topic section mt-16">
 				<div class="section__heading mb-8">
 					<h3>
 						<a href="#"
@@ -142,12 +142,12 @@
 								alt="" class="transform hover:scale-110 transition-all "></a>
 
 							<div
-								class="flex justify-center bg-indigo-400 items-center py-2 absolute item__menu w-full">
+								class="flex justify-center bg-indigo-300 items-center py-1 absolute item__menu w-full">
 								<a href="#"><i
 									class="fa text-2xl fa-heart text-white hover:text-indigo-500 transition-colors"></i></a>
 								<div class="border-l-2 border-white h-7 mx-2"></div>
 								<a href="#"><i
-									class="fa text-2xl fa-cart-plus text-white hover:text-indigo-500 transition-colors"></i></a>
+									class="fa text-2xl fa-cart-plus text-white hover:text-indigo-200 transition-colors"></i></a>
 							</div>
 						</div>
 						<a href="${applicationScope.productDetailPage}"
@@ -162,12 +162,12 @@
 								alt="" class="transform hover:scale-110 transition-all "></a>
 
 							<div
-								class="flex justify-center bg-indigo-400 items-center py-2 absolute item__menu w-full">
+								class="flex justify-center bg-indigo-300 items-center py-1 absolute item__menu w-full">
 								<a href="#"><i
 									class="fa text-2xl fa-heart text-white hover:text-indigo-500 transition-colors"></i></a>
 								<div class="border-l-2 border-white h-7 mx-2"></div>
 								<a href="#"><i
-									class="fa text-2xl fa-cart-plus text-white hover:text-indigo-500 transition-colors"></i></a>
+									class="fa text-2xl fa-cart-plus text-white hover:text-indigo-200 transition-colors"></i></a>
 							</div>
 						</div>
 						<a href="${applicationScope.productDetailPage}"
@@ -182,12 +182,12 @@
 								alt="" class="transform hover:scale-110 transition-all "></a>
 
 							<div
-								class="flex justify-center bg-indigo-400 items-center py-2 absolute item__menu w-full">
+								class="flex justify-center bg-indigo-300 items-center py-1 absolute item__menu w-full">
 								<a href="#"><i
 									class="fa text-2xl fa-heart text-white hover:text-indigo-500 transition-colors"></i></a>
 								<div class="border-l-2 border-white h-7 mx-2"></div>
 								<a href="#"><i
-									class="fa text-2xl fa-cart-plus text-white hover:text-indigo-500 transition-colors"></i></a>
+									class="fa text-2xl fa-cart-plus text-white hover:text-indigo-200 transition-colors"></i></a>
 							</div>
 						</div>
 						<a href="${applicationScope.productDetailPage}"
@@ -202,12 +202,12 @@
 								alt="" class="transform hover:scale-110 transition-all "></a>
 
 							<div
-								class="flex justify-center bg-indigo-400 items-center py-2 absolute item__menu w-full">
+								class="flex justify-center bg-indigo-300 items-center py-1 absolute item__menu w-full">
 								<a href="#"><i
 									class="fa text-2xl fa-heart text-white hover:text-indigo-500 transition-colors"></i></a>
 								<div class="border-l-2 border-white h-7 mx-2"></div>
 								<a href="#"><i
-									class="fa text-2xl fa-cart-plus text-white hover:text-indigo-500 transition-colors"></i></a>
+									class="fa text-2xl fa-cart-plus text-white hover:text-indigo-200 transition-colors"></i></a>
 							</div>
 						</div>
 						<a href="${applicationScope.productDetailPage}"
@@ -220,8 +220,8 @@
 						class="px-4 py-2 font-bold bg-indigo-400 hover:bg-indigo-500 transition-colors text-white rounded-md">Xem
 						thêm</button>
 				</div>
-			</div>
-			<div class="main__new-collection section mt-16">
+			</div> --%>
+			<%-- <div class="main__new-collection section mt-16">
 				<div class="section__heading mb-8">
 					<h3>
 						<a href="#"
@@ -276,7 +276,7 @@
 					<div class="swiper-button-next"></div>
 
 				</div>
-			</div>
+			</div> --%>
 		</div>
 	</main>
 	<%@include file="/WEB-INF/views/store/include/store-footer.jsp"%>

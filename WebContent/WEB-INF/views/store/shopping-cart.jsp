@@ -114,12 +114,12 @@
 									alt="${p.id}" class="transform hover:scale-110 transition-all " /></a>
 
 								<div
-									class="flex justify-center bg-indigo-400 items-center py-2 absolute item__menu w-full">
+									class="flex justify-center bg-indigo-300 items-center py-1 absolute item__menu w-full">
 									<!-- <a href="#"><i
 										class="fa text-2xl fa-heart text-white hover:text-indigo-500 transition-colors"></i></a>
 									<div class="border-l-2 border-white h-7 mx-2"></div> -->
 									<a href="store/shopping-cart/insert-into-cart/${p.id}"><i
-										class="fa text-2xl fa-cart-plus text-white hover:text-indigo-500 transition-colors"></i></a>
+										class="fa text-2xl fa-cart-plus text-white hover:text-indigo-200 transition-colors"></i></a>
 								</div>
 							</div>
 							<a href="${applicationScope.productDetailPage}/${p.id}"

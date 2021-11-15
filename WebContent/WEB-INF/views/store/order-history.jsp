@@ -129,12 +129,12 @@
 							</c:forEach>
 						</table> --%>
 						<div class="order-row flex justify-between">
-							<div class="order-cell flex-1 p-2 border">Sản phẩm</div>
-							<div class="order-cell w-1/6 p-2 border text-center align-middle">Số lượng</div>
-							<div class="order-cell w-1/5 p-2 border text-center align-middle">Thành tiền</div>
+							<div class="order-cell flex-1 p-2 border font-bold">Sản phẩm</div>
+							<div class="order-cell w-1/6 p-2 border text-center align-middle font-bold">Số lượng</div>
+							<div class="order-cell w-1/5 p-2 border text-center align-middle font-bold">Thành tiền</div>
 						</div>
 						<c:forEach var="order" items="${listOrder}" varStatus="loop">
-							<p class="p-2 text-indigo-500 font-bold">- ${loop.index+1}.</p>
+							<p class="p-2 text-indigo-500 font-bold">${loop.index+1}.</p>
 							
 								<c:forEach var="c" items="${order.orderDetails}">
 								<div class="order-row flex">

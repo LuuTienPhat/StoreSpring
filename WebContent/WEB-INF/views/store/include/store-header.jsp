@@ -27,7 +27,8 @@
         transition: all .3s ease-out;
     }
 	@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300&display=swap');
-	*{font-family: 'Source Sans Pro', sans-serif;}
+	*{font-family: 'Source Sans Pro', sans-serif;
+	}
 </style>
 <body>
 	<div class="overcoat"></div>
@@ -66,7 +67,7 @@
 	</c:if>
 	
 	<header class="header">
-		<ul class="nav__top flex justify-end bg-indigo-400">
+		<ul class="nav__top flex justify-end bg-indigo-300">
 			<li><a href="#store-address"
 				class="px-4 py-1 block font-bold hover:text-indigo-500 transition-colors">HỆ
 					THỐNG CỬA HÀNG</a></li>
@@ -80,14 +81,24 @@
 		<div class="nav__middle flex justify-between px-32 items-center">
 			<div class="nav__middle-left flex justify-between items-center">
 				<div class="mobile-menu-button test-ani cursor-pointer hidden">
-					<div class="bar-top bg-indigo-400"></div>
-					<div class="bar-middle bg-indigo-400"></div>
-					<div class="bar-bottom bg-indigo-400"></div>
+					<div class="bar-top bg-indigo-300"></div>
+					<div class="bar-middle bg-indigo-300"></div>
+					<div class="bar-bottom bg-indigo-300"></div>
 				</div>
 				<a href="${applicationScope.storeIndexPage}"
-					class="logo inline-flex items-center mr-5 img-container"> <img
-					src="<c:url value='/resources/store/assets/img/logo_200x200 copy.png' />">
+					class="logo inline-flex items-center mr-5 img-container" style="width: 160px; height: 47px;"> <img
+					src="<c:url value='/resources/store/assets/img/new-logo_200x200 - 1.png' />">
 				</a>
+				<%-- <a href="${applicationScope.storeIndexPage}"
+					class="logo inline-flex items-center mr-5 img-container" style="height:47px; max-width:190px !important;"> <span class="text-indigo-500 mr-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-asterisk" viewBox="0 0 16 16">
+                            <path
+                                d="M8 0a1 1 0 0 1 1 1v5.268l4.562-2.634a1 1 0 1 1 1 1.732L10 8l4.562 2.634a1 1 0 1 1-1 1.732L9 9.732V15a1 1 0 1 1-2 0V9.732l-4.562 2.634a1 1 0 1 1-1-1.732L6 8 1.438 5.366a1 1 0 0 1 1-1.732L7 6.268V1a1 1 0 0 1 1-1z"
+                            />
+                        </svg>
+                    </span>
+                    <span class="uppercase font-bold text-xl">Store Spring 21</span>
+				</a> --%>
 			</div>
 
 			<div
@@ -167,7 +178,7 @@
 			</div>
 
 		</div>
-		<div class="nav__bottom flex items-center px-32 bg-indigo-400">
+		<div class="nav__bottom flex items-center px-32 bg-indigo-300 uppercase">
 			<div class="nav__bottom-header hidden w-full"></div>
 			<ul class="flex items-center">
 				<!-- <li class="nav__submenu-container relative">
@@ -188,7 +199,7 @@
 					<div
 						class="cursor-pointer px-2 py-3 flex justify-between border-b-2 border-white">
 						<a href="store/all"
-							class="block font-bold text-sm hover:text-indigo-500 transition-colors">Tất
+							class="block font-bold text-sm hover:text-indigo-200 transition-colors">Tất
 							cả</a>
 						<!-- <i class="fa fa-chevron-down flex-1 nav__submenu-container pr-2 hidden"></i> -->
 					</div>
@@ -198,7 +209,7 @@
 						<div
 							class="cursor-pointer px-2 py-3 flex justify-between border-b-2 border-white">
 							<a href="store/category/${category.id}"
-								class="block font-bold text-sm hover:text-indigo-500 transition-colors w-full">${category.name}</a>
+								class="block font-bold text-sm hover:text-indigo-200 transition-colors w-full">${category.name}</a>
 							<!-- <i class="fa fa-chevron-down flex-1 nav__submenu-container pr-2 hidden"></i> -->
 						</div> <!-- <div class="submenu absolute">
                         <ul class="bg-indigo-300 w-44">
