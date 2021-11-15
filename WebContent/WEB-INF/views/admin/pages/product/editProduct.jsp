@@ -272,17 +272,20 @@
            
            let index = 1;
            let dt = new DataTransfer();
-           for(let imageEle of imageElements) {
-           	let url = imageEle.src;
-               let fileName = "${product.id}_" + index + "." + imageEle.src.slice((imageEle.src.lastIndexOf(".") - 1 >>> 0) + 2);
-               fetch(url, { mode: "cors" }).then(async (response) => {
-                   const contentType = response.headers.get("content-type");
-                   const blob = await response.blob();
-                   const file = new File([blob], fileName, { contentType });
-                   dt.items.add(file);
-                   imageUpload.files = dt.files;
-                 });
-               index++;
+           
+           if(imageElements.length != 0) {
+	           for(let imageEle of imageElements) {
+	           	let url = imageEle.src;
+	               let fileName = "${product.id}_" + index + "." + imageEle.src.slice((imageEle.src.lastIndexOf(".") - 1 >>> 0) + 2);
+	               fetch(url, { mode: "cors" }).then(async (response) => {
+	                   const contentType = response.headers.get("content-type");
+	                   const blob = await response.blob();
+	                   const file = new File([blob], fileName, { contentType });
+	                   dt.items.add(file);
+	                   imageUpload.files = dt.files;
+	                 });
+	               index++;
+	           }
            }
 
            imageUpload.onchange = () => {
@@ -308,16 +311,14 @@
            const removeFileFromFileList = (e) => {
                let index = parseInt(e.dataset.id);
                const dt = new DataTransfer();
-               const input = document.getElementById("images");
-               const { files } = input;
 
-               for (let i = 0; i < files.length; i++) {
-                 const file = files[i];
+               for (let i = 0; i < imageUpload.files.length; i++) {
+                 const file = imageUpload.files[i];
                  if (index !== i) dt.items.add(file); // here you exclude the file. thus removing it.
                }
 
-               input.files = dt.files; // Assign the updates list
-               updatePreviewImage(input.files);
+               imageUpload.files = dt.files; // Assign the updates list
+               updatePreviewImage(imageUpload.files);
              };
            </script>
         

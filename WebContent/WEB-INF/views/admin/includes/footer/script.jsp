@@ -45,7 +45,6 @@
 <script src="<c:url value='/resources/admin/assets/js/volt.js' />"></script>
 
 <!-- Simplebar -->
-<script src="<c:url value='/resources/admin/vendor/simple-datatables/dist/umd/simple-datatables.js' />"></script>
 
 <script type="text/javascript">
 	/* const loadingPage = document.getElementById("loading-page");

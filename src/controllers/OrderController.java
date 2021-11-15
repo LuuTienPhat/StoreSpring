@@ -10,6 +10,7 @@ import javax.transaction.Transactional;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.support.PagedListHolder;
@@ -18,10 +19,14 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import entities.CategoryEntity;
+import entities.OrderDetailEntity;
 import entities.OrderEntity;
+import entities.ProductEntity;
+import models.EntityData;
 
 @Controller
 @Transactional
@@ -31,55 +36,99 @@ public class OrderController {
 	@Autowired
 	@Qualifier("sessionFactory")
 	SessionFactory factory;
+
+	EntityData entityData;
 	
 	String viewsDirectory = "admin/pages/order/";
 
 	@RequestMapping("")
 	public String renderOrderPage(ModelMap model, HttpServletRequest request,
-			@RequestParam(value = "search", required = false) String search) throws IOException {
+			@RequestParam(value = "search", required = false) String search,
+			@RequestParam(value = "state", required = false) String state) throws IOException {
+
+		entityData = new EntityData(factory);
+		List<OrderEntity> orders = new ArrayList<OrderEntity>();
+		Session session = factory.getCurrentSession();
+		String hql = "FROM OrderEntity WHERE state LIKE '%" + state + "%'";
+
+		String hql2 = "FROM OrderEntity WHERE id LIKE '%" + search + "%' OR orderDate LIKE '%" + search
+				+ "%' OR shipName LIKE '%" + search + "%' OR shipAddress LIKE '%" + search + "%' OR total LIKE '%"
+				+ search + "%' OR shipAddress LIKE '%" + search + "%'"
+				+ (state != null ? "OR state LIKE '%" + state + "%'" : "");
 		
 		
-		model.addAttribute("orders", getOrders());
-		
+			if (search != null) {
+				Query query = session.createQuery(hql2);
+				orders = query.list();
+				model.addAttribute("pagedLink", "/admin/categories?search=" + search + "&&state=" + state);
+			} else if (state != null) {{
+				Query query = session.createQuery(hql);
+				orders = query.list();
+				model.addAttribute("pagedLink", "/admin/categories?state=" + state);
+			}
+		} else {
+			orders = entityData.getOrders();
+			model.addAttribute("pagedLink", "/admin/categories");
+		}
+
 		model.addAttribute("title", "Quản lý đơn hàng");
+		model.addAttribute("state", state);
+		PagedListHolder pagedListHolder = new PagedListHolder(orders);
+		int page = ServletRequestUtils.getIntParameter(request, "p", 0);
+		pagedListHolder.setPage(page);
+		pagedListHolder.setMaxLinkedPages(5);
+		pagedListHolder.setPageSize(5);
+
+		model.addAttribute("pagedListHolder", pagedListHolder);
 		return viewsDirectory + "order";
 	}
-	
-	@RequestMapping("/{id}")
+
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public String renderOrderDetailPage(ModelMap model, @PathVariable("id") String id) throws IOException {
-		System.out.print(getOrder(id).toString());
-		model.addAttribute("order", getOrder(id));
-		model.addAttribute("title", "Quản lý đơn hàng");
+
+		entityData = new EntityData(factory);
+		OrderEntity order = entityData.getOrder(id);
+		model.addAttribute("order", entityData.getOrder(id));
+		model.addAttribute("title", "Đơn hàng " + order.getId());
 		return viewsDirectory + "viewOrder";
 	}
-	
-	@RequestMapping("/update-state")
-	public String changeOrderState(ModelMap model, HttpServletRequest request) throws IOException {
-		int state = Integer.parseInt(request.getParameter("state")) ;
-		String id = request.getParameter("id");
-		
-		OrderEntity order = getOrder(id);
-		
-		
-		model.addAttribute("title", "Quản lý đơn hàng");
-		return viewsDirectory + "order";
+
+	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
+	public String changeOrderState(ModelMap model, HttpServletRequest request, @PathVariable("id") String id)
+			throws IOException {
+		int state = Integer.parseInt(request.getParameter("state"));
+
+		if (state == 2) { // admin xac nhan don hang da xong
+			OrderEntity order = entityData.getOrder(id);
+			order.setState(state);
+			List<OrderDetailEntity> orderDetailList = order.getOrderDetails();
+			entityData.updateProducts(orderDetailList);
+		} else {
+			OrderEntity order = entityData.getOrder(id);
+
+			if (order.getState() != 2) { // neu don hang da duoc admin xac nhan thi khong duoc xuong state thap hon
+				order.setState(state);
+
+				Session session = factory.openSession();
+				Transaction t = session.beginTransaction();
+				try {
+					session.merge(order);
+					t.commit();
+					System.out.println("Updated");
+
+				} catch (Exception e) {
+					t.rollback();
+					System.out.println("Error");
+					e.printStackTrace();
+				} finally {
+					session.close();
+				}
+			}
+		}
+
+		OrderEntity order = entityData.getOrder(id);
+		model.addAttribute("order", order);
+		model.addAttribute("title", "Đơn hàng " + order.getId());
+		return viewsDirectory + "viewOrder";
 	}
-	
-	// GET ORDERS FROM SQL
-		public List<OrderEntity> getOrders() throws IOException {
-			Session session = factory.getCurrentSession();
-			String hql = "FROM OrderEntity";
-			Query query = session.createQuery(hql);
-			List<OrderEntity> orders = query.list();
-			return orders;
-		}
-		
-		//GET SINGLE ORDER
-		public OrderEntity getOrder(String id) {
-			Session session = factory.getCurrentSession();
-			String hql = "FROM OrderEntity WHERE id = '" + id + "'";
-			Query query = session.createQuery(hql);
-			OrderEntity order = (OrderEntity) query.list().get(0);
-			return order;
-		}
 }
