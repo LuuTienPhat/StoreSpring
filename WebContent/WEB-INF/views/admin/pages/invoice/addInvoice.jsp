@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!-- ========== Tag Lib ========= -->
 <%@include file="/WEB-INF/views/admin/includes/header/taglib.jsp"%>
+
 <!DOCTYPE html>
 <html lang="en">
    <head>
@@ -47,37 +48,37 @@
                </div>
             </div>
          </div>
-         <div class="row">
+         <div class="row mb-4">
             <div class="col-12">
                <div class="card border-0 shadow components-section">
                   <div class="card-body">
                      <div class="row">
                         <div class="col-lg-12 col-sm-12">
                         
-                           <form:form action="${applicationScope.productPage }/add" method="POST" enctype="multipart/form-data" modelAttribute="invoice">
+                           <form:form action="${requestScope['javax.servlet.forward.request_uri']}" method="POST" enctype="multipart/form-data" modelAttribute="invoice">
                                <div class="mb-4">
                                  <label class="my-1 me-2" for="invoice">Loại hoá đơn</label>
-                                 <%-- <form:select path="invoice.invoiceType.id"  class="form-select ${invoiceTypeValid }" id="invoice" aria-describedby="invoiceHelp" >
-                                     <form:option value="">Chọn danh mục của sản phẩm</form:option>
+                                 <form:select path="invoiceType.id"  class="form-select ${invoiceTypeValid }" id="invoice-type">
+                                     <form:option value="">Chọn loại hoá đơn</form:option>
                                      <form:options items="${invoiceTypes}" itemLabel="name" itemValue="id"/>
                                  </form:select>
-                                 <form:errors path = "invoice.invoiceType.id" class="invalid-feedback"/> --%>
+                                 <form:errors path = "invoiceType.id" class="invalid-feedback"/>
 	                          </div>
                                
-                               <%--<div class="row mb-4">
-                                 <div class="col-12">
-                                    <label for="productName">Tên sản phẩm</label>
-                                    <form:input type="productName" class="form-control ${nameValid }" path="name" id="productName" placeholder="Nhập tên sản phẩm"/>
-                                 	<form:errors path="name" class="invalid-feedback"/>
+                               <div class="row mb-4">
+                                 <div class="col-6">
+                                    <label for="productName">Ngày lập</label>
+                                    <form:input type="text" class="form-control ${dateValid }" path="date" id="date" placeholder="Nhập ngày lập hoá đơn" data-input="data-input"/>
+                                 	<form:errors path="date" class="invalid-feedback"/>
                                  </div>
                                  <div class="col-6">
-                                    <label for="quantity">Số lượng</label>
-                                    <form:input value="0" type="quantity" class="form-control ${quantityValid }" path="quantity" id="quantity" placeholder="Nhập số lượng" />
-                                 	<form:errors path="quantity" class="invalid-feedback"/>
+                                    <label for="quantity">Thời gian lập</label>
+                                    <form:input type="text" class="form-control ${timeValid }" path="time" id="time" placeholder="Nhập giờ lập hoá đơn" data-input="data-input"/>
+                                 	<form:errors path="time" class="invalid-feedback"/>
                                  </div>
                               </div>
                               
-                              <div class="row mb-4">
+                             <%-- <div class="row mb-4">
 	                              <div class="col-6">
 	                                 <label for="unit">Đơn vị tính</label>
 	                                 <form:input type="unit" value="cái" class="form-control" path="unit" id="unit" placeholder="Nhập đơn vị tính" />
@@ -119,18 +120,73 @@
 			                 		 previewImage.innerHTML = imgElement;
 			                 		}
 			                 </script> --%>
-                              <div class="">
+                              <!-- <div class="">
                                  <button class="btn btn-primary my-0" type="submit">Chọn sản phẩm</button>
-                              </div>
-                           </form:form>
+                              </div> -->
+                           
                         </div>
                      </div>
                   </div>
                </div>
             </div>
-         </div>
+         	</div>  
+         	
+         	<%@include file="/WEB-INF/views/admin/pages/invoice/pageNavigation.jsp"%>
+         	
+         </form:form>
          <%@include file="/WEB-INF/views/admin/includes/footer/footer.jsp"%>
       </main>
-      <!-- ========== All JS files linkup ========= --><%@include file="/WEB-INF/views/admin/includes/footer/script.jsp"%>
+      
+      <!-- Modal Content -->
+       <div class="modal fade" id="modal-add" tabindex="-1" role="dialog" aria-labelledby="modal-add"
+         aria-hidden="true">
+         <div class="modal-dialog modal-dialog-centered" role="document">
+           <div class="modal-content">
+             <div class="modal-header">
+               <h2 class="h5 modal-title">Xác nhận</h2>
+               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+             </div>
+             <div class="modal-body text-center">
+               <h5 class="my-0 ">Bạn có muốn xoá sản phẩm này?</h5>
+               <!-- <small class="my-0 mt-4 text-wrap">Hãy chắc chắn sản phẩm đó không tồn tại trong các hoá đơn hoặc đơn hàng.</small> -->
+             </div>
+             <div class="modal-footer">
+               <a type="button" class="btn btn-danger" id="btnConfirm" href="">Đồng ý</a>
+               <button type="button" class="btn btn-link text-gray-600 ms-auto"
+                 data-bs-dismiss="modal">Đóng</button>
+             </div>
+           </div>
+         </div>
+       </div>
+       <!-- End of Modal Content -->
+       
+       
+      <!-- ========== All JS files linkup ========= -->
+      <%@include file="/WEB-INF/views/admin/includes/footer/script.jsp"%>
    </body>
+   
+   <script type="text/javascript">
+   const datePicker = flatpickr("#date", {
+	   locale: "vn",
+	   allowInput: true,
+	   enableTime: false,
+	   firstDayOfWeek: 1,
+	   dateFormat: "Y-m-d",
+	   altInput: true,
+	   altFormat: "d/m/Y",
+   });
+   
+   const timePicker = flatpickr("#time", {
+	   locale: "vn",
+	   allowInput: true,
+	   noCalendar: true,
+	   enableTime: true,
+	   altInput: true,
+	   altFormat: "H:i:S",
+	   dateFormat: "H:i:S",
+	   time_24hr: true,
+	   enableSeconds: true,
+   });
+   
+   </script>
 </html>
