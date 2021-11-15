@@ -2,11 +2,6 @@
 	pageEncoding="UTF-8"%>
 <!-- ========== Tag Lib ========= -->
 <%@include file="/WEB-INF/views/admin/includes/header/taglib.jsp"%>
-<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<c:set var="req" value="${pageContext.request}" />
-<c:set var="url">${req.requestURL}</c:set>
-<c:set var="uri" value="${req.requestURI}" />
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -34,15 +29,6 @@
 
 <body>
 <%@include file="/WEB-INF/views/admin/includes/nav/sidebar.jsp"%>
-
-<jsp:useBean id="pagedListHolder" scope="request"
-	type="org.springframework.beans.support.PagedListHolder" />
-<c:url
-	value="${pagedLink}"
-	var="pagedLink">
-	<c:param name="p" value="~" />
-</c:url>
-
 
 <main class="content">
 	<%@include file="/WEB-INF/views/admin/includes/nav/navbar.jsp"%>
@@ -129,6 +115,7 @@
                 </ul>
               </div>
             </div>
+            
             <div class="col-sm col-lg-4">
               <dl class="row text-sm-right">
                 <dt class="col-6"><strong>Số hoá đơn.</strong></dt>
@@ -136,12 +123,14 @@
                 <dt class="col-6"><strong>Ngày lập:</strong></dt>
                 <dd class="col-6">
                 	<fmt:setLocale value="vi_VN" scope="session"/>
-	                <fmt:formatDate value="${invoice.date}" pattern="dd/MM/yyyy"/>
+                	<fmt:parseDate  value="${invoice.date}"  type="date" pattern="yyyy-MM-dd" var="parsedDate" />
+	                <fmt:formatDate value="${parsedDate}" pattern="dd/MM/yyyy"/>
                 </dd>
                 <dt class="col-6"><strong>Giờ tạo:</strong></dt>
                 <dd class="col-6">
                 	<fmt:setLocale value="vi_VN" scope="session"/>
-	                <fmt:formatDate value="${invoice.date}" pattern="HH:mm:ss"/>
+                	<fmt:parseDate  value="${invoice.time}"  type="date" pattern="HH:mm:ss" var="parsedTime" />
+	                <fmt:formatDate value="${parsedTime}" pattern="HH:mm:ss"/>
                 </dd>
                 
                 <!-- <dt class="col-6"><strong>Date Due:</strong></dt>
@@ -162,7 +151,7 @@
                       <th scope="row" class="border-0 text-right">SL</th>
                       <th scope="row" class="border-0 text-right">Đơn giá</th>
                       <!-- <th scope="row" class="border-0">%VAT</th> -->
-                      <th scope="row" class="border-0">Tổng tiền</th>
+                      <th scope="row" class="border-0">Thành tiền</th>
                       <!-- <th scope="row" class="border-0">Ghi chú</th> -->
                     </tr>
                   </thead>
@@ -177,9 +166,15 @@
                       <td class="text-wrap">${invoiceDetail.product.name }</td>
                       <td>${invoiceDetail.product.unit }</td>
                       <td>${invoiceDetail.quantity }</td>
-                      <td>${invoiceDetail.price }</td>
+                      <td>
+                      	<fmt:setLocale value="vi_VN" scope="session" />
+                        <fmt:formatNumber value="${invoiceDetail.price }" type="currency" />
+                      </td>
                       <!-- <td>1</td> -->
-                      <td>999,00</td>
+                      <td>
+                      	<fmt:setLocale value="vi_VN" scope="session" />
+                        <fmt:formatNumber value="${invoiceDetail.price * invoiceDetail.quantity }" type="currency" />
+                      </td>
                       <!-- <td></td> -->
                     </tr>
                   </c:forEach>
@@ -204,8 +199,12 @@
                       </tr> -->
                       <tr>
                         <td class="left"><strong>Tổng tiền</strong></td>
-                        <td class="right"><strong>$7.477,36</strong></td>
+                        <td class="right"><strong>
+	                        <fmt:setLocale value="vi_VN" scope="session" />
+	                        <fmt:formatNumber value="${invoice.getTotalPrice() }" type="currency" />
+                        </strong></td>
                       </tr>
+                      
                     </tbody>
                   </table>
                 </div>
@@ -218,6 +217,10 @@
         </div>
       </div>
              </div>  
+             
+             <c:if test="${type.equals('preview')}">
+             	<%@include file="/WEB-INF/views/admin/pages/invoice/pageNavigation.jsp"%>
+             </c:if>
 		<%@include file="/WEB-INF/views/admin/includes/footer/footer.jsp"%>
 
 </main>
