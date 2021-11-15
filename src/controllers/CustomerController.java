@@ -2,15 +2,12 @@ package controllers;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -24,14 +21,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 
-import entities.CategoryEntity;
-import entities.ImageEntity;
 import entities.CustomerEntity;
-import models.UploadFile;
-import models.Generate;
 import models.EntityData;
+import models.UploadFile;
 
 @Transactional
 @Controller
@@ -47,6 +40,8 @@ public class CustomerController {
 	@Autowired
 	@Qualifier("uploadFile")
 	UploadFile uploadFile;
+	
+	EntityData entityData;
 
 	String viewsDirectory = "admin/pages/customer/";
 
@@ -55,26 +50,21 @@ public class CustomerController {
 			@RequestParam(value = "search", required = false) String search) throws IOException {
 
 		List<CustomerEntity> customers = new ArrayList<CustomerEntity>();
+		entityData = new EntityData(factory);
 		if (search != null) {
-			Session session = factory.getCurrentSession();
-			String hql = "FROM CustomerEntity WHERE id LIKE '%" + search + "%' OR name LIKE '%" + search
-					+ "%' OR description LIKE '%" + search + "%' OR quantity LIKE '%" + search + "%' OR unit LIKE '%"
-					+ search + "%' OR price LIKE '%" + search + "%' OR category_id LIKE '%" + search + "%'";
-
-			Query query = session.createQuery(hql);
-			customers = query.list();
+			customers = entityData.searchForCustomer(search);
 
 		} else {
-			customers = getCustomers();
+			customers =  entityData.getCustomers();
 		}
-		
-		PagedListHolder pagedListHolder = new PagedListHolder(customers);
+
+		PagedListHolder<CustomerEntity> pagedListHolder = new PagedListHolder<CustomerEntity>(customers);
 		int page = ServletRequestUtils.getIntParameter(request, "p", 0);
 		pagedListHolder.setPage(page);
 		pagedListHolder.setMaxLinkedPages(5);
 		pagedListHolder.setPageSize(5);
 
-		model.addAttribute("pagedListHolder", customers);
+		model.addAttribute("pagedListHolder", pagedListHolder);
 		model.addAttribute("title", "Quản lý Khách hàng");
 		model.addAttribute("type", "khách hàng");
 		return viewsDirectory + "customer";
@@ -150,9 +140,13 @@ public class CustomerController {
 	// VIEW CUSTOMER
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public String productDetail(ModelMap model, @PathVariable("id") String id) throws IOException {
-		model.addAttribute("product", getCustomer(id));
-		model.addAttribute("title", "Chi tiết sản phẩm");
-		return viewsDirectory + "viewProduct";
+		
+		entityData = new EntityData(factory);
+		CustomerEntity customer = entityData.getCustomer(id);
+
+		model.addAttribute("customer", customer);
+		model.addAttribute("title", "Khách hàng " + customer.getId());
+		return viewsDirectory + "viewCustomer";
 	}
 
 	// EDIT PRODUCT
@@ -191,23 +185,5 @@ public class CustomerController {
 	 * 
 	 * return "redirect:/admin/products"; }
 	 */
-	
-	// GET CUSTOMER FROM SQL
-		public List<CustomerEntity> getCustomers() throws IOException {
-			Session session = factory.getCurrentSession();
-			String hql = "FROM CustomerEntity";
-			Query query = session.createQuery(hql);
-			List<CustomerEntity> customers = query.list();
-			return customers;
-		}
 
-		// GET SINGLE CUSTOMER
-		public CustomerEntity getCustomer(String id) throws IOException {
-			Session session = factory.getCurrentSession();
-			String hql = "FROM CustomerEntity WHERE id = '" + id + "'";
-			Query query = session.createQuery(hql);
-
-			CustomerEntity customer = (CustomerEntity) query.list().get(0);
-			return customer;
-		}
 }

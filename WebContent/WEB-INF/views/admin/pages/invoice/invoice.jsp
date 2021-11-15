@@ -110,8 +110,9 @@
                             <th class="border-gray-200">Loại hoá đơn</th>
                             <th class="border-gray-200">Ngày tạo</th>
                             <th class="border-gray-200">Giờ tạo</th>
-                            <th class="border-gray-200">Nhân viên tạo</th>						
-                            <th class="border-gray-200">Giá trị</th>
+                            <th class="border-gray-200">Nhân viên tạo</th>
+                            <th class="border-gray-200">Tổng sản phẩm</th>							
+                            <th class="border-gray-200">Tổng thành tiền</th>
                             <th class="border-gray-200 rounded-end"></th>
                         </tr>
                     </thead>
@@ -129,19 +130,22 @@
                              <td>
 	                             <span class="fw-normal text-wrap">
 	                            	<fmt:setLocale value="vi_VN" scope="session"/>
-	                            	<fmt:formatDate value="${invoice.date}" pattern="dd/MM/yyyy"/>
+	                            	<fmt:parseDate  value="${invoice.date}"  type="date" pattern="yyyy-MM-dd" var="parsedDate" />
+	                            	<fmt:formatDate value="${parsedDate}" pattern="dd/MM/yyyy"/>
 	                            </span>
                             </td>
                             <td>
 	                             <span class="fw-normal text-wrap">
 	                            	<fmt:setLocale value="vi_VN" scope="session"/>
-	                            	<fmt:formatDate value="${invoice.date}" pattern="HH:mm:ss"/>
+	                            	<fmt:parseDate  value="${invoice.time}"  type="date" pattern="HH:mm:ss" var="parsedTime" />
+	                            	<fmt:formatDate value="${parsedTime}" pattern="HH:mm:ss"/>
 	                            </span>
                             </td>
                             <td><span class="fw-normal text-wrap">${invoice.admin.firstname}</span></td>
+                            <td><span class="fw-normal text-wrap">${invoice.getTotalQuantity()}</span></td>
                             <td><span class="fw-normal">
                             	<fmt:setLocale value="vi_VN" scope="session" />
-                              	<fmt:formatNumber value="3000" type="currency" />
+                              	<fmt:formatNumber value="${invoice.getTotalPrice() }" type="currency" />
                             </span></td>
                             <%-- <td><span class="fw-normal text-wrap">${invoice.admin.name}</span></td> --%>
                             <td class = "text-center">

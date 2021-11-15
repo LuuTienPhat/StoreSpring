@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Random;
 
 import entities.CategoryEntity;
+import entities.InvoiceEntity;
 import entities.ProductEntity;
 import net.sf.ehcache.config.Searchable;
 
@@ -68,4 +69,21 @@ public class Generate {
 		
 		return generatedString;
 	}
+	
+	//GENERATE AND CHECK INVOICE ID
+		public static InvoiceEntity searchInvoice(List<InvoiceEntity> invoices, String id) {
+			for (InvoiceEntity invoice : invoices) {
+				if(invoice.getId().equals(id)) return invoice;
+			}
+			return null;
+		}
+		
+		public static String generateInvoiceId(List<InvoiceEntity> invoices) {
+			String generatedString = null;
+			do {
+				generatedString = "I" + generateId(9);
+			} while (searchInvoice(invoices, generatedString) != null);
+			
+			return generatedString;
+		}
 }
