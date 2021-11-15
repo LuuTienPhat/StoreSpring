@@ -12,6 +12,7 @@ import javax.transaction.Transactional;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.support.PagedListHolder;
@@ -27,10 +28,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import entities.AdminEntity;
 import entities.InvoiceDetailEntity;
 import entities.InvoiceEntity;
 import entities.InvoiceTypeEntity;
 import entities.ProductEntity;
+import models.DateTimeValidator;
+import models.EntityData;
+import models.Generate;
 import models.UploadFile;
 
 @Controller
@@ -51,20 +56,21 @@ public class InvoiceController {
 
 	String viewsDirectory = "admin/pages/invoice/";
 
+	EntityData entityData;
+
 	@RequestMapping("")
 	public String renderCategoryPage(ModelMap model, HttpServletRequest request,
 			@RequestParam(value = "search", required = false) String search) throws IOException {
+
 		List<InvoiceEntity> invoices = new ArrayList<InvoiceEntity>();
+		entityData = new EntityData(factory);
+
 		if (search != null) {
-			Session session = factory.getCurrentSession();
-			String hql = "FROM InvoiceEntity WHERE id LIKE '%" + search + "%' OR name LIKE '%" + search
-					+ "%' OR description LIKE '%" + search + "%'";
-			Query query = session.createQuery(hql);
-			invoices = query.list();
+			invoices = entityData.searchForInvoice(search);
 			model.addAttribute("pagedLink", "/admin/invoices?search=" + search);
 
 		} else {
-			invoices = getInvoices();
+			invoices = entityData.getInvoices();
 			model.addAttribute("pagedLink", "/admin/invoices");
 		}
 
@@ -83,27 +89,118 @@ public class InvoiceController {
 
 	// ADD INVOICE
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
-	public String renderAddCategoryPage(ModelMap model, HttpServletRequest request, HttpSession session,
-			RedirectAttributes redirectAttributes) throws IOException {
+	public String renderAddInvoicePage(ModelMap model, HttpSession session, RedirectAttributes redirectAttributes)
+			throws IOException {
 
-		// session = request.getSession();
-		InvoiceEntity invoice = session.getAttribute("invoice") != null
-				? (InvoiceEntity) session.getAttribute("invoice")
-				: new InvoiceEntity();
-		invoice.setId("1234");
-		session.setAttribute("invoice", invoice);
+		entityData = new EntityData(factory);
+		InvoiceEntity invoice = (InvoiceEntity) session.getAttribute("invoice");
+		if (invoice != null)
+			session.setAttribute("invoice", null);
 
-		List<ProductEntity> products = getProducts();
-		model.addAttribute("products", products);
-		model.addAttribute("invoice", invoice);
+		model.addAttribute("invoice", new InvoiceEntity());
+		model.addAttribute("invoiceTypes", entityData.getInoivceTypes());
 		model.addAttribute("title", "Thêm hoá đơn");
+		model.addAttribute("pageName", "addInvoice");
 		return viewsDirectory + "addInvoice";
 	}
 
+	@RequestMapping(value = "/add", method = RequestMethod.POST)
+	public String addInvoice(ModelMap model, HttpServletRequest request, HttpSession session,
+			RedirectAttributes redirectAttributes, @ModelAttribute("invoice") InvoiceEntity invoice,
+			BindingResult errors) throws IOException {
+
+		int errorsCount = 0;
+		String date = request.getParameter("date");
+		String time = request.getParameter("time");
+
+		if (date.isEmpty()) {
+			errors.rejectValue("date", "invoice", "Nhập ngày lập hoá đơn");
+			model.addAttribute("dateValid", "is-invalid");
+			errorsCount++;
+		} else if (!DateTimeValidator.isDateValid(date)) {
+			errors.rejectValue("date", "invoice", "Định dạng ngày tháng không đúng");
+			model.addAttribute("dateValid", "is-invalid");
+			errorsCount++;
+		}
+
+		if (time.isEmpty()) {
+			errors.rejectValue("time", "invoice", "Nhập giờ lập hoá đơn");
+			model.addAttribute("timeValid", "is-invalid");
+			errorsCount++;
+		} else if (!DateTimeValidator.isTimeValid(time)) {
+			errors.rejectValue("invoiceType.id", "invoice", "Định dạng giờ không đúng");
+			model.addAttribute("invoiceTypeValid", "is-invalid");
+			errorsCount++;
+		}
+
+		if (invoice.getInvoiceType().getId().isEmpty()) {
+			errors.rejectValue("invoiceType.id", "invoice", "Chọn loại hoá đơn");
+			model.addAttribute("invoiceTypeValid", "is-invalid");
+			errorsCount++;
+		}
+
+		if (errorsCount != 0) {
+			model.addAttribute("invoice", invoice);
+			model.addAttribute("title", "Thêm hoá đơn");
+			model.addAttribute("pageName", "addInvoice");
+			return viewsDirectory + "addInvoice";
+
+		} else {
+			invoice.setDate(date);
+			invoice.setTime(time);
+			AdminEntity admin = new AdminEntity();
+			admin.setId(session.getAttribute("admin").toString());
+			invoice.setAdmin(admin);
+			session.setAttribute("invoice", invoice);
+			return "redirect:/admin/invoices/add/invoice-detail";
+		}
+	}
+
+	// ADD INVOICE DETAIL
+	@RequestMapping(value = "/add/invoice-detail", method = RequestMethod.GET)
+	public String renderAddInvoiceDetailPage(ModelMap model, HttpServletRequest request, HttpSession session2,
+			RedirectAttributes redirectAttributes, @RequestParam(value = "search", required = false) String search)
+			throws IOException {
+
+		InvoiceEntity invoice = (InvoiceEntity) session2.getAttribute("invoice");
+
+		if (invoice == null) {
+			return "redirect:/admin/invoices/add";
+		} else {
+			List<ProductEntity> products = new ArrayList<ProductEntity>();
+			entityData = new EntityData(factory);
+
+			if (search != null) {
+				products = entityData.searchForProduct(search);
+				model.addAttribute("pagedLink", "/admin/invoices/add/invoice-detail?search=" + search);
+
+			} else {
+				products = entityData.getProducts();
+				model.addAttribute("pagedLink", "/admin/invoices/add/invoice-detail");
+			}
+
+			PagedListHolder pagedListHolder = new PagedListHolder(products);
+			int page = ServletRequestUtils.getIntParameter(request, "p", 0);
+			pagedListHolder.setPage(page);
+			pagedListHolder.setMaxLinkedPages(5);
+			pagedListHolder.setPageSize(5);
+
+			model.addAttribute("pagedListHolder", pagedListHolder);
+			model.addAttribute("previousPageLink", "admin/invoices/add");
+			model.addAttribute("nextPageLink", "admin/invoices/add/preview");
+			model.addAttribute("invoice", invoice);
+			model.addAttribute("title", "Thêm hoá đơn");
+			model.addAttribute("pageName", "addInvoiceDetail");
+			return viewsDirectory + "addInvoiceDetail";
+		}
+	}
+
 	// UPDATE INVOICE DETAIL
-	@RequestMapping(value = "/add/update", method = RequestMethod.POST)
+	@RequestMapping(value = "/add/invoice-detail", method = RequestMethod.POST)
 	public String updateInvoiceDetail(ModelMap model, HttpServletRequest request, HttpSession session,
 			RedirectAttributes attributes) throws IOException {
+		entityData = new EntityData(factory);
+
 		String[] product_ids = request.getParameterValues("product_id");
 		String[] quantities = request.getParameterValues("quantity");
 		String[] prices = request.getParameterValues("price");
@@ -116,8 +213,7 @@ public class InvoiceController {
 				if (index == -1) {
 					InvoiceDetailEntity invoiceDetail = new InvoiceDetailEntity();
 					invoiceDetail.setInvoice(invoice);
-					ProductEntity product = new ProductEntity();
-					product.setId(product_ids[i]);
+					ProductEntity product = entityData.getProduct(product_ids[i]);
 					invoiceDetail.setProduct(product);
 					invoiceDetail.setQuantity(Integer.parseInt(quantities[i]));
 					invoiceDetail.setPrice(Float.parseFloat(prices[i]));
@@ -131,21 +227,61 @@ public class InvoiceController {
 
 		invoice.setInvoiceDetails(invoiceDetails);
 		session.setAttribute("invoice", invoice);
+		return "redirect:/admin/invoices/add/invoice-detail";
+	}
 
-		/*
-		 * int[] importQuantity =
-		 * Integer.parseInt(request.getParameter("importQuantity"));
-		 */
+	// PREVIEW INVOICE
+	@RequestMapping(value = "/add/preview", method = RequestMethod.GET)
+	public String previewInvoice(ModelMap model, HttpSession session) {
+		System.out.println("preview");
+		InvoiceEntity invoice = (InvoiceEntity) session.getAttribute("invoice");
 
-		// attributes.addFlashAttribute("message", "Đã thêm thành công");
-		return "redirect:/admin/invoices/add";
+		if (invoice == null) {
+			return "redirect:/admin/invoices/add";
+		} else {
+			System.out.println(invoice.getId());
+			model.addAttribute("previousPageLink", "admin/invoices/add/invoice-detail");
+			model.addAttribute("nextPageLink", "admin/invoices/add/finish");
 
-		/*
-		 * List<ProductEntity> products = getProducts(); model.addAttribute("products",
-		 * products); model.addAttribute("invoice", invoice);
-		 * model.addAttribute("title", "Thêm hoá đơn"); return viewsDirectory +
-		 * "addInvoice";
-		 */
+			model.addAttribute("type", "preview");
+			model.addAttribute("invoice", invoice);
+			model.addAttribute("title", "Hoá đơn " + invoice.getId());
+			return viewsDirectory + "viewInvoice";
+		}
+	}
+
+	// FINISH INVOICE
+	@RequestMapping(value = "/add/finish", method = RequestMethod.GET)
+	public String finsishInvoice(ModelMap model, HttpSession session, RedirectAttributes redirectAttributes)
+			throws IOException {
+		System.out.println("preview");
+		entityData = new EntityData(factory);
+		InvoiceEntity invoice = (InvoiceEntity) session.getAttribute("invoice");
+
+		if (invoice == null) {
+			return "redirect:/admin/invoices/add";
+		} else {
+			invoice.setId(Generate.generateInvoiceId(entityData.getInvoices()));
+			if (entityData.addInvoiceToDB(invoice)) {
+				redirectAttributes.addFlashAttribute("message", "Thêm hoá đơn thành công!");
+				redirectAttributes.addFlashAttribute("messageType", "success");
+			} else {
+				redirectAttributes.addFlashAttribute("message", "Không thể thêm hoá đơn!");
+				redirectAttributes.addFlashAttribute("messageType", "error");
+			}
+			return "redirect:/admin/invoices/add";
+		}
+	}
+
+	// VIEW DETAILS OF INVOICE
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	public String viewInvoiceDetail(ModelMap model, HttpServletRequest request, @PathVariable(value = "id") String id) {
+		System.out.println("Id: " + id);
+		entityData = new EntityData(factory);
+		InvoiceEntity invoice = entityData.getInvoice(id);
+		model.addAttribute("invoice", invoice);
+		model.addAttribute("title", "Hoá đơn " + invoice.getId());
+		return viewsDirectory + "viewInvoice";
 	}
 
 	public int searhcInvoiceDetail(List<InvoiceDetailEntity> invoiceDetails, String productId) {
@@ -155,110 +291,5 @@ public class InvoiceController {
 			}
 		}
 		return -1;
-	}
-
-	@RequestMapping(value = "/add", method = RequestMethod.POST)
-	public String addInvoice(ModelMap model, @ModelAttribute(value = "invoice") InvoiceEntity invoice,
-			BindingResult errors, @RequestParam(value = "image", required = false) MultipartFile image)
-			throws IllegalStateException, IOException, InterruptedException {
-
-		return viewsDirectory + "addInvoice";
-		/*
-		 * if (category.getName().isEmpty()) { errors.rejectValue("name", "category",
-		 * "Nhập tên danh mục"); model.addAttribute("nameValid", "is-invalid"); }
-		 * 
-		 * if (errors.hasFieldErrors("name")) { model.addAttribute("category",
-		 * category); model.addAttribute("title", "Thêm Danh Mục"); return
-		 * viewsDirectory + "addCategory";
-		 * 
-		 * } else { List<InvoiceEntity> categories = getCategories(); String categoryId
-		 * = Generate.generateCategoryId(categories); category.setId(categoryId);
-		 * category.setDateAdded(new Date());
-		 * 
-		 * if (image.getSize() != 0) { String basePath = uploadFile.getBasePath();
-		 * String imageFileName = categoryId +
-		 * UploadFile.getExtension(image.getOriginalFilename()); String imagePath =
-		 * UploadFile.getCategoryBasePath() + imageFileName;
-		 * category.setImage(imagePath);
-		 * 
-		 * File fileInServer = new
-		 * File(context.getRealPath("resources\\upload\\categories\\" + imageFileName));
-		 * File fileInResource = new File(basePath + "/categories/" + imageFileName); if
-		 * (!fileInServer.exists()) { BufferedOutputStream stream = new
-		 * BufferedOutputStream(new FileOutputStream(fileInServer));
-		 * stream.write(image.getBytes()); stream.close(); } if
-		 * (!fileInResource.exists()) { BufferedOutputStream stream = new
-		 * BufferedOutputStream(new FileOutputStream(fileInResource));
-		 * stream.write(image.getBytes()); stream.close(); } Thread.sleep(5000); }
-		 * 
-		 * Session session = factory.openSession(); Transaction t =
-		 * session.beginTransaction(); try { session.save(category); t.commit();
-		 * System.out.println("Added");
-		 * 
-		 * } catch (Exception e) { t.rollback(); System.out.println("Error");
-		 * System.err.println(e.getMessage()); } finally { session.close(); }
-		 * 
-		 * return "redirect:/admin/categories"; }
-		 */
-	}
-
-	// VIEW DETAILS OF INVOICE
-
-	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public String viewInvoiceDetail(ModelMap model, HttpServletRequest request, @PathVariable(value = "id") String id) {
-		System.out.println("Id: " + id);
-		InvoiceEntity invoice = getInvoice(id);
-		model.addAttribute("invoice", invoice);
-		model.addAttribute("title", "Hoá đơn " + invoice.getId());
-
-		PagedListHolder pagedListHolder = new PagedListHolder(invoice.getInvoiceDetails());
-		int page = ServletRequestUtils.getIntParameter(request, "p", 0);
-		pagedListHolder.setPage(page);
-		pagedListHolder.setMaxLinkedPages(10);
-		pagedListHolder.setPageSize(5);
-
-		model.addAttribute("pagedListHolder", pagedListHolder);
-		return viewsDirectory + "viewInvoice";
-	}
-
-	// GET INVOICES FROM SQL
-	public List<InvoiceEntity> getInvoices() throws IOException {
-		Session session = factory.openSession();
-		String hql = "FROM InvoiceEntity";
-		Query query = session.createQuery(hql);
-		List<InvoiceEntity> invoices = query.list();
-		session.close();
-		return invoices;
-	}
-
-	// GET SINGLE INVOICE
-	public InvoiceEntity getInvoice(String id) {
-		Session session = factory.openSession();
-		String hql = "FROM InvoiceEntity WHERE id = '" + id + "'";
-		Query query = session.createQuery(hql);
-		InvoiceEntity invoice = (InvoiceEntity) query.list().get(0);
-		session.close();
-		return invoice;
-	}
-
-	// GET PRODUCTS
-	public List<ProductEntity> getProducts() throws IOException {
-		Session session = factory.openSession();
-		String hql = "FROM ProductEntity";
-		Query query = session.createQuery(hql);
-		List<ProductEntity> products = query.list();
-		session.close();
-		return products;
-	}
-
-	// GET INVOICE TYPES
-	@ModelAttribute("invoiceTypes")
-	public List<InvoiceTypeEntity> getInoivceTypes() throws IOException {
-		Session session = factory.openSession();
-		String hql = "FROM InvoiceTypeEntity";
-		Query query = session.createQuery(hql);
-		List<InvoiceTypeEntity> invoiceTypes = query.list();
-		session.close();
-		return invoiceTypes;
 	}
 }
