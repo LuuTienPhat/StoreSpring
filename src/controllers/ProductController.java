@@ -1,15 +1,10 @@
 package controllers;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -24,9 +19,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.support.PagedListHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,8 +32,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import entities.CategoryEntity;
 import entities.ImageEntity;
 import entities.ProductEntity;
-import models.UploadFile;
+import models.EntityData;
 import models.Generate;
+import models.UploadFile;
 
 @Transactional
 @Controller
@@ -57,26 +51,22 @@ public class ProductController {
 	@Qualifier("uploadFile")
 	UploadFile uploadFile;
 
+	EntityData entityData;
+
 	String viewsDirectory = "admin/pages/product/";
 
 	@RequestMapping("")
 	public String renderProductPage(ModelMap model, HttpServletRequest request,
 			@RequestParam(value = "search", required = false) String search) throws IOException {
 
+		entityData = new EntityData(factory);
 		List<ProductEntity> products = new ArrayList<ProductEntity>();
+
 		if (search != null) {
-			Session session = factory.openSession();
-			String hql = "FROM ProductEntity WHERE id LIKE '%" + search + "%' OR name LIKE '%" + search
-					+ "%' OR description LIKE '%" + search + "%' OR quantity LIKE '%" + search + "%' OR unit LIKE '%"
-					+ search + "%' OR price LIKE '%" + search + "%' OR category_id LIKE '%" + search + "%'";
-
-			Query query = session.createQuery(hql);
-			products = query.list();
+			products = entityData.searchForProduct(search);
 			model.addAttribute("pagedLink", "/admin/products?search=" + search);
-			session.close();
-
 		} else {
-			products = getProducts();
+			products = entityData.getProducts();
 			model.addAttribute("pagedLink", "/admin/products");
 		}
 
@@ -95,6 +85,8 @@ public class ProductController {
 
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	public String renderAddProductPage(ModelMap model) throws IOException {
+		EntityData entityData = new EntityData(factory);
+		model.addAttribute("categories", entityData.getCategories());
 		model.addAttribute("product", new ProductEntity());
 		model.addAttribute("title", "Thêm sản phẩm");
 		return viewsDirectory + "addProduct";
@@ -131,59 +123,64 @@ public class ProductController {
 		}
 
 		if (errorsCount != 0) {
-			model.addAttribute("title", "Thêm Danh Mục");
-			model.addAttribute("message", "Thông tin bị lỗi");
+			model.addAttribute("product", product);
+			model.addAttribute("message", "Vui lòng điền đầy đủ thông tin!");
 			model.addAttribute("messageType", "warning");
+			model.addAttribute("title", "Thêm sản phẩm");
 			return viewsDirectory + "addProduct";
+
 		} else {
-			List<ProductEntity> products = getProducts();
+			EntityData entityData = new EntityData(factory);
+			List<ProductEntity> products = entityData.getProducts();
 			String productId = Generate.generateProductId(products);
 			product.setId(productId);
 			product.setDateAdded(new Date());
 
 			if (files.length > 0) {
 				List<ImageEntity> images = new ArrayList<ImageEntity>();
-				String basePath = uploadFile.getBasePath();
-				int index = 1;
 
-				File folderInServer = new File(context.getRealPath("resources\\upload\\products\\" + productId + "\\"));
-				File folderInResource = new File(basePath + "/products/" + productId + "/");
+				File folderInServer = new File(
+						uploadFile.getUploadPathOnServer(context) + "products/" + productId + "/");
+				File folderInResource = new File(uploadFile.getUploadPath() + "products/" + productId + "/");
 
 				if (!folderInResource.exists())
 					folderInResource.mkdir();
 				if (!folderInServer.exists())
 					folderInServer.mkdir();
 
+				int index = 1;
 				for (MultipartFile image : files) {
-					ImageEntity i = new ImageEntity();
-					String imageFileName = productId + "_" + index
-							+ UploadFile.getExtension(image.getOriginalFilename());
-					String imagePath = UploadFile.getProductBasePath() + "/" + productId + "/" + imageFileName;
-					i.setProduct(product);
-					i.setImage(imagePath);
+					if (!image.isEmpty()) {
+						ImageEntity i = new ImageEntity();
+						String imageFileName = productId + "_" + index
+								+ UploadFile.getExtension(image.getOriginalFilename());
+						String imagePath = uploadFile.getRelativeUploadPath() + "products/" + productId + "/"
+								+ imageFileName;
+						i.setProduct(product);
+						i.setImage(imagePath);
 
-					File fileInServer = new File(
-							context.getRealPath("resources\\upload\\products\\" + productId + "\\" + imageFileName));
-					File fileInResource = new File(basePath + "/products/" + productId + "/" + imageFileName);
+						File fileInServer = new File(folderInServer + "/" + imageFileName);
+						File fileInResource = new File(folderInResource + "/" + imageFileName);
 
-					if (!fileInServer.exists()) {
-						UploadFile.writeFile(fileInServer, image);
+						if (!fileInServer.exists()) {
+							UploadFile.writeFile(fileInServer, image);
+
+						}
+						if (!fileInResource.exists()) {
+							UploadFile.writeFile(fileInResource, image);
+						}
+
+						images.add(i);
+						index++;
 					}
-					if (!fileInResource.exists()) {
-						UploadFile.writeFile(fileInResource, image);
-					}
-
-					images.add(i);
-					index++;
 				}
 				product.setImages(images);
 			}
 
-			if(addProductToDB(product)) {
+			if (entityData.addProductToDB(product)) {
 				redirectAttributes.addFlashAttribute("message", "Thêm sản phẩm thành công!");
 				redirectAttributes.addFlashAttribute("messageType", "success");
-			}
-			else {
+			} else {
 				redirectAttributes.addFlashAttribute("message", "Không thể thêm sản phẩm!");
 				redirectAttributes.addFlashAttribute("messageType", "error");
 			}
@@ -198,18 +195,17 @@ public class ProductController {
 			ProductEntity product = new ProductEntity();
 			product.setId(productId);
 
-			String basePath = uploadFile.getBasePath();
-			File folderInServer = new File(context.getRealPath("resources\\upload\\products\\" + productId + "\\"));
-			File folderInResource = new File(basePath + "/products/" + productId + "/");
+			File folderInServer = new File(uploadFile.getUploadPathOnServer(context) + "products/" + productId + "/");
+			File folderInResource = new File(uploadFile.getUploadPath() + "products/" + productId + "/");
 
 			if (folderInResource.exists()) {
-				deleteDirectory(folderInResource);
+				UploadFile.deleteDirectory(folderInResource);
 			}
 			if (folderInServer.exists()) {
-				deleteDirectory(folderInServer);
+				UploadFile.deleteDirectory(folderInServer);
 			}
 
-			if (deleteProductInDB(product)) {
+			if (entityData.deleteProductInDB(product)) {
 				redirectAttributes.addFlashAttribute("message", "Xoá sản phẩm thành công!");
 				redirectAttributes.addFlashAttribute("messageType", "success");
 			} else {
@@ -223,7 +219,8 @@ public class ProductController {
 	// VIEW PRODUCT
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public String productDetail(ModelMap model, @PathVariable("id") String id) throws IOException {
-		ProductEntity product = getProduct(id);
+		entityData = new EntityData(factory);
+		ProductEntity product = entityData.getProduct(id);
 		model.addAttribute("product", product);
 		model.addAttribute("title", "Chi tiết " + product.getId());
 		return viewsDirectory + "viewProduct";
@@ -232,21 +229,19 @@ public class ProductController {
 	// EDIT PRODUCT
 	@RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
 	public String renderEditProductPage(ModelMap model, @PathVariable("id") String id) throws IOException {
-		ProductEntity product = getProduct(id);
-
+		entityData = new EntityData(factory);
+		ProductEntity product = entityData.getProduct(id);
+		model.addAttribute("categories", entityData.getCategories());
 		model.addAttribute("product", product);
-		model.addAttribute("title", "Chi tiết sản phẩm");
+		model.addAttribute("title", "Chỉnh sửa sản phẩm");
 		return viewsDirectory + "editProduct";
 	}
 
 	@RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
 	public String editProduct(ModelMap model, HttpServletRequest request,
-			@RequestParam(value = "image", required = false) MultipartFile images, @PathVariable("id") String id,
+			@RequestParam(value = "images", required = false) MultipartFile[] files, @PathVariable("id") String id,
 			@ModelAttribute("product") ProductEntity moddifiedProduct, BindingResult errors,
 			RedirectAttributes redirectAttributes) throws IOException {
-
-		// CategoryEntity category = new CategoryEntity();
-		// category.setId(request.getParameter("categoryId"));
 
 		int errorsCount = 0;
 
@@ -272,9 +267,18 @@ public class ProductController {
 			errors.rejectValue("category", "product", "Chọn danh mục sản phẩm");
 			model.addAttribute("categoryValid", "is-invalid");
 			errorsCount++;
+
+		}
+
+		if (errorsCount != 0) {
+			model.addAttribute("product", moddifiedProduct);
+			model.addAttribute("title", "Chỉnh sửa sản phẩm");
+			model.addAttribute("message", "Vui lòng điền đầy đủ thông tin!");
+			model.addAttribute("messageType", "warning");
 			return viewsDirectory + "editProduct";
 		} else {
-			ProductEntity product = getProduct(id);
+			entityData = new EntityData(factory);
+			ProductEntity product = entityData.getProduct(id);
 			product.setName(moddifiedProduct.getName());
 			product.setQuantity(moddifiedProduct.getQuantity());
 			product.setCategory(moddifiedProduct.getCategory());
@@ -282,7 +286,56 @@ public class ProductController {
 			product.setPrice(moddifiedProduct.getPrice());
 			product.setDescription(moddifiedProduct.getDescription());
 
-			if (updateProductInDB(product)) {
+			File folderInServer = new File(
+					uploadFile.getUploadPathOnServer(context) + "products/" + product.getId() + "/");
+			File folderInResource = new File(uploadFile.getUploadPath() + "products/" + product.getId() + "/");
+
+			List<ImageEntity> images = null;
+			if (files.length != 0) {
+				images = new ArrayList<ImageEntity>();
+				int index = 1;
+
+				if (folderInResource.exists()) {
+					UploadFile.deleteDirectory(folderInResource);
+					folderInResource.mkdir();
+				} else {
+					folderInResource.mkdir();
+				}
+				if (folderInServer.exists()) {
+					UploadFile.deleteDirectory(folderInServer);
+					folderInServer.mkdir();
+				} else
+					folderInServer.mkdir();
+
+				for (MultipartFile image : files) {
+					if (!image.isEmpty()) {
+						ImageEntity i = new ImageEntity();
+						String imageFileName = product.getId() + "_" + index
+								+ UploadFile.getExtension(image.getOriginalFilename());
+						String imagePath = uploadFile.getRelativeUploadPath() + "products/" + product.getId() + "/"
+								+ imageFileName;
+						i.setProduct(product);
+						i.setImage(imagePath);
+
+						File fileInServer = new File(folderInServer + "/" + imageFileName);
+						File fileInResource = new File(folderInResource + "/" + imageFileName);
+
+						if (!fileInServer.exists()) {
+							UploadFile.writeFile(fileInServer, image);
+
+						}
+						if (!fileInResource.exists()) {
+							UploadFile.writeFile(fileInResource, image);
+						}
+						images.add(i);
+						index++;
+					}
+				}
+			}
+
+			product.setImages(images);
+
+			if (entityData.updateProductInDB(product)) {
 				redirectAttributes.addFlashAttribute("message", "Cập nhật sản phẩm thành công!");
 				redirectAttributes.addFlashAttribute("messageType", "success");
 			} else {
@@ -290,109 +343,7 @@ public class ProductController {
 				redirectAttributes.addFlashAttribute("message", "Không thể cập nhật sản phẩm!");
 				redirectAttributes.addFlashAttribute("messageType", "error");
 			}
-			return "redirect:/admin/products";
+			return "redirect:/admin/products/edit/" + product.getId();
 		}
 	}
-	
-	public boolean addProductToDB(ProductEntity product) {
-		Session session = factory.openSession();
-		Transaction t = session.beginTransaction();
-		try {
-			session.save(product);
-			t.commit();
-			System.out.println("Product is Added");
-			return true;
-		} catch (Exception e) {
-			t.rollback();
-			System.out.println("Error when adding product");
-			e.printStackTrace();
-			return false;
-		} finally {
-			session.close();
-		}
-	}
-
-	public boolean updateProductInDB(ProductEntity product) {
-		Session session = factory.openSession();
-		Transaction t = session.beginTransaction();
-		try {
-			session.merge(product);
-			t.commit();
-			System.out.println("Produc is updated");
-			return true;
-		} catch (Exception e) {
-			t.rollback();
-			System.out.println("Error when updating product");
-			e.printStackTrace();
-			return false;
-		} finally {
-			session.close();
-		}
-	}
-
-	public boolean deleteProductInDB(ProductEntity product) {
-		Session session = factory.openSession();
-		Transaction t = session.beginTransaction();
-		try {
-			session.delete(product);
-			t.commit();
-			System.out.println("Product is deleted");
-			return true;
-
-		} catch (Exception e) {
-			t.rollback();
-			System.out.println("Error when deleting product");
-			e.printStackTrace();
-			return false;
-		} finally {
-			session.close();
-		}
-	}
-
-	public static boolean deleteDirectory(File dir) {
-		if (dir.isDirectory()) {
-			File[] children = dir.listFiles();
-			for (int i = 0; i < children.length; i++) {
-				boolean success = deleteDirectory(children[i]);
-				if (!success) {
-					return false;
-				}
-			}
-		}
-		// either file or an empty directory
-		System.out.println("removing file or directory : " + dir.getName());
-		return dir.delete();
-	}
-
-	// GET CATEGORIES FROM SQL
-	@ModelAttribute("categories")
-	public List<CategoryEntity> getCategories() throws IOException {
-		Session session = factory.openSession();
-		String hql = "FROM CategoryEntity";
-		Query query = session.createQuery(hql);
-		List<CategoryEntity> categories = query.list();
-		session.close();
-		return categories;
-	}
-
-	// GET PRODUCTS
-	public List<ProductEntity> getProducts() throws IOException {
-		Session session = factory.openSession();
-		String hql = "FROM ProductEntity";
-		Query query = session.createQuery(hql);
-		List<ProductEntity> products = query.list();
-		session.close();
-		return products;
-	}
-
-	// GET PRODUCT WITH ID
-	public ProductEntity getProduct(String id) throws IOException {
-		Session session = factory.openSession();
-		String hql = "FROM ProductEntity WHERE id = '" + id + "'";
-		Query query = session.createQuery(hql);
-		ProductEntity product = (ProductEntity) query.list().get(0);
-		session.close();
-		return product;
-	}
-
 }
