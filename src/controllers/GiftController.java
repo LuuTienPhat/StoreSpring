@@ -555,91 +555,6 @@ public class GiftController {
 		return "store/shopping-cart";
 	}
 
-	public boolean checkOutHibernate(OrderEntity order, List<CartDetailEntity> listCartDetail) {
-		Session session = factory.openSession();
-		Transaction t = session.beginTransaction();
-		List<ProductEntity> listProduct = this.getListProduct();
-
-		List<ProductEntity> listProductToBeUpdate = new ArrayList<ProductEntity>();
-
-		for (ProductEntity pe : listProduct) {
-			for (CartDetailEntity cde : listCartDetail) {
-				if (cde.getProduct().getId().trim().equals(pe.getId())) {
-//					System.out.println(pe.getQuantity() +"old quan: "+ pe.getName());
-					pe.setQuantity(pe.getQuantity() - cde.getQuantity());// new quantity after update
-//					System.out.println(pe.getQuantity() +"new quan: "+ pe.getName());
-					listProductToBeUpdate.add(pe);
-				}
-			}
-		}
-		List<OrderDetailEntity> listODE = new ArrayList<OrderDetailEntity>();
-		for (CartDetailEntity cartDetailEntity : listCartDetail) {
-			OrderDetailEntity ode = new OrderDetailEntity(order.getId(), cartDetailEntity.getProduct().getId());
-			ode.setQuantity(cartDetailEntity.getQuantity());
-			listODE.add(ode);
-		}
-		boolean updateFlag = false;
-		try {
-			session.save(order);
-			for (CartDetailEntity cartDetailEntity : listCartDetail) {
-				session.delete(cartDetailEntity);
-			}
-			for (OrderDetailEntity ode : listODE) {
-				session.save(ode);
-			}
-
-			t.commit();
-		} catch (Exception ex) {
-			t.rollback();
-			return false;
-		} finally {
-			session.close();
-			updateFlag = true;
-		}
-		if (updateFlag==true) {
-			for (ProductEntity p : listProductToBeUpdate) {
-				if (!updateProductQuantity(p.getId(), p.getQuantity())) {
-					return false;
-				}
-			}
-		}
-		return true;
-	}
-
-	public List<CartDetailEntity> getListCartDetail(String customerId) {
-		Session session = factory.getCurrentSession();
-		String hql = "FROM CartDetailEntity c WHERE c.customer.id =:customerId";
-		Query query = session.createQuery(hql);
-
-		List<CartDetailEntity> list = query.setParameter("customerId", customerId).list();
-		return list;
-	}
-
-	public String getCustomerIdByUserName(String userName) {
-		Session session = factory.getCurrentSession();
-		String hql = "SELECT id FROM CustomerEntity c WHERE c.username =:userName";
-		Query query = session.createQuery(hql);
-		String customerId = (String) query.setParameter("userName", userName).uniqueResult();
-		return customerId;
-	}
-
-	public CustomerEntity getCustomerByUsername(String userName) {
-		Session session = factory.getCurrentSession();
-		String hql = "FROM CustomerEntity c WHERE c.username =:userName";
-		Query query = session.createQuery(hql);
-		CustomerEntity customer = (CustomerEntity) query.setParameter("userName", userName).uniqueResult();
-		return customer;
-	}
-
-	public List<ProductEntity> getListProduct() {
-		/* System.out.println("getListCartDetail"); */
-		Session session = factory.getCurrentSession();
-		String hql = "FROM ProductEntity";
-		Query query = session.createQuery(hql);
-		List<ProductEntity> list = query.list();
-		return list;
-	}
-
 	@RequestMapping(value = "/shopping-cart/delete/{productId}", method = RequestMethod.GET)
 	public String delete(@PathVariable("productId") String productId, HttpSession httpSession) {
 		httpSession.setAttribute("listCategory", this.getListCategory());
@@ -650,16 +565,6 @@ public class GiftController {
 			System.out.println("Delete unsuccessful");
 		}
 		return "redirect:/store/shopping-cart";
-	}
-
-	public boolean deleteProductFromCartDetail(String productId, HttpSession httpSession) {
-		Session session = factory.getCurrentSession();
-		String hql = "DELETE FROM CartDetailEntity c WHERE c.id.customer_id=:customerId and c.id.product_id=:productId";
-		Query query = session.createQuery(hql).setParameter("customerId",
-				this.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername")));
-		query.setParameter("productId", productId);
-
-		return query.executeUpdate() > 0;
 	}
 
 	@RequestMapping(value = "/shopping-cart/update", method = RequestMethod.POST)
@@ -679,48 +584,6 @@ public class GiftController {
 		}
 		attributes.addFlashAttribute("message", "Cập nhật số lượng thành công.");
 		return "redirect:/store/shopping-cart";
-	}
-
-	public boolean updateCustomerDetail(CustomerEntity customer, HttpSession httpSession) {
-		Session session = factory.getCurrentSession();
-		String hql = "UPDATE CustomerEntity c SET c.firstname=:firstname, c.lastname=:lastname,"
-				+ "c.phone=:phone, c.address=:address, c.email=:email   WHERE c.id=:id";
-		Query query = session.createQuery(hql).setParameter("id",
-				this.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername")));
-		query.setParameter("firstname", customer.getFirstname());
-		query.setParameter("lastname", customer.getLastname());
-		query.setParameter("phone", customer.getPhone());
-		query.setParameter("address", customer.getAddress());
-		query.setParameter("email", customer.getEmail());
-		return query.executeUpdate() > 0;
-	}
-
-	public boolean updateCustomerPassword(CustomerEntity customer, HttpSession httpSession) {
-		Session session = factory.getCurrentSession();
-		String hql = "UPDATE CustomerEntity c SET c.password=:password WHERE c.id=:id";
-		Query query = session.createQuery(hql).setParameter("id",
-				this.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername")));
-		query.setParameter("password", customer.getPassword());
-		return query.executeUpdate() > 0;
-	}
-
-	public boolean updateProductQuantityFromCartDetail(String productId, String quantity, HttpSession httpSession) {
-		Session session = factory.getCurrentSession();
-		String hql = "UPDATE CartDetailEntity c SET c.quantity=:quantity WHERE c.id.customer_id=:customerId and c.id.product_id=:productId";
-		Query query = session.createQuery(hql).setParameter("customerId",
-				this.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername")));
-		query.setParameter("productId", productId);
-		query.setParameter("quantity", Integer.parseInt(quantity));
-		return query.executeUpdate() > 0;
-	}
-
-	public boolean updateProductQuantity(String productId, int quantity) {
-		Session session = factory.getCurrentSession();
-		String hql = "UPDATE ProductEntity p SET p.quantity=:quantity WHERE p.id=:productId";
-		Query query = session.createQuery(hql);
-		query.setParameter("productId", productId);
-		query.setParameter("quantity", quantity);
-		return query.executeUpdate() > 0;
 	}
 
 	@RequestMapping("/shopping-cart/insert-into-cart/{productId}")
@@ -819,6 +682,143 @@ public class GiftController {
 		}
 		model.addAttribute("pagedListHolder", pagedListHolder);
 		return "store/search-result";
+	}
+
+	public boolean updateCustomerDetail(CustomerEntity customer, HttpSession httpSession) {
+		Session session = factory.getCurrentSession();
+		String hql = "UPDATE CustomerEntity c SET c.firstname=:firstname, c.lastname=:lastname,"
+				+ "c.phone=:phone, c.address=:address, c.email=:email   WHERE c.id=:id";
+		Query query = session.createQuery(hql).setParameter("id",
+				this.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername")));
+		query.setParameter("firstname", customer.getFirstname());
+		query.setParameter("lastname", customer.getLastname());
+		query.setParameter("phone", customer.getPhone());
+		query.setParameter("address", customer.getAddress());
+		query.setParameter("email", customer.getEmail());
+		return query.executeUpdate() > 0;
+	}
+
+	public boolean updateCustomerPassword(CustomerEntity customer, HttpSession httpSession) {
+		Session session = factory.getCurrentSession();
+		String hql = "UPDATE CustomerEntity c SET c.password=:password WHERE c.id=:id";
+		Query query = session.createQuery(hql).setParameter("id",
+				this.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername")));
+		query.setParameter("password", customer.getPassword());
+		return query.executeUpdate() > 0;
+	}
+
+	public boolean updateProductQuantityFromCartDetail(String productId, String quantity, HttpSession httpSession) {
+		Session session = factory.getCurrentSession();
+		String hql = "UPDATE CartDetailEntity c SET c.quantity=:quantity WHERE c.id.customer_id=:customerId and c.id.product_id=:productId";
+		Query query = session.createQuery(hql).setParameter("customerId",
+				this.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername")));
+		query.setParameter("productId", productId);
+		query.setParameter("quantity", Integer.parseInt(quantity));
+		return query.executeUpdate() > 0;
+	}
+
+	public boolean updateProductQuantity(String productId, int quantity) {
+		Session session = factory.getCurrentSession();
+		String hql = "UPDATE ProductEntity p SET p.quantity=:quantity WHERE p.id=:productId";
+		Query query = session.createQuery(hql);
+		query.setParameter("productId", productId);
+		query.setParameter("quantity", quantity);
+		return query.executeUpdate() > 0;
+	}
+
+	public boolean deleteProductFromCartDetail(String productId, HttpSession httpSession) {
+		Session session = factory.getCurrentSession();
+		String hql = "DELETE FROM CartDetailEntity c WHERE c.id.customer_id=:customerId and c.id.product_id=:productId";
+		Query query = session.createQuery(hql).setParameter("customerId",
+				this.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername")));
+		query.setParameter("productId", productId);
+
+		return query.executeUpdate() > 0;
+	}
+
+	public List<CartDetailEntity> getListCartDetail(String customerId) {
+		Session session = factory.getCurrentSession();
+		String hql = "FROM CartDetailEntity c WHERE c.customer.id =:customerId";
+		Query query = session.createQuery(hql);
+
+		List<CartDetailEntity> list = query.setParameter("customerId", customerId).list();
+		return list;
+	}
+
+	public String getCustomerIdByUserName(String userName) {
+		Session session = factory.getCurrentSession();
+		String hql = "SELECT id FROM CustomerEntity c WHERE c.username =:userName";
+		Query query = session.createQuery(hql);
+		String customerId = (String) query.setParameter("userName", userName).uniqueResult();
+		return customerId;
+	}
+
+	public CustomerEntity getCustomerByUsername(String userName) {
+		Session session = factory.getCurrentSession();
+		String hql = "FROM CustomerEntity c WHERE c.username =:userName";
+		Query query = session.createQuery(hql);
+		CustomerEntity customer = (CustomerEntity) query.setParameter("userName", userName).uniqueResult();
+		return customer;
+	}
+
+	public List<ProductEntity> getListProduct() {
+		/* System.out.println("getListCartDetail"); */
+		Session session = factory.getCurrentSession();
+		String hql = "FROM ProductEntity";
+		Query query = session.createQuery(hql);
+		List<ProductEntity> list = query.list();
+		return list;
+	}
+
+	public boolean checkOutHibernate(OrderEntity order, List<CartDetailEntity> listCartDetail) {
+		Session session = factory.openSession();
+		Transaction t = session.beginTransaction();
+		List<ProductEntity> listProduct = this.getListProduct();
+
+		List<ProductEntity> listProductToBeUpdate = new ArrayList<ProductEntity>();
+
+		for (ProductEntity pe : listProduct) {
+			for (CartDetailEntity cde : listCartDetail) {
+				if (cde.getProduct().getId().trim().equals(pe.getId())) {
+//					System.out.println(pe.getQuantity() +"old quan: "+ pe.getName());
+					pe.setQuantity(pe.getQuantity() - cde.getQuantity());// new quantity after update
+//					System.out.println(pe.getQuantity() +"new quan: "+ pe.getName());
+					listProductToBeUpdate.add(pe);
+				}
+			}
+		}
+		List<OrderDetailEntity> listODE = new ArrayList<OrderDetailEntity>();
+		for (CartDetailEntity cartDetailEntity : listCartDetail) {
+			OrderDetailEntity ode = new OrderDetailEntity(order.getId(), cartDetailEntity.getProduct().getId());
+			ode.setQuantity(cartDetailEntity.getQuantity());
+			listODE.add(ode);
+		}
+		boolean updateFlag = false;
+		try {
+			session.save(order);
+			for (CartDetailEntity cartDetailEntity : listCartDetail) {
+				session.delete(cartDetailEntity);
+			}
+			for (OrderDetailEntity ode : listODE) {
+				session.save(ode);
+			}
+
+			t.commit();
+		} catch (Exception ex) {
+			t.rollback();
+			return false;
+		} finally {
+			session.close();
+			updateFlag = true;
+		}
+		if (updateFlag == true) {
+			for (ProductEntity p : listProductToBeUpdate) {
+				if (!updateProductQuantity(p.getId(), p.getQuantity())) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 
 	public boolean cartItemIsExit(String product_id, HttpSession httpSession) {

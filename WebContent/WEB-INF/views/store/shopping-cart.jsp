@@ -11,12 +11,12 @@
 	<%@include file="/WEB-INF/views/store/include/store-header.jsp"%>
 	<main class="main">
 		<div class="cart-list__container main__new-product px-32 my-6">
-		<h3 class="text-indigo-400 font-bold mb-4 text-xl">GIỎ HÀNG CỦA BẠN</h3>
-				<hr class="border-none bg-indigo-400 mb-4" style="height: 1px;">
+		<h3 class="text-indigo-500 font-bold mb-4 text-xl">GIỎ HÀNG CỦA BẠN</h3>
+				<hr class="border-none bg-indigo-500 mb-4" style="height: 1px;">
 					<c:if test="${listCartDetail.size()==0}">
 							<p>Bạn không có sản phẩm nào trong giỏ hàng.</p>
 							<p class="mb-2"><a href="${applicationScope.storeIndexPage}"
-							class="inline-block font-bold text-indigo-400 hover:text-indigo-200 transition-colors">Quay lại trang chủ</a> để mua sắm.</p>
+							class="inline-block font-bold text-indigo-500 hover:text-indigo-300 transition-colors">Quay lại trang chủ</a> để mua sắm.</p>
 						</c:if>
 			<form action="store/shopping-cart/update" method="post">
 				<table class="cart-list__table mb-4">
@@ -47,7 +47,7 @@
 								<!-- desc = tên sản phẩm + màu sắc + kích cỡ (nếu có) -->
 								<td class="card-list__table-desc"  style="text-align: left;"><a
 									href="${applicationScope.productDetailPage}/${c.product.id}"
-									class="hover:text-indigo-400">${c.product.name}</a>
+									class="hover:text-indigo-500">${c.product.name}</a>
 									<div>Tồn kho: ${c.product.quantity}</div>
 									</td>
 								<td class="cart-list__price font-bold"><fmt:setLocale value="vi_VN" scope="session" />
@@ -66,7 +66,7 @@
                               <fmt:formatNumber value="${c.quantity*c.product.price}" type="currency" /></td>
 								<td class="card-list__action"><a
 									href="store/shopping-cart/delete/${c.product.id}"
-									class="hover:text-indigo-400">Xóa</a></td>
+									class="hover:text-indigo-500">Xóa</a></td>
 							</tr>
 						</c:forEach>
 					</tbody>
@@ -76,13 +76,13 @@
 				</table>
 				<div class="flex justify-end mb-4">
 					<button
-						class="px-4 py-2 font-bold bg-indigo-300 hover:bg-indigo-400 transition-colors text-white rounded-md"
+						class="px-4 py-2 font-bold bg-indigo-400 hover:bg-indigo-500 transition-colors text-white rounded-md"
 						type="submit">Cập nhật</button>
 						<!-- <a href="store/shopping-cart/delete-all"
-						class="ml-2 px-4 py-2 font-bold bg-indigo-300 hover:bg-indigo-400 transition-colors text-white rounded-md"
+						class="ml-2 px-4 py-2 font-bold bg-indigo-400 hover:bg-indigo-500 transition-colors text-white rounded-md"
 						>Xóa tất cả</a> -->
 						<a href="store/shopping-cart/check-out"
-						class="ml-2 px-4 py-2 font-bold bg-indigo-300 hover:bg-indigo-400 transition-colors text-white rounded-md"
+						class="ml-2 px-4 py-2 font-bold bg-indigo-400 hover:bg-indigo-500 transition-colors text-white rounded-md"
 						>Thanh toán</a>
 				</div>
 			</form>
@@ -90,13 +90,13 @@
 			<p>Hỗ trợ ship 30k cho đơn hàng từ 500k toàn quốc</p>
 			<p>Đơn hàng trên website được xử lý trong giờ hành chính</p>
 
-			<h3 class="text-right text-indigo-300 mt-4 text-3xl font-bold">
+			<h3 class="text-right text-indigo-400 mt-4 text-3xl font-bold">
 				Tổng: <span class="cart-total">000</span>
 			</h3>
 			<div class="section__heading mb-8  mt-16">
 				<h3>
 					<span href="#"
-						class="<!-- hover:text-indigo-300 --> transition-colors text-3xl font-bold">Các
+						class="<!-- hover:text-indigo-400 --> transition-colors text-3xl font-bold">Các
 						sản phẩm đã xem</span>
 				</h3>
 			</div>
@@ -114,16 +114,16 @@
 									alt="${p.id}" class="transform hover:scale-110 transition-all " /></a>
 
 								<div
-									class="flex justify-center bg-indigo-300 items-center py-2 absolute item__menu w-full">
+									class="flex justify-center bg-indigo-400 items-center py-2 absolute item__menu w-full">
 									<!-- <a href="#"><i
-										class="fa text-2xl fa-heart text-white hover:text-indigo-400 transition-colors"></i></a>
+										class="fa text-2xl fa-heart text-white hover:text-indigo-500 transition-colors"></i></a>
 									<div class="border-l-2 border-white h-7 mx-2"></div> -->
 									<a href="store/shopping-cart/insert-into-cart/${p.id}"><i
-										class="fa text-2xl fa-cart-plus text-white hover:text-indigo-400 transition-colors"></i></a>
+										class="fa text-2xl fa-cart-plus text-white hover:text-indigo-500 transition-colors"></i></a>
 								</div>
 							</div>
 							<a href="${applicationScope.productDetailPage}/${p.id}"
-								class="item__name block hover:text-indigo-300 transition-colors font-bold my-2">${p.name}</a>
+								class="item__name block hover:text-indigo-400 transition-colors font-bold my-2">${p.name}</a>
 						</div>
 						<div>
 						<span class="item__price font-bold"><fmt:setLocale value="vi_VN" scope="session" />

@@ -15,10 +15,10 @@
 		<div class="main__new-product section px-32 my-6">
 			<div class="section__heading mb-8">
 				<div class="product-navigation font-bold mb-5">
-					<h3 class="text-indigo-400 font-bold text-xl ">TẤT CẢ SẢN PHẨM</h3>
+					<h3 class="text-indigo-500 font-bold text-xl ">TẤT CẢ SẢN PHẨM</h3>
 					
 				</div>
-				<hr class="border-none bg-indigo-400" style="height: 1px;">
+				<hr class="border-none bg-indigo-500" style="height: 1px;">
 			</div>
 			<div class="new-product__list flex flex-wrap">
 				<jsp:useBean id="pagedListHolder" scope="request"
@@ -40,16 +40,16 @@
 									alt="${pd.id}" class="transform hover:scale-110 transition-all" /></a>
 
 								<div
-									class="flex justify-center bg-indigo-300 items-center py-2 absolute item__menu w-full">
+									class="flex justify-center bg-indigo-400 items-center py-2 absolute item__menu w-full">
 									<!-- <a href="#"><i
-										class="fa text-2xl fa-heart text-white hover:text-indigo-400 transition-colors"></i></a>
+										class="fa text-2xl fa-heart text-white hover:text-indigo-500 transition-colors"></i></a>
 									<div class="border-l-2 border-white h-7 mx-2"></div> -->
 									<a href="store/shopping-cart/insert-into-cart/${pd.id}"><i
-										class="fa text-2xl fa-cart-plus text-white hover:text-indigo-400 transition-colors"></i></a>
+										class="fa text-2xl fa-cart-plus text-white hover:text-indigo-500 transition-colors"></i></a>
 								</div>
 							</div>
 							<a href="${applicationScope.productDetailPage}/${pd.id}"
-								class="item__name block hover:text-indigo-300 transition-colors font-bold my-2">${pd.name}</a>
+								class="item__name block hover:text-indigo-400 transition-colors font-bold my-2">${pd.name}</a>
 						</div>
 						<div>
 						<span class="item__price font-bold"><fmt:setLocale value="vi_VN" scope="session" />

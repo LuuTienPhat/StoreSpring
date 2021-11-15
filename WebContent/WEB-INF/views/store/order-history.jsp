@@ -44,36 +44,36 @@
 		<div class="main__new-product px-32 mb-12 mt-6">
 			<div class="mb-5 font-bold text-xl">
 				<a href="${applicationScope.userInfoPage}"
-					class="hover:text-indigo-400 transition-colors">Hồ sơ cá nhân</a>
-				> <span class="text-indigo-400">Lịch sử mua hàng</span>
+					class="hover:text-indigo-500 transition-colors">Hồ sơ cá nhân</a>
+				> <span class="text-indigo-500">Lịch sử mua hàng</span>
 			</div>
 			<div class="flex justify-between info-wrapper">
 				<div class="p-4 pt-0 border-2 mr-4 border-gray-200 user-info-nav">
 					<div
-						class="my-2 mt-3 text-center text-indigo-400 text-xl font-bold">${customerEntity.firstname}
+						class="my-2 mt-3 text-center text-indigo-500 text-xl font-bold">${customerEntity.firstname}
 						${customerEntity.lastname}</div>
 					<div class="mb-1">
 						<a href="${applicationScope.userInfoPage}"
-							class="hover:text-indigo-400 transition-colors">Thông tin
+							class="hover:text-indigo-500 transition-colors">Thông tin
 							tài khoản</a>
 					</div>
 					<div class="mb-1">
 						<a href="${applicationScope.changePasswordPage}"
-							class="hover:text-indigo-400 transition-colors">Đổi mật
+							class="hover:text-indigo-500 transition-colors">Đổi mật
 							khẩu</a>
 					</div>
 					<div class="mb-1">
 						<a href="${applicationScope.shoppingCartPage}"
-							class="hover:text-indigo-400 transition-colors">Giỏ hàng</a>
+							class="hover:text-indigo-500 transition-colors">Giỏ hàng</a>
 					</div>
 					<div class="mb-1">
 						<span href="${applicationScope.orderHistoryPage}"
-							class="text-indigo-400 transition-colors">Lịch sử mua
+							class="text-indigo-500 transition-colors">Lịch sử mua
 							hàng</span>
 					</div>
 					<div class="mb-1">
 						<a href="${applicationScope.logOutPage}"
-							class="hover:text-indigo-400 transition-colors">Đăng xuất</a>
+							class="hover:text-indigo-500 transition-colors">Đăng xuất</a>
 					</div>
 				</div>
 				<div class="sign-up-form-container border-2 border-gray-200 flex-1">
@@ -86,7 +86,7 @@
 							<p>Bạn chưa có đơn hàng nào.</p>
 							<p class="mb-2">
 								<a href="${applicationScope.storeIndexPage}"
-									class="inline-block font-bold text-indigo-400 hover:text-indigo-200 transition-colors">Quay
+									class="inline-block font-bold text-indigo-500 hover:text-indigo-300 transition-colors">Quay
 									lại trang chủ</a> để mua sắm.
 							</p>
 						</c:if>
@@ -106,7 +106,7 @@
 											<td class="card-list__table-desc"
 												style="text-align: left !important;"><a
 												href="${applicationScope.productDetailPage}/${c.product.id}"
-												class="hover:text-indigo-400">${c.product.name}</a> <br>
+												class="hover:text-indigo-500">${c.product.name}</a> <br>
 												<div class="cart-list__price">
 													Đơn giá: <span class="font-bold"><fmt:setLocale
 															value="vi_VN" scope="session" /> <fmt:formatNumber
@@ -134,13 +134,13 @@
 							<div class="order-cell w-1/5 p-2 border text-center align-middle">Thành tiền</div>
 						</div>
 						<c:forEach var="order" items="${listOrder}" varStatus="loop">
-							<p class="p-2 text-indigo-400 font-bold">- ${loop.index+1}.</p>
+							<p class="p-2 text-indigo-500 font-bold">- ${loop.index+1}.</p>
 							
 								<c:forEach var="c" items="${order.orderDetails}">
 								<div class="order-row flex">
 									<div class="order-cell flex-1 p-2 border"><a
 												href="${applicationScope.productDetailPage}/${c.product.id}"
-												class="hover:text-indigo-400">${c.product.name}</a><br>
+												class="hover:text-indigo-500">${c.product.name}</a><br>
 												<div class="cart-list__price text-sm">
 													Đơn giá: <span class="font-bold"><fmt:setLocale
 															value="vi_VN" scope="session" /> <fmt:formatNumber
