@@ -4,7 +4,7 @@
 <html lang="en">
 
 <head>
-<title>Product detail</title>
+<title>${product.name}</title>
 <%@include file="/WEB-INF/views/store/include/store-head.jsp"%>
 </head>
 
@@ -28,6 +28,7 @@
 					<div class="flex justify-between">
 						<h6 class="mb-2 text-gray-500">Mã sản phẩm: ${product.id}</h6>
 						<div class="flex">
+						<h6 class="mb-2 text-gray-500">Tồn kho: ${product.quantity}</h6>
 							<!-- <i
 								class="fa fa-share-alt text-2xl hover:text-indigo-500 text-2xl mr-2 cursor-pointer"></i>
 							<i
@@ -138,7 +139,7 @@
 						<span class="item__price font-bold"><fmt:setLocale value="vi_VN" scope="session" />
                               <fmt:formatNumber value="${p.price}" type="currency" /></span>
                               <c:if test="${p.quantity <= 0}">
-                              <span class="px-1 ml-1 bg-gray-500 text-white">Hết hàng</span>
+                              <span class="p-1 ml-1 bg-gray-500 text-white">Hết hàng</span>
                               </c:if>
 						</div>
 						<%-- <span class="item__price font-bold"><fmt:setLocale value="vi_VN" scope="session" />
