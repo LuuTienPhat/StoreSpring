@@ -373,6 +373,15 @@ public class EntityData {
 		List<OrderEntity> orders = query.list();
 		return orders;
 	}
+	
+	// GET ORDERS FROM DB
+		public List<OrderEntity> getLatestOrders() throws IOException {
+			Session session = factory.getCurrentSession();
+			String hql = "FROM OrderEntity o WHERE o.state = 0 ORDER BY o.orderDate DESC";
+			Query query = session.createQuery(hql);
+			List<OrderEntity> orders = query.list();
+			return orders;
+		}
 
 	// GET SINGLE ORDER
 	public OrderEntity getOrder(String id) {
