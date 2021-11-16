@@ -84,7 +84,7 @@
 						<span class="item__price font-bold"><fmt:setLocale value="vi_VN" scope="session" />
                               <fmt:formatNumber value="${p.price}" type="currency" /></span>
                               <c:if test="${p.quantity <= 0}">
-                              <span class="px-1 ml-1 bg-gray-500 text-white">Hết hàng</span>
+                              <span class="p-1 ml-1 bg-gray-500 text-white">Hết hàng</span>
                               </c:if>
 						</div>
 						<%-- <span class="item__price font-bold"><fmt:setLocale value="vi_VN" scope="session" />

@@ -156,7 +156,7 @@
 							<div class="w-full flex justify-between my-1 p-2">
 									<span class="">Tổng cộng:</span><span class="font-bold"><fmt:setLocale
 											value="vi_VN" scope="session" /><fmt:formatNumber
-											value="${order.orderTotal}" type="currency" /></span>
+											value="${order.totalPrice}" type="currency" /></span>
 								</div>
 								<div class="w-full border-b border-black"></div>
 						</c:forEach>

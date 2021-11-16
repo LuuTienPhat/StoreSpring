@@ -509,8 +509,8 @@ public class GiftController {
 					method.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername"))))) {
 				attributes.addFlashAttribute("message", "Đặt hàng thành công!");
 				String body = "<h3  style='margin: 8px 0;'>Thông tin người nhận</h3><p  style='margin: 4px 0;'>Tên: "
-						+ order.getShipName() + ", SĐT: " + order.getShipPhone()
-						+ "</p><p  style='margin: 4px 0;'>Địa chỉ:" + order.getShipAddress() + "</p>";
+						+ order.getShipName() + "</p><p style='margin: 4px 0;'>SĐT: " + order.getShipPhone()
+						+ "</p><p  style='margin: 4px 0;'>Địa chỉ: " + order.getShipAddress() + "</p>";
 				body = body + "<h3  style='margin: 8px 0;'>Thông tin đơn hàng</h3>"
 						+ "<table style='width: 400px;border: 1px solid black;"
 						+ "  border-collapse: collapse;'> <thead>" + "						<tr>"

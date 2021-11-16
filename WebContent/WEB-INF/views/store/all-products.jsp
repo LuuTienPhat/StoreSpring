@@ -55,7 +55,7 @@
 						<span class="item__price font-bold"><fmt:setLocale value="vi_VN" scope="session" />
                               <fmt:formatNumber value="${pd.price}" type="currency" /></span>
                               <c:if test="${pd.quantity <= 0}">
-                              <span class="px-1 ml-1 bg-gray-500 text-white">Hết hàng</span>
+                              <span class="p-1 ml-1 bg-gray-500 text-white">Hết hàng</span>
                               </c:if>
 						</div>
 						
