@@ -16,7 +16,7 @@ import javax.persistence.Table;
 public class InvoiceTypeEntity {
 	@Id
 	@GeneratedValue
-	@Column(name = "id", updatable = false)
+	@Column(name = "id", updatable = false, insertable = false)
 	private int id;
 
 	@Column(name = "name")

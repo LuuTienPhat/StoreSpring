@@ -123,6 +123,7 @@ public class ProductController {
 		}
 
 		if (errorsCount != 0) {
+			model.addAttribute("categories", entityData.getCategories());
 			model.addAttribute("product", product);
 			model.addAttribute("message", "Vui lòng điền đầy đủ thông tin!");
 			model.addAttribute("messageType", "warning");
@@ -339,7 +340,6 @@ public class ProductController {
 				redirectAttributes.addFlashAttribute("message", "Cập nhật sản phẩm thành công!");
 				redirectAttributes.addFlashAttribute("messageType", "success");
 			} else {
-
 				redirectAttributes.addFlashAttribute("message", "Không thể cập nhật sản phẩm!");
 				redirectAttributes.addFlashAttribute("messageType", "error");
 			}

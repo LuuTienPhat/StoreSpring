@@ -56,7 +56,7 @@ public class ProductEntity {
 
 	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	private List<ImageEntity> images;
-	
+
 	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	private List<InvoiceDetailEntity> invoiceDetails;
 
@@ -139,7 +139,7 @@ public class ProductEntity {
 	public void setCartDetails(List<CartDetailEntity> cartDetails) {
 		this.cartDetails = cartDetails;
 	}
-	
+
 	public ProductEntity() {
 		// TODO Auto-generated constructor stub
 	}

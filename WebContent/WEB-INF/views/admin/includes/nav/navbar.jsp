@@ -1,9 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-
-<%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c"%>
-
-<%@ taglib uri="http://java.sun.com/jstl/fmt_rt" prefix="f" %>
+	pageEncoding="UTF-8"%>
+<!-- ========== Tag Lib ========= -->
+<%@include file="/WEB-INF/views/admin/includes/header/taglib.jsp"%>
 
 <nav class="navbar navbar-top navbar-expand navbar-dashboard navbar-dark ps-0 pe-2 pb-0">
   <div class="container-fluid px-0">
@@ -67,27 +65,52 @@
           </a>
           <div class="dropdown-menu dropdown-menu-lg dropdown-menu-center mt-2 py-0">
             <div class="list-group list-group-flush">
-              <a href="#" class="text-center text-primary fw-bold border-bottom border-light py-3">Notifications</a>
-              <a href="#" class="list-group-item list-group-item-action border-bottom">
+              <a href="#" class="text-center text-primary fw-bold border-bottom border-light py-3">Đơn hàng mới</a>
+              
+              <c:forEach items="${applicationScope.lastestOrders}" var="order" varStatus="i" begin="0" end="5">
+              <a href="${applicationScope.orderPage}/${order.id}" class="list-group-item list-group-item-action border-bottom">
                 <div class="row align-items-center">
-                    <div class="col-auto">
+                    <div class="col-auto d-flex flex-column">
+                    	<small class="text-danger">12:00</small>
+                        <small class="text-danger">11/12</small>
                       <!-- Avatar -->
-                      <img alt="Image placeholder" src="<c:url value='/resources/admin/assets/img/team/profile-picture-1.jpg' />" class="avatar-md rounded">
+                      <%-- <img alt="Image placeholder" src="<c:url value='/resources/admin/assets/img/team/profile-picture-1.jpg' />" class="avatar-md rounded"> --%>
                     </div>
                     <div class="col ps-0 ms-2">
                       <div class="d-flex justify-content-between align-items-center">
                           <div>
-                            <h4 class="h6 mb-0 text-small">Jose Leos</h4>
+                            <h4 class="h6 mb-0 text-small">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hash icon icon-xs" viewBox="0 0 16 16">
+							  <path d="M8.39 12.648a1.32 1.32 0 0 0-.015.18c0 .305.21.508.5.508.266 0 .492-.172.555-.477l.554-2.703h1.204c.421 0 .617-.234.617-.547 0-.312-.188-.53-.617-.53h-.985l.516-2.524h1.265c.43 0 .618-.227.618-.547 0-.313-.188-.524-.618-.524h-1.046l.476-2.304a1.06 1.06 0 0 0 .016-.164.51.51 0 0 0-.516-.516.54.54 0 0 0-.539.43l-.523 2.554H7.617l.477-2.304c.008-.04.015-.118.015-.164a.512.512 0 0 0-.523-.516.539.539 0 0 0-.531.43L6.53 5.484H5.414c-.43 0-.617.22-.617.532 0 .312.187.539.617.539h.906l-.515 2.523H4.609c-.421 0-.609.219-.609.531 0 .313.188.547.61.547h.976l-.516 2.492c-.008.04-.015.125-.015.18 0 .305.21.508.5.508.265 0 .492-.172.554-.477l.555-2.703h2.242l-.515 2.492zm-1-6.109h2.266l-.515 2.563H6.859l.532-2.563z"/>
+							</svg>
+                            ${order.id}</h4>
                           </div>
                           <div class="text-end">
-                            <small class="text-danger">a few moments ago</small>
+                           <%--  <small class="text-danger">${order.orderDate}</small> --%>
+                            <small class="text-success d-flex flex-column align-items-end">
+                            	<fmt:setLocale value="vi_VN" scope="session" />
+                              	<fmt:formatNumber value="${order.getTotalPrice()}" type="currency" />
+                            </small>
                           </div>
                       </div>
-                      <p class="font-small mt-1 mb-0">Added you to an event "Project stand-up" tomorrow at 12:30 AM.</p>
+                      <p class="font-small mt-1 mb-0 text-truncate">
+                      	<svg class="icon icon-xxs text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                      	${order.shipName}
+                      </p>
+                      
+                      <p class="font-small my-0">
+                      <span class="d-inline-block text-truncate" style="min-width: 200px;">
+                      	 <svg class="icon icon-xxs text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+							  ${order.shipAddress}
+							</span>
+                      </p>
                     </div>
                 </div>
               </a>
-              <a href="#" class="list-group-item list-group-item-action border-bottom">
+              </c:forEach>
+              
+              
+              <%-- <a href="#" class="list-group-item list-group-item-action border-bottom">
                 <div class="row align-items-center">
                     <div class="col-auto">
                       <!-- Avatar -->
@@ -162,10 +185,10 @@
                       <p class="font-small mt-1 mb-0">New message: "We need to improve the UI/UX for the landing page."</p>
                     </div>
                 </div>
-              </a>
-              <a href="#" class="dropdown-item text-center fw-bold rounded-bottom py-3">
-                <svg class="icon icon-xxs text-gray-400 me-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path></svg>
-                View all
+              </a> --%>
+              <a href="${applicationScope.orderPage}" class="dropdown-item text-center fw-bold rounded-bottom py-3">
+                <svg class="icon icon-xxs text-gray-400 me-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path></svg>  
+                Xem tất cả
               </a>
             </div>
           </div>

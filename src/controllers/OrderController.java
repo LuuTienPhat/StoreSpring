@@ -38,7 +38,7 @@ public class OrderController {
 	SessionFactory factory;
 
 	EntityData entityData;
-	
+
 	String viewsDirectory = "admin/pages/order/";
 
 	@RequestMapping("")
@@ -55,13 +55,13 @@ public class OrderController {
 				+ "%' OR shipName LIKE '%" + search + "%' OR shipAddress LIKE '%" + search + "%' OR total LIKE '%"
 				+ search + "%' OR shipAddress LIKE '%" + search + "%'"
 				+ (state != null ? "OR state LIKE '%" + state + "%'" : "");
-		
-		
-			if (search != null) {
-				Query query = session.createQuery(hql2);
-				orders = query.list();
-				model.addAttribute("pagedLink", "/admin/categories?search=" + search + "&&state=" + state);
-			} else if (state != null) {{
+
+		if (search != null) {
+			Query query = session.createQuery(hql2);
+			orders = query.list();
+			model.addAttribute("pagedLink", "/admin/categories?search=" + search + "&&state=" + state);
+		} else if (state != null) {
+			{
 				Query query = session.createQuery(hql);
 				orders = query.list();
 				model.addAttribute("pagedLink", "/admin/categories?state=" + state);
@@ -73,26 +73,28 @@ public class OrderController {
 
 		model.addAttribute("title", "Quản lý đơn hàng");
 		model.addAttribute("state", state);
-		PagedListHolder pagedListHolder = new PagedListHolder(orders);
-		int page = ServletRequestUtils.getIntParameter(request, "p", 0);
-		pagedListHolder.setPage(page);
-		pagedListHolder.setMaxLinkedPages(5);
-		pagedListHolder.setPageSize(5);
-
+		PagedListHolder pagedListHolder = pagination(request, orders);
 		model.addAttribute("pagedListHolder", pagedListHolder);
 		return viewsDirectory + "order";
 	}
 
+	// VIEW ORDER
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public String renderOrderDetailPage(ModelMap model, @PathVariable("id") String id) throws IOException {
+	public String renderOrderDetailPage(ModelMap model, HttpServletRequest request, @PathVariable("id") String id)
+			throws IOException {
 
 		entityData = new EntityData(factory);
 		OrderEntity order = entityData.getOrder(id);
 		model.addAttribute("order", entityData.getOrder(id));
+		PagedListHolder pagedListHolder = pagination(request, order.getOrderDetails());
+		model.addAttribute("pagedListHolder", pagedListHolder);
+		model.addAttribute("type", "sản phẩm");
+		model.addAttribute("pagedLink", "admin/orders/" + id);
 		model.addAttribute("title", "Đơn hàng " + order.getId());
 		return viewsDirectory + "viewOrder";
 	}
 
+	// UPDATE ORDER STATE
 	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
 	public String changeOrderState(ModelMap model, HttpServletRequest request, @PathVariable("id") String id)
 			throws IOException {
@@ -130,5 +132,14 @@ public class OrderController {
 		model.addAttribute("order", order);
 		model.addAttribute("title", "Đơn hàng " + order.getId());
 		return viewsDirectory + "viewOrder";
+	}
+
+	public PagedListHolder pagination(HttpServletRequest request, List list) {
+		PagedListHolder pagedListHolder = new PagedListHolder(list);
+		int page = ServletRequestUtils.getIntParameter(request, "p", 0);
+		pagedListHolder.setPage(page);
+		pagedListHolder.setMaxLinkedPages(5);
+		pagedListHolder.setPageSize(5);
+		return pagedListHolder;
 	}
 }
