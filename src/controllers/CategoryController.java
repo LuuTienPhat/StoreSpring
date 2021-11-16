@@ -248,6 +248,8 @@ public class CategoryController {
 
 				UploadFile.writeFile(fileInServer, image);
 				UploadFile.writeFile(fileInResource, image);
+				
+				Thread.sleep(2000);
 			}
 
 			if (entitydata.updateCategoryInDB(category)) {
