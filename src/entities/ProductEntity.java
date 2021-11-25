@@ -44,6 +44,9 @@ public class ProductEntity {
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date dateAdded;
 
+	@Column(name = "views", nullable = true)
+	private int views;
+
 	@ManyToOne
 	@JoinColumn(name = "category_id")
 	private CategoryEntity category;
@@ -59,6 +62,9 @@ public class ProductEntity {
 
 	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	private List<InvoiceDetailEntity> invoiceDetails;
+
+	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+	private List<FavoriteProduct> favoriteProducts;
 
 	public String getId() {
 		return id;
@@ -116,6 +122,14 @@ public class ProductEntity {
 		this.dateAdded = dateAdded;
 	}
 
+	public int getViews() {
+		return views;
+	}
+
+	public void setViews(int views) {
+		this.views = views;
+	}
+
 	public CategoryEntity getCategory() {
 		return category;
 	}
@@ -138,6 +152,40 @@ public class ProductEntity {
 
 	public void setCartDetails(List<CartDetailEntity> cartDetails) {
 		this.cartDetails = cartDetails;
+	}
+
+	public List<OrderDetailEntity> getOrderDetails() {
+		return orderDetails;
+	}
+
+	public void setOrderDetails(List<OrderDetailEntity> orderDetails) {
+		this.orderDetails = orderDetails;
+	}
+
+	public List<InvoiceDetailEntity> getInvoiceDetails() {
+		return invoiceDetails;
+	}
+
+	public void setInvoiceDetails(List<InvoiceDetailEntity> invoiceDetails) {
+		this.invoiceDetails = invoiceDetails;
+	}
+
+	public List<FavoriteProduct> getFavoriteProducts() {
+		return favoriteProducts;
+	}
+
+	public void setFavoriteProducts(List<FavoriteProduct> favoriteProducts) {
+		this.favoriteProducts = favoriteProducts;
+	}
+	
+	public float getTotalRevenueInOrders(String productId) {
+		float revenue = 0;
+		for (OrderDetailEntity orderDetail : orderDetails) {
+			if(orderDetail.getProduct().getId().equals(productId)) {
+				revenue += orderDetail.getQuantity() * orderDetail.getProduct().getPrice();
+			}
+		}
+		return revenue;
 	}
 
 	public ProductEntity() {
