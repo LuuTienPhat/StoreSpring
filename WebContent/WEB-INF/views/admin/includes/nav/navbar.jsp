@@ -200,7 +200,7 @@
             <div class="media d-flex align-items-center">
               <img class="avatar rounded-circle" alt="Image placeholder" src="<c:url value='/resources/admin/assets/img/team/profile-picture-4.jpg' />">
               <div class="media-body ms-2 text-dark align-items-center d-none d-lg-block">
-                <span class="mb-0 font-small fw-bold text-gray-900">Lưu Tiến Phát</span>
+                <span class="mb-0 font-small fw-bold text-gray-900">${sessionScope.admin.lastname} ${sessionScope.admin.firstname}</span>
               </div>
             </div>
           </a>
