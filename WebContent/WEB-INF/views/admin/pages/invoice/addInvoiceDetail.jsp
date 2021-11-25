@@ -116,7 +116,7 @@
                     <th class="border-gray-200">Hình ảnh</th>
                     <!-- <th class="border-gray-200">Đơn vị tính</th> -->
                     <th class="border-gray-200">SL tồn</th>
-                    <th class="border-gray-200">SL nhập</th>
+                    <th class="border-gray-200">${invoice.invoiceType.id == 1 ? 'SL nhập' : 'SL xuất'}</th>
                     <th class="border-gray-200">Đơn giá</th>
                     <!-- <th class="border-gray-200">Mô tả</th> -->
                     <th class="border-gray-200">Thành tiền</th>
@@ -142,8 +142,8 @@
                         <td><span class="fw-normal text-wrap">${product.name}</span></td>
                         <td><span class="fw-bold text-danger text-wrap">${product.category.name}</span></td>
                         <td>
-                          <span class="fw-normal text-wrap">
-                            <img src="${!product.images.isEmpty() ? product.images.get(0).image : ''}" width="100" height="100" alt="${product.name}" />
+                          <span class="fw-normal">
+                            <img class="img-fluid" src="${!product.images.isEmpty() ? product.images.get(0).image : ''}" width="200" height="200" alt="${product.name}" />
                           </span>
                         </td>
                         <td><span class="fw-bold text-wrap">${product.quantity}</span></td>
@@ -157,7 +157,7 @@
                         --%>
                         <td>
                           <span class="fw-bold text-wrap">
-                            <input class="form-control" name="price" id="price" value="${invoice.getPrice(product.id) == 0 ? '' : invoice.getPrice(product.id)}" autofocus size="100"/>
+                            <input class="form-control" name="price" id="price" value="${invoice.getPrice(product.id) == 0 ? '' : invoice.getPrice(product.id)}" autofocus size="70"/>
                           </span>
                         </td>
                         <td>
@@ -262,5 +262,8 @@
 
     <!-- ========== All JS files linkup ========= -->
     <%@include file="/WEB-INF/views/admin/includes/footer/script.jsp"%>
+    
+    <!-- ========== Notyf JS linkup ========= -->
+  <%@include file="/WEB-INF/views/admin/includes/footer/notyf.jsp"%>
   </body>
 </html>
