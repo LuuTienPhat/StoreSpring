@@ -59,7 +59,7 @@
                                <div class="mb-4">
                                  <label class="my-1 me-2" for="invoice">Loại hoá đơn</label>
                                  <form:select path="invoiceType.id"  class="form-select ${invoiceTypeValid }" id="invoice-type">
-                                     <form:option value="">Chọn loại hoá đơn</form:option>
+                                     <form:option value="0">Chọn loại hoá đơn</form:option>
                                      <form:options items="${invoiceTypes}" itemLabel="name" itemValue="id"/>
                                  </form:select>
                                  <form:errors path = "invoiceType.id" class="invalid-feedback"/>
@@ -163,6 +163,9 @@
        
       <!-- ========== All JS files linkup ========= -->
       <%@include file="/WEB-INF/views/admin/includes/footer/script.jsp"%>
+      
+      <!-- ========== Notyf JS linkup ========= -->
+  <%@include file="/WEB-INF/views/admin/includes/footer/notyf.jsp"%>
    </body>
    
    <script type="text/javascript">
