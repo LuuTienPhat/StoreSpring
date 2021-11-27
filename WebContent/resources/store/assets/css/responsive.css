@@ -194,6 +194,8 @@
         margin: 0 !important;
         margin-bottom: 8px !important;
     }
+    footer .legal{
+    width: 150px !important;}
 }
 
 @media (max-width: 739px){

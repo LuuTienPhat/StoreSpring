@@ -142,6 +142,7 @@
 	</main>
 
 	<%@include file="/WEB-INF/views/store/include/store-footer.jsp"%>
+	<script src="<c:url value='/resources/store/assets/js/swiper-bundle.min.js'/>"></script>
 	<!-- <script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script> -->
 	<!-- <script src="./assets/js/main.js"></script> -->
 	<script src="<c:url value='/resources/store/assets/js/main.js'/>"></script>

@@ -67,6 +67,10 @@
 							class="hover:text-indigo-500 transition-colors">Giỏ hàng</a>
 					</div>
 					<div class="mb-1">
+						<a href="${applicationScope.userFavoritePage}"
+							class="hover:text-indigo-500 transition-colors">Sản phẩm đã thích</a>
+					</div>
+					<div class="mb-1">
 						<span href="${applicationScope.orderHistoryPage}"
 							class="text-indigo-500 transition-colors">Lịch sử mua
 							hàng</span>
