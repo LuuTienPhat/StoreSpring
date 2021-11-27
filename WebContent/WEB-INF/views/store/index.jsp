@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>Quà tặng và phụ kiện</title>
+<title>Store Spring 21 - Quà tặng và phụ kiện</title>
 <%@include file="/WEB-INF/views/store/include/store-head.jsp"%>
 
 </head>
@@ -45,7 +45,8 @@
 			<div class="slider__right flex flex-col flex-1 ml-2">
 				<a href="#" class="w-full mb-2 h-1/2"><img
 					src="<c:url value='/resources/store/assets/img/sideBanner.png'/>"
-					alt="" class="w-full h-full"></a> <a href="#" class="w-full h-1/2"><img
+					alt="" class="w-full h-full"></a> <a href="#"
+					class="w-full h-1/2"><img
 					src="<c:url value='/resources/store/assets/img/sideBanner2.png'/>"
 					alt="" class="w-full h-full"></a>
 			</div>
@@ -64,15 +65,27 @@
 						<div>
 							<div class="relative item-menu-container overflow-hidden">
 								<a href="${applicationScope.productDetailPage}/${p.id}"
-									class="block overflow-hidden">
-									<img src="${p.images[0].image}"
-									alt="${p.id}" class="transform hover:scale-110 transition-all " /></a>
+									class="block overflow-hidden"> <img
+									src="${p.images[0].image}" alt="${p.id}"
+									class="transform hover:scale-110 transition-all " /></a>
 
 								<div
 									class="flex justify-center bg-indigo-300 items-center py-1 absolute item__menu w-full">
-									<!-- <a href="#"><i
-										class="fa text-2xl fa-heart text-white hover:text-indigo-500 transition-colors"></i></a>
-									<div class="border-l-2 border-white h-7 mx-2"></div> -->
+									<a href="store/insert-to-favlist/${p.id}"> <c:set var="contains"
+											value="false" /> <c:forEach var="fav"
+											items="${listFavorite}">
+											<c:if test="${fav.product.id eq p.id}">
+												<c:set var="contains" value="true" />
+											</c:if>
+										</c:forEach> <c:if test="${contains==true}">
+											<i
+												class="fa text-2xl fa-heart text-white text-indigo-500 transition-colors"></i>
+										</c:if> <c:if test="${contains==false}">
+											<i
+												class="fa text-2xl fa-heart text-white hover:text-indigo-500 transition-colors"></i>
+										</c:if> <!-- <i
+										class="fa text-2xl fa-heart text-white hover:text-indigo-500 transition-colors"></i> --></a>
+									<div class="border-l-2 border-white h-7 mx-2"></div>
 									<a href="store/shopping-cart/insert-into-cart/${p.id}"><i
 										class="fa text-2xl fa-cart-plus text-white hover:text-indigo-200 transition-colors"></i></a>
 								</div>
@@ -81,11 +94,12 @@
 								class="item__name block hover:text-indigo-400 transition-colors font-bold my-2">${p.name}</a>
 						</div>
 						<div>
-						<span class="item__price font-bold"><fmt:setLocale value="vi_VN" scope="session" />
-                              <fmt:formatNumber value="${p.price}" type="currency" /></span>
-                              <c:if test="${p.quantity <= 0}">
-                              <span class="p-1 ml-1 bg-gray-500 text-white">Hết hàng</span>
-                              </c:if>
+							<span class="item__price font-bold"><fmt:setLocale
+									value="vi_VN" scope="session" /> <fmt:formatNumber
+									value="${p.price}" type="currency" /></span>
+							<c:if test="${p.quantity <= 0}">
+								<span class="p-1 ml-1 bg-gray-500 text-white">Hết hàng</span>
+							</c:if>
 						</div>
 						<%-- <span class="item__price font-bold"><fmt:setLocale value="vi_VN" scope="session" />
                               <fmt:formatNumber value="${p.price}" type="currency" /></span> --%>
@@ -280,7 +294,8 @@
 		</div>
 	</main>
 	<%@include file="/WEB-INF/views/store/include/store-footer.jsp"%>
-	<script src="<c:url value='/resources/store/assets/js/swiper-bundle.min.js'/>"></script>
+	<script
+		src="<c:url value='/resources/store/assets/js/swiper-bundle.min.js'/>"></script>
 	<!-- <script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script> -->
 	<!-- <script src="./assets/js/main.js"></script> -->
 	<script src="<c:url value='/resources/store/assets/js/main.js'/>"></script>

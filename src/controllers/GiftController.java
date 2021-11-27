@@ -31,6 +31,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import entities.CartDetailEntity;
 import entities.CategoryEntity;
 import entities.CustomerEntity;
+import entities.FavoriteProductEntity;
 import entities.OrderDetailEntity;
 import entities.OrderEntity;
 import entities.ProductEntity;
@@ -62,6 +63,7 @@ public class GiftController {
 			}
 			System.out.println(sum);
 			httpSession.setAttribute("customerTotalQuantity", sum);
+			model.addAttribute("listFavorite", method.getListFavourite(method.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername"))));
 		}
 
 		return "store/index";
@@ -79,6 +81,7 @@ public class GiftController {
 			}
 			System.out.println(sum);
 			httpSession.setAttribute("customerTotalQuantity", sum);
+			model.addAttribute("listFavorite", method.getListFavourite(method.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername"))));
 		}
 		model.addAttribute("list", method.getListProduct());
 		return "store/index";
@@ -106,6 +109,7 @@ public class GiftController {
 			httpSession.setAttribute("listRecentViewProducts", lpe);
 		}
 		model.addAttribute("product", method.getProduct(productId));
+		model.addAttribute("listFavorite", method.getListFavourite(method.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername"))));
 		System.out.println(productId + "; " + method.getProduct(productId).getName());
 		return "store/product-detail";
 	}
@@ -256,7 +260,8 @@ public class GiftController {
 		pagedListHolder.setPage(page);
 		pagedListHolder.setMaxLinkedPages(3);
 		pagedListHolder.setPageSize(8);
-
+		
+		model.addAttribute("listFavorite", method.getListFavourite(method.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername"))));
 		model.addAttribute("pagedListHolder", pagedListHolder);
 
 		return "store/category-products";
@@ -560,7 +565,7 @@ public class GiftController {
 		pagedListHolder.setPageSize(8);
 
 		model.addAttribute("pagedListHolder", pagedListHolder);
-
+		model.addAttribute("listFavorite", method.getListFavourite(method.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername"))));
 		return "store/all-products";
 	}
 
@@ -702,10 +707,18 @@ public class GiftController {
 			lrs.add(0, keyword);
 			httpSession.setAttribute("listRecentSearch", lrs);
 		}
+		model.addAttribute("listFavorite", method.getListFavourite(method.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername"))));
 		model.addAttribute("pagedListHolder", pagedListHolder);
 		return "store/search-result";
 	}
+	@RequestMapping("/user-info/favorite")
+	public String favoritePage(HttpSession httpSession, ModelMap model) {
+		Methods method = new Methods(factory);
+		httpSession.setAttribute("listCategory", method.getListCategory());
+		model.addAttribute("listFavorite", method.getListFavourite(method.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername"))));
 
+		return "store/user-favorite";
+	}
 
 	public static final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
 			Pattern.CASE_INSENSITIVE);
@@ -1039,4 +1052,45 @@ public class GiftController {
 //		List<ProductEntity> list = query.setParameter("keyword", "%" + keyword + "%").list();
 //		return list;
 //	}
+	
+	
+	
+	
+	
+	
+	
+	
+	// Theem vaof danh sach yeu thich
+	@RequestMapping("/insert-to-favlist/{productId}")
+	public String insertToFavouriteList(String customerId, @PathVariable("productId") String productId, HttpSession httpSession,
+			RedirectAttributes attributes) {
+		Methods method = new Methods(factory);
+		httpSession.setAttribute("listCategory", method.getListCategory());
+		Session session = factory.openSession();
+		Transaction t = session.beginTransaction();
+		FavoriteProductEntity fp = new FavoriteProductEntity();
+		if (method.favItemIsExit(productId, httpSession)) {
+			if(method.deleteProductFromFavourite(productId, httpSession)) {
+				attributes.addFlashAttribute("message", "Đã xóa khỏi danh sách yêu thích");
+				System.out.println("remove from fav list successful!-------------");
+			}
+		} else {
+			fp.setCustomer(method.getCustomerByUsername((String) httpSession.getAttribute("customerUsername")));
+			fp.setProduct(method.getProduct(productId));
+			try {
+				session.save(fp);
+				t.commit();
+				System.out.println("Insert to fav list successful!-------------");
+				attributes.addFlashAttribute("message", "Đã thêm vào danh sách yêu thích");
+
+			} catch (Exception ex) {
+				t.rollback();
+				System.out.println("--------Insert to fav list unsuccessful!");
+			} finally {
+				session.close();
+			}
+		}
+
+		return "redirect:/store/user-info/favorite";
+	}
 }

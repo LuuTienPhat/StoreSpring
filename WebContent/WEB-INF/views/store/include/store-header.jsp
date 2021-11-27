@@ -9,42 +9,56 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="f"%>
 </head>
 <style>
-    .msg {
-        position: fixed;
-        top: 200px;
-        right: 30px;
-        transform: translateX(300px);
-        transition: all .3s ease-out;
-        z-index: 999999;
-    }
-    .msg-detail{
-        color: white;
-        width: 220px;
-        padding: 12px;
-    }
-    .msg.active {
-        transform: translateX(0);
-        transition: all .3s ease-out;
-    }
-	@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300&display=swap');
-	*{font-family: 'Source Sans Pro', sans-serif;
-	}
+.msg {
+	position: fixed;
+	top: 200px;
+	right: 30px;
+	transform: translateX(320px);
+	transition: all .3s ease-out;
+	z-index: 999999;
+	visibility: hidden;
+}
+
+.msg-detail {
+	color: white;
+	width: 240px;
+	/* padding: 12px; */
+}
+
+.msg.active {
+	transform: translateX(0);
+	transition: all .3s ease-out;
+	visibility: visible;
+}
+
+@import
+	url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300&display=swap')
+	;
+
+* {
+	font-family: 'Source Sans Pro', sans-serif;
+}
 </style>
 <body>
 	<div class="overcoat"></div>
 	<c:if test="${message!=null}">
-	<div class="msg">
-        <div class="msg-detail flex justify-between items-center bg-indigo-500 mb-4">
-            <span class="block mr-2">${message}</span>
-            <i class="fas fa-times cursor-pointer text-2xl"></i>
-        </div>
-    </div>
-    
-    <script type="text/javascript">
+		<div class="msg rounded-md overflow-hidden">
+			<div
+				class="msg-detail flex justify-between items-center bg-indigo-500 h-full ">
+				<span class="p-2">${message}</span>
+				<div
+					class="cursor-pointer p-2 hover:bg-indigo-400 self-stretch transition-all flex items-center">
+					<i class="fas fa-times text-2xl "></i>
+				</div>
+
+			</div>
+		</div>
+
+		<script type="text/javascript">
         var a = document.querySelectorAll(".msg i");
         for (var i = 0; i < a.length; i++) {
             a[i].addEventListener("click", function (e) {
-                e.target.parentNode.style.display = "none";
+                e.target.parentNode.parentNode.parentNode.classList.remove("active");
             })
         }
         document.addEventListener('readystatechange', event => {
@@ -62,10 +76,10 @@
                 }
                 
             }
-         }, 20000);
+         }, 10000);
     </script>
 	</c:if>
-	
+
 	<header class="header">
 		<ul class="nav__top flex justify-end bg-indigo-300">
 			<li><a href="#store-address"
@@ -74,7 +88,7 @@
 			<li><a href="#"
 				class="px-4 py-1 block font-bold hover:text-indigo-500 transition-colors">VỀ
 					STORE SPRING 21</a></li>
-<!-- 			<li><a href="#"
+			<!-- 			<li><a href="#"
 				class="px-4 py-1 block font-bold hover:text-indigo-500 transition-colors">TUYỂN
 					DỤNG</a></li> -->
 		</ul>
@@ -86,7 +100,8 @@
 					<div class="bar-bottom bg-indigo-300"></div>
 				</div>
 				<a href="${applicationScope.storeIndexPage}"
-					class="logo inline-flex items-center mr-5 img-container" style="width: 160px; height: 47px;"> <img
+					class="logo inline-flex items-center mr-5 img-container"
+					style="width: 160px; height: 47px;"> <img
 					src="<c:url value='/resources/store/assets/img/new-logo_200x200 - 1.png' />">
 				</a>
 				<%-- <a href="${applicationScope.storeIndexPage}"
@@ -120,16 +135,15 @@
 							<li><a href="store/category/${category.id}"
 								class="px-2 py-1 block hover:text-indigo-400 transition-colors">${category.name}</a></li>
 						</c:forEach> --%>
-						<li><span
-								class="py-1 block"><i class="fas fa-history mr-1"></i>Tìm kiếm gần đây:</span></li>
+						<li><span class="py-1 block"><i
+								class="fas fa-history mr-1"></i>Tìm kiếm gần đây:</span></li>
 						<c:if test="${sessionScope.listRecentSearch !=null}">
-						<c:forEach var="key"
-							items="${sessionScope.listRecentSearch}">
-							<li><a href="store/search/${key}"
-								class="px-2 py-1 block hover:text-indigo-400 italic transition-colors">${key}</a></li>
-						</c:forEach>
+							<c:forEach var="key" items="${sessionScope.listRecentSearch}">
+								<li><a href="store/search/${key}"
+									class="px-2 py-1 block hover:text-indigo-400 italic transition-colors">${key}</a></li>
+							</c:forEach>
 						</c:if>
-						
+
 					</ul>
 				</div>
 				<div class="nav__log-in flex justify-between items-center">
@@ -161,14 +175,12 @@
 					</div>
 					<a href="${applicationScope.shoppingCartPage}"
 						class="py-1 block transition-colors mr-2 relative"><i
-						class="hover:text-indigo-400 fa fa-shopping-bag text-2xl"></i> 
-						<c:if
+						class="hover:text-indigo-400 fa fa-shopping-bag text-2xl"></i> <c:if
 							test="${sessionScope.customerUsername!=null}">
 							<div
 								class="shopping-bag__count absolute bg-red-500 font-bold rounded-full -top-3 -right-3 px-2 text-md">
 								${sessionScope.customerTotalQuantity}</div>
-						</c:if> 
-						<c:if
+						</c:if> <c:if
 							test="${sessionScope.customerUsername == null || sessionScope.customerUsername == '' }">
 							<div
 								class="shopping-bag__count absolute bg-red-500 font-bold rounded-full -top-3 -right-3 px-2 text-md">
@@ -178,7 +190,8 @@
 			</div>
 
 		</div>
-		<div class="nav__bottom flex items-center px-32 bg-indigo-300 uppercase">
+		<div
+			class="nav__bottom flex items-center px-32 bg-indigo-300 uppercase">
 			<div class="nav__bottom-header hidden w-full"></div>
 			<ul class="flex items-center">
 				<!-- <li class="nav__submenu-container relative">

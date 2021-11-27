@@ -63,6 +63,10 @@
 							class="hover:text-indigo-500 transition-colors">Giỏ hàng</a>
 					</div>
 					<div class="mb-1">
+						<a href="${applicationScope.userFavoritePage}"
+							class="hover:text-indigo-500 transition-colors">Sản phẩm đã thích</a>
+					</div>
+					<div class="mb-1">
 						<a href="${applicationScope.orderHistoryPage}"
 							class="hover:text-indigo-500 transition-colors">Lịch sử mua hàng</a>
 					</div>
@@ -126,7 +130,7 @@
 		</div>
 	</main>
 	<%@include file="/WEB-INF/views/store/include/store-footer.jsp"%>
-
+<script src="<c:url value='/resources/store/assets/js/swiper-bundle.min.js'/>"></script>
 	<!-- <script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script> -->
 	<!-- <script src="./assets/js/main.js"></script> -->
 	<script src="<c:url value='/resources/store/assets/js/main.js'/>"></script>

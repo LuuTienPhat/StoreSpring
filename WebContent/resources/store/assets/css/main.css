@@ -302,22 +302,25 @@ tbody::before {
 	position: fixed;
 	top: 200px;
 	right: 30px;
-	transform: translateX(300px);
+	transform: translateX(320px);
 	transition: all .3s ease-out;
 	z-index: 999999;
+	visibility: hidden;
 }
 
 .msg-detail {
 	color: white;
-	width: 220px;
-	padding: 12px;
+	width: 240px;
+	/* padding: 12px; */
 }
 
 .msg.active {
 	transform: translateX(0);
 	transition: all .3s ease-out;
+	visibility: visible;
 }
-.ordered-list{
-	height: 700px;
+
+.ordered-list {
+	height: 600px;
 	overflow-y: scroll;
 }

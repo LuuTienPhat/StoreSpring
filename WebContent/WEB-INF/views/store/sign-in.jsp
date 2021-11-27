@@ -58,6 +58,7 @@
 
 	<!-- <script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script> -->
 	<!-- <script src="./assets/js/main.js"></script> -->
+	<script src="<c:url value='/resources/store/assets/js/swiper-bundle.min.js'/>"></script>
 	<script src="<c:url value='/resources/store/assets/js/main.js'/>"></script>
 	<!-- <script src="./assets/js/sign-up.js"></script> -->
 	<script src="<c:url value='/resources/store/assets/js/sign-up.js'/>"></script>
