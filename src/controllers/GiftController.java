@@ -31,7 +31,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import entities.CartDetailEntity;
 import entities.CategoryEntity;
 import entities.CustomerEntity;
-import entities.FavoriteProduct;
+import entities.FavoriteProductEntity;
 import entities.OrderDetailEntity;
 import entities.OrderEntity;
 import entities.ProductEntity;
@@ -1068,7 +1068,7 @@ public class GiftController {
 		httpSession.setAttribute("listCategory", method.getListCategory());
 		Session session = factory.openSession();
 		Transaction t = session.beginTransaction();
-		FavoriteProduct fp = new FavoriteProduct();
+		FavoriteProductEntity fp = new FavoriteProductEntity();
 		if (method.favItemIsExit(productId, httpSession)) {
 			if(method.deleteProductFromFavourite(productId, httpSession)) {
 				attributes.addFlashAttribute("message", "Đã xóa khỏi danh sách yêu thích");

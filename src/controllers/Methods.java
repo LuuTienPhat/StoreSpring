@@ -13,7 +13,7 @@ import org.hibernate.Transaction;
 import entities.CartDetailEntity;
 import entities.CategoryEntity;
 import entities.CustomerEntity;
-import entities.FavoriteProduct;
+import entities.FavoriteProductEntity;
 import entities.OrderDetailEntity;
 import entities.OrderEntity;
 import entities.ProductEntity;
@@ -345,13 +345,13 @@ public class Methods {
 	}
 	
 	//testing
-	public List<FavoriteProduct> getListFavourite(String customerId) {
+	public List<FavoriteProductEntity> getListFavourite(String customerId) {
 		Session session = factory.getCurrentSession();
-		String hql = "FROM FavoriteProduct f WHERE f.customer.id =:customerId";
+		String hql = "FROM FavoriteProductEntity f WHERE f.customer.id =:customerId";
 		Query query = session.createQuery(hql);
 
-		List<FavoriteProduct> list = query.setParameter("customerId", customerId).list();
-//		for(FavoriteProduct f: list) {
+		List<FavoriteProductEntity> list = query.setParameter("customerId", customerId).list();
+//		for(FavoriteProductEntity f: list) {
 //			System.out.println(f.getProduct().getId());
 //		}
 		return list;
@@ -359,7 +359,7 @@ public class Methods {
 	
 	public boolean favItemIsExit(String product_id, HttpSession httpSession) {
 		Session session = factory.getCurrentSession();
-		String hql = "SELECT f.product.id FROM FavoriteProduct f WHERE f.customer.id =:customerId and f.product.id=:productId";
+		String hql = "SELECT f.product.id FROM FavoriteProductEntity f WHERE f.customer.id =:customerId and f.product.id=:productId";
 		Query query = session.createQuery(hql);
 		query.setParameter("customerId",
 				this.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername")));
@@ -370,7 +370,7 @@ public class Methods {
 	
 	public boolean deleteProductFromFavourite(String productId, HttpSession httpSession) {
 		Session session = factory.getCurrentSession();
-		String hql = "DELETE FROM FavoriteProduct f WHERE f.customer.id=:customerId and f.product.id=:productId";
+		String hql = "DELETE FROM FavoriteProductEntity f WHERE f.customer.id=:customerId and f.product.id=:productId";
 		Query query = session.createQuery(hql).setParameter("customerId",
 				this.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername")));
 		query.setParameter("productId", productId);
