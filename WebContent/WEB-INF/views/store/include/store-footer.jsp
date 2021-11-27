@@ -38,7 +38,7 @@
                     <div class="transform hover:scale-110 transition-all w-10 social-icon-container"> <a href="#" class="w-full"><img
                                 src="<c:url value='/resources/store/assets/img/fb-logo.png'/>" class="h-7"></a></div>
                 </div>
-                <div class="h-fit w-full">
+                <div class="h-fit w-full legal">
                     <a href="#" class="w-full"><img src="<c:url value='/resources/store/assets/img/dathongbaobocongthuong.png'/>"></a>
                 </div>
             </div>
