@@ -1,4 +1,4 @@
-package models;
+package models.validator;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -51,10 +51,16 @@ public class DateTimeValidator {
 			return false;
 		}
 	}
-
+	
+	
 	/*
-	 * public static void main(String[] args) { if (isTimeValid("01:32:12",
-	 * "HH:mm:ss")) { System.out.println("true"); } if (isDateValid("2021-01-01",
-	 * "uuuu-MM-dd")) { System.out.println("true"); } }
+	 * public static String getlastDayOfMonth(LocalDate date) {
+	 * 
+	 * }
+	 * 
+	 * public static String getfirstDayOfMonth(LocalDate date) {
+	 * 
+	 * }
 	 */
+	 
 }
