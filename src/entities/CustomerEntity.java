@@ -33,11 +33,14 @@ public class CustomerEntity {
 	@Column(name = "date_added")
 	private String dateAdded;
 
-	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	private List<CartDetailEntity> cartDetails;
 	
-	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	private List<OrderEntity> orders;
+	
+	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+	private List<FavoriteProductEntity> favoriteProducts;
 
 	public String getId() {
 		return id;
@@ -128,4 +131,11 @@ public class CustomerEntity {
 		this.orders = orders;
 	}
 
+	public List<FavoriteProductEntity> getFavoriteProducts() {
+		return favoriteProducts;
+	}
+
+	public void setFavoriteProducts(List<FavoriteProductEntity> favoriteProducts) {
+		this.favoriteProducts = favoriteProducts;
+	}
 }
