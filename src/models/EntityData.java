@@ -1,17 +1,23 @@
 package models;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
+import entities.AccountEntity;
+import entities.AdminEntity;
 import entities.CategoryEntity;
 import entities.CustomerEntity;
 import entities.InvoiceEntity;
@@ -120,7 +126,6 @@ public class EntityData {
 
 	// ==================== END OF CATEGORIES ====================
 
-	
 	// ==================== PRODUCTS ====================
 
 	// GET PRODUCTS
@@ -129,6 +134,46 @@ public class EntityData {
 		String hql = "FROM ProductEntity";
 		Query query = session.createQuery(hql);
 		List<ProductEntity> products = query.list();
+		session.close();
+		return products;
+	}
+
+	// GET MOST VIEWED PRODUCT
+	public List<ProductEntity> getMostViewedProducts() throws IOException {
+		Session session = factory.openSession();
+		String hql = "FROM ProductEntity p ORDER BY p.views DESC ";
+		Query query = session.createQuery(hql).setMaxResults(7);
+		List<ProductEntity> products = query.list();
+		session.close();
+		return products;
+	}
+
+	// GET TOP FAVORITE PRODUCT
+	public List<ProductEntity> getTopFavoriteProducts() throws IOException {
+		Session session = factory.openSession();
+		String hql = "FROM ProductEntity p ORDER BY p.favoriteProducts.size DESC";
+		Query query = session.createQuery(hql).setMaxResults(7);
+		List<ProductEntity> products = query.list();
+		session.close();
+		return products;
+	}
+
+	// GET TOP GROSS REVENUE PRODUCTS IN ORDERS
+	public List<ProductEntity> getTopGrossRevenueProductsInOrders() throws IOException {
+		Session session = factory.openSession();
+		String hql = "FROM ProductEntity p ORDER BY p.favoriteProducts.size DESC";
+		Query query = session.createQuery(hql).setMaxResults(7);
+		List<ProductEntity> products = query.list();
+		session.close();
+		return products;
+	}
+
+	// GET TOP REVENUE PRODUCTS IN ORDERS IN THIS MONTH
+	public List getTopGrossRevenueProductsInOrdersInThisMonth() throws IOException {
+		Session session = factory.openSession();
+		String hql = "from ProductEntity p INNER JOIN p.orderDetails od INNER JOIN od.order o WHERE o.orderDate between '2021-11-01' AND '2021-11-30' ORDER BY p.quantity * p.price DESC";
+		Query query = session.createQuery(hql).setMaxResults(7);
+		List products = query.list();
 		session.close();
 		return products;
 	}
@@ -223,7 +268,6 @@ public class EntityData {
 
 	// ==================== END OF PRODUCTS ====================
 
-	
 	// ==================== INVOICES ====================
 
 	// GET INVOICES FROM DB
@@ -327,7 +371,6 @@ public class EntityData {
 
 	// ==================== END OF INVOICES ====================
 
-	
 	// ==================== CUSTOMERS ====================
 
 	// GET CUSTOMER FROM DB
@@ -362,33 +405,45 @@ public class EntityData {
 
 	// ==================== END OF CUSTOMERS ====================
 
-	
 	// ==================== ORDERS ====================
 
 	// GET ORDERS FROM DB
 	public List<OrderEntity> getOrders() throws IOException {
-		Session session = factory.getCurrentSession();
+		Session session = factory.openSession();
 		String hql = "FROM OrderEntity";
 		Query query = session.createQuery(hql);
 		List<OrderEntity> orders = query.list();
+		session.close();
 		return orders;
 	}
 	
-	// GET ORDERS FROM DB
-		public List<OrderEntity> getLatestOrders() throws IOException {
-			Session session = factory.getCurrentSession();
-			String hql = "FROM OrderEntity o WHERE o.state = 0 ORDER BY o.orderDate DESC";
+	// GET ORDERS FROM DB WITH STATE
+		public List<OrderEntity> getOrders(int state) throws IOException {
+			Session session = factory.openSession();
+			String hql = "FROM OrderEntity WHERE state = '" + state + "'";
 			Query query = session.createQuery(hql);
 			List<OrderEntity> orders = query.list();
+			session.close();
 			return orders;
 		}
 
+	// GET ORDERS FROM DB
+	public List<OrderEntity> getLatestOrders() throws IOException {
+		Session session = factory.openSession();
+		String hql = "FROM OrderEntity o WHERE o.state = 0 ORDER BY o.orderDate DESC";
+		Query query = session.createQuery(hql);
+		List<OrderEntity> orders = query.list();
+		session.close();
+		return orders;
+	}
+
 	// GET SINGLE ORDER
 	public OrderEntity getOrder(String id) {
-		Session session = factory.getCurrentSession();
+		Session session = factory.openSession();
 		String hql = "FROM OrderEntity WHERE id = '" + id + "'";
 		Query query = session.createQuery(hql);
 		OrderEntity order = (OrderEntity) query.list().get(0);
+		session.close();
 		return order;
 	}
 
@@ -418,6 +473,140 @@ public class EntityData {
 		}
 	}
 
+	// GET GROSS REVENUE OF ALL ORDERS IN THIS MONTH
+	public float getGrossRevenueOfAllOrdersInThisMonth() throws IOException {
+		LocalDate now = LocalDate.now();
+		LocalDate lastDayOfMonth = now.with(TemporalAdjusters.lastDayOfMonth());
+		LocalDate firstDayOfMonth = now.with(TemporalAdjusters.firstDayOfMonth());
+
+		String lastDayOfMonthString = lastDayOfMonth.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		String firstDayOfMonthString = firstDayOfMonth.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+		Session session = factory.openSession();
+		String hql = "FROM OrderEntity WHERE orderDate >= '" + firstDayOfMonthString + "' AND orderDate <= '"
+				+ lastDayOfMonthString + "' AND state = '3'";
+		Query query = session.createQuery(hql);
+		List<OrderEntity> orders = query.list();
+
+		float revenue = 0;
+		for (OrderEntity order : orders) {
+			revenue += order.getTotalPrice();
+		}
+		session.close();
+		return revenue;
+	}
+
+	// GET GROSS REVENUE OF ALL ORDERS IN CHOSEN MONTH
+	public float getGrossRevenueOfAllOrders(String month) throws IOException {
+		LocalDate lastDayOfMonth = LocalDate.parse(month, DateTimeFormatter.ofPattern("M"))
+				.with(TemporalAdjusters.lastDayOfMonth());
+		LocalDate firstDayOfMonth = LocalDate.parse(month, DateTimeFormatter.ofPattern("M"))
+				.with(TemporalAdjusters.firstDayOfMonth());
+
+		String lastDayOfMonthString = lastDayOfMonth.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		String firstDayOfMonthString = firstDayOfMonth.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+		Session session = factory.openSession();
+		String hql = "FROM OrderEntity WHERE orderDate >= '" + firstDayOfMonthString + "' AND orderDate <= '"
+				+ lastDayOfMonthString + "' AND state = '3'";
+		Query query = session.createQuery(hql);
+		List<OrderEntity> orders = query.list();
+
+		float revenue = 0;
+		for (OrderEntity order : orders) {
+			revenue += order.getTotalPrice();
+		}
+		session.close();
+		return revenue;
+	}
+
+	// GET ORDER STATISTICS
+	public List<OrderStatistics> getOrderStatistics() throws IOException {
+		List<OrderStatistics> orderStatisticsByMonths = new ArrayList<OrderStatistics>();
+		
+		for(int i = 0; i < 6; i++) {
+			LocalDate now = LocalDate.now().minusMonths(i);
+			LocalDate lastDayOfMonth = now.with(TemporalAdjusters.lastDayOfMonth());
+			LocalDate firstDayOfMonth = now.with(TemporalAdjusters.firstDayOfMonth());
+
+			String lastDayOfMonthString = lastDayOfMonth.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+			String firstDayOfMonthString = firstDayOfMonth.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+			Session session = factory.openSession();
+			String hql = "FROM OrderEntity WHERE orderDate >= '" + firstDayOfMonthString + "' AND orderDate <= '"
+					+ lastDayOfMonthString + "' AND state = '3'";
+			Query query = session.createQuery(hql);
+			
+			OrderStatistics orderStatistics = new OrderStatistics();
+			orderStatistics.setDate(java.sql.Date.valueOf(now));
+			orderStatistics.setNumber(query.list().size());
+			orderStatisticsByMonths.add(orderStatistics);
+		}
+		
+		return orderStatisticsByMonths;
+	}
+
 	// ==================== END OF ORDERS ====================
+
+	// ==================== ADMIN ====================
+
+	public AccountEntity getAccount(String username, String password) {
+		Session session = factory.openSession();
+		String hql = "FROM AccountEntity WHERE username = '" + username + "' AND password = '" + password + "'";
+		Query query = session.createQuery(hql);
+
+		if (query.list().isEmpty()) {
+			session.close();
+			return null;
+		} else {
+			AccountEntity account = (AccountEntity) query.list().get(0);
+			session.close();
+			return account;
+		}
+	}
+
+	public AdminEntity getAdmin(String username, String password) {
+		AccountEntity account = getAccount(username, password);
+		if (account == null)
+			return null;
+		else
+			return account.getAdmin();
+	}
+
+	public AdminEntity getAdmin(String adminId) {
+		Session session = factory.openSession();
+		String hql = "FROM AdminEntity WHERE id = '" + adminId + "'";
+		Query query = session.createQuery(hql);
+
+		if (query.list().isEmpty()) {
+			session.close();
+			return null;
+		} else {
+			AdminEntity admin = (AdminEntity) query.list().get(0);
+			session.close();
+			return admin;
+		}
+	}
+
+	// UPDATE ADMIN IN DB
+	public boolean updateAdminInDB(AdminEntity admin) {
+		Session session = factory.openSession();
+		Transaction t = session.beginTransaction();
+		try {
+			session.merge(admin);
+			t.commit();
+			System.out.println("Admin is updated");
+			return true;
+		} catch (Exception e) {
+			t.rollback();
+			System.out.println("Error when updating admin");
+			e.printStackTrace();
+			return false;
+		} finally {
+			session.close();
+		}
+	}
+
+	// ==================== END OF ADMIN ====================
 
 }
