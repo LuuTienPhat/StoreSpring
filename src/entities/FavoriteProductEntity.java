@@ -10,7 +10,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "FavoriteProduct")
-public class FavoriteProduct {
+public class FavoriteProductEntity {
 	@Id
 	@GeneratedValue
 	@Column(name = "id", updatable = false)

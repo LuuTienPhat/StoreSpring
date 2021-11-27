@@ -1,4 +1,4 @@
-package models;
+package models.validator;
 
 public class InputValidator {
 	public static Boolean isInputValid(String input) {
