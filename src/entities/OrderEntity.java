@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "[Order]")
@@ -25,6 +27,7 @@ public class OrderEntity {
 	 * @Column(name = "order_total") private float orderTotal;
 	 */
 	@Column(name = "order_date")
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date orderDate;
 	/*
 	 * @Column(name = "shipped_date") private Date shippedDate;
@@ -170,4 +173,5 @@ public class OrderEntity {
 		}
 		return 0;
 	}
+
 }
