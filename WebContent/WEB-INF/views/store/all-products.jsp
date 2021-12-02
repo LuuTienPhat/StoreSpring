@@ -41,7 +41,7 @@
 
 								<div
 									class="flex justify-center bg-indigo-300 items-center py-1 absolute item__menu w-full">
-									<a href="store/insert-to-favlist/${pd.id}"> <c:set var="contains"
+									<a href="store/insert-to-favlist/${pd.id}/allseperatorquestionmarkp=${pagedListHolder.page}"> <c:set var="contains"
 											value="false" /> <c:forEach var="fav"
 											items="${listFavorite}">
 											<c:if test="${fav.product.id eq pd.id}">
@@ -56,7 +56,7 @@
 										</c:if> <!-- <i
 										class="fa text-2xl fa-heart text-white hover:text-indigo-500 transition-colors"></i> --></a>
 									<div class="border-l-2 border-white h-7 mx-2"></div>
-									<a href="store/shopping-cart/insert-into-cart/${pd.id}"><i
+									<a href="store/shopping-cart/insert-into-cart/${pd.id}/allseperatorquestionmarkp=${pagedListHolder.page}"><i
 										class="fa text-2xl fa-cart-plus text-white hover:text-indigo-200 transition-colors"></i></a>
 								</div>
 							</div>

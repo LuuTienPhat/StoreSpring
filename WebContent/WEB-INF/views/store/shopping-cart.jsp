@@ -115,11 +115,24 @@
 
 								<div
 									class="flex justify-center bg-indigo-300 items-center py-1 absolute item__menu w-full">
-									<!-- <a href="#"><i
-										class="fa text-2xl fa-heart text-white hover:text-indigo-500 transition-colors"></i></a>
-									<div class="border-l-2 border-white h-7 mx-2"></div> -->
-									<a href="store/shopping-cart/insert-into-cart/${p.id}"><i
-										class="fa text-2xl fa-cart-plus text-white hover:text-indigo-200 transition-colors"></i></a>
+									<a href="store/insert-to-favlist/${p.id}/user-cart"> <c:set var="contains"
+											value="false" /> <c:forEach var="fav"
+											items="${listFavorite}">
+											<c:if test="${fav.product.id eq p.id}">
+												<c:set var="contains" value="true" />
+											</c:if>
+										</c:forEach> <c:if test="${contains==true}">
+											<i
+												class="fa text-2xl fa-heart text-white text-indigo-500 transition-colors"></i>
+										</c:if> <c:if test="${contains==false}">
+											<i
+												class="fa text-2xl fa-heart text-white hover:text-indigo-500 transition-colors"></i>
+										</c:if> <!-- <i
+										class="fa text-2xl fa-heart text-white hover:text-indigo-500 transition-colors"></i> --></a>
+										<div class="border-l-2 border-white h-7 mx-2"></div>
+											<a
+												href="store/shopping-cart/insert-into-cart/${p.id}/user-cart"><i
+												class="fa text-2xl fa-cart-plus text-white hover:text-indigo-200 transition-colors"></i></a>
 								</div>
 							</div>
 							<a href="${applicationScope.productDetailPage}/${p.id}"

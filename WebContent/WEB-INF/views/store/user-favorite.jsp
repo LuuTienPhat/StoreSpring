@@ -95,7 +95,7 @@
 									lại trang chủ</a> để mua sắm.
 							</p>
 						</c:if>
-						<div class="new-product__list flex flex-wrap">
+						<div class="new-product__list flex flex-wrap py-4">
 							<c:forEach var="fav" items="${listFavorite}" varStatus="loop">
 								<div class="item w-1/3 px-3 mb-4 flex flex-col justify-between">
 									<div>
@@ -108,7 +108,7 @@
 
 											<div
 												class="flex justify-center bg-indigo-300 items-center py-1 absolute item__menu w-full">
-												<a href="store/insert-to-favlist/${fav.product.id}"> <c:set
+												<a href="store/insert-to-favlist/${fav.product.id}/user-fav"> <c:set
 														var="contains" value="false" /> <%-- <c:forEach var="fav"
 											items="${listFavorite}">
 											<c:if test="${fav.product.id eq p.id}">
@@ -123,7 +123,7 @@
 										class="fa text-2xl fa-heart text-white hover:text-indigo-500 transition-colors"></i> --></a>
 												<div class="border-l-2 border-white h-7 mx-2"></div>
 												<a
-													href="store/shopping-cart/insert-into-cart/${fav.product.id}"><i
+													href="store/shopping-cart/insert-into-cart/${fav.product.id}/user-fav"><i
 													class="fa text-2xl fa-cart-plus text-white hover:text-indigo-200 transition-colors"></i></a>
 											</div>
 										</div>
