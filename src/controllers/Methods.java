@@ -101,6 +101,7 @@ public class Methods {
 		String hql = "FROM ProductEntity p WHERE p.name LIKE :keyword OR p.category.name LIKE:keyword ORDER BY p.dateAdded DESC";
 		Query query = session.createQuery(hql).setParameter("keyword", "%" + keyword + "%");
 		List<ProductEntity> list = query.setParameter("keyword", "%" + keyword + "%").list();
+		System.out.println(query.toString());
 		return list;
 	}
 	
