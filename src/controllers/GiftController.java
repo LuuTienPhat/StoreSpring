@@ -333,6 +333,8 @@ public class GiftController {
 		if (errors.hasErrors()) {
 			model.addAttribute("message", "Vui lòng sửa các lỗi sau đây!");
 //			attributes.addFlashAttribute("message", "Vui lòng sửa các lỗi sau đây!");
+			model.addAttribute("customerEntity",
+					method.getCustomerByUsername((String) httpSession.getAttribute("customerUsername")));
 			return "store/user-info";
 		} else {
 			CustomerEntity ce = new CustomerEntity();
@@ -373,7 +375,8 @@ public class GiftController {
 		httpSession.setAttribute("listCategory", method.getListCategory());
 		model.addAttribute("listOrder", method
 				.getCustomerOrder(method.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername"))));
-
+		model.addAttribute("customerEntity",
+				method.getCustomerByUsername((String) httpSession.getAttribute("customerUsername")));
 		return "store/order-history";
 	}
 
@@ -400,6 +403,8 @@ public class GiftController {
 
 		if (errors.hasErrors()) {
 			model.addAttribute("message", "Vui lòng sửa các lỗi sau đây!");
+			model.addAttribute("customerEntity",
+					method.getCustomerByUsername((String) httpSession.getAttribute("customerUsername")));
 //			attributes.addFlashAttribute("message", "Vui lòng sửa các lỗi sau đây!");
 			return "store/user-change-password";
 		} else {
@@ -782,7 +787,8 @@ public class GiftController {
 		Methods method = new Methods(factory);
 		httpSession.setAttribute("listCategory", method.getListCategory());
 		model.addAttribute("listFavorite", method.getListFavourite(method.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername"))));
-
+		model.addAttribute("customerEntity",
+				method.getCustomerByUsername((String) httpSession.getAttribute("customerUsername")));
 		return "store/user-favorite";
 	}
 
