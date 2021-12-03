@@ -333,6 +333,8 @@ public class GiftController {
 		if (errors.hasErrors()) {
 			model.addAttribute("message", "Vui lòng sửa các lỗi sau đây!");
 //			attributes.addFlashAttribute("message", "Vui lòng sửa các lỗi sau đây!");
+			model.addAttribute("customerEntity",
+					method.getCustomerByUsername((String) httpSession.getAttribute("customerUsername")));
 			return "store/user-info";
 		} else {
 			CustomerEntity ce = new CustomerEntity();
@@ -373,7 +375,8 @@ public class GiftController {
 		httpSession.setAttribute("listCategory", method.getListCategory());
 		model.addAttribute("listOrder", method
 				.getCustomerOrder(method.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername"))));
-
+		model.addAttribute("customerEntity",
+				method.getCustomerByUsername((String) httpSession.getAttribute("customerUsername")));
 		return "store/order-history";
 	}
 
@@ -400,6 +403,8 @@ public class GiftController {
 
 		if (errors.hasErrors()) {
 			model.addAttribute("message", "Vui lòng sửa các lỗi sau đây!");
+			model.addAttribute("customerEntity",
+					method.getCustomerByUsername((String) httpSession.getAttribute("customerUsername")));
 //			attributes.addFlashAttribute("message", "Vui lòng sửa các lỗi sau đây!");
 			return "store/user-change-password";
 		} else {
@@ -575,6 +580,18 @@ public class GiftController {
 		httpSession.setAttribute("listCategory", method.getListCategory());
 		model.addAttribute("listCartDetail", method.
 				getListCartDetail(method.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername"))));
+		
+		if ((httpSession.getAttribute("customerUsername") != null)) {
+			int sum = 0;
+			for (CartDetailEntity c : method.getCustomerByUsername((String) httpSession.getAttribute("customerUsername"))
+					.getCartDetails()) {
+				sum = sum + c.getQuantity();
+			}
+			System.out.println(sum);
+			httpSession.setAttribute("customerTotalQuantity", sum);
+			model.addAttribute("listFavorite", method.getListFavourite(method.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername"))));
+		}
+
 		return "store/shopping-cart";
 	}
 
@@ -610,10 +627,41 @@ public class GiftController {
 		attributes.addFlashAttribute("message", "Cập nhật số lượng thành công.");
 		return "redirect:/store/shopping-cart";
 	}
-
-	@RequestMapping("/shopping-cart/insert-into-cart/{productId}")
-	public String insertToCart(String customerId, @PathVariable("productId") String productId, HttpSession httpSession,
-			RedirectAttributes attributes) {
+	public String returnRedirectControl(String redirectPath) {
+		
+		if(redirectPath.equals("index")) {
+			return "redirect:/";
+		}
+		if(redirectPath.equals("user-fav")) {
+			return "redirect:/store/user-info/favorite";
+		}
+		if(redirectPath.equals("user-cart")) {
+			return "redirect:/store/shopping-cart";
+		}
+		if(redirectPath.contains("allseperator")) {
+			String newPath = redirectPath.replaceAll("seperator", "/");
+			newPath = newPath.replaceAll("questionmark", "?");
+			return "redirect:/store/"+ newPath;
+		}
+		if(redirectPath.contains("categporyseperator")) {
+			String newPath = redirectPath.replaceAll("seperator", "/");
+			newPath = newPath.replaceAll("questionmark", "?");
+			return "redirect:/store/"+ newPath;
+		}
+		if(redirectPath.contains("searchseperator")) {
+			String newPath = redirectPath.replaceAll("seperator", "/");
+			newPath = newPath.replaceAll("questionmark", "?");
+			return "redirect:/store/"+ newPath;
+		}
+		if(redirectPath.contains("product-detailseperator")) {
+			String newPath = redirectPath.replaceAll("seperator", "/");
+			return "redirect:/store/"+ newPath;
+		}
+		return "redirect:/";
+	}
+	@RequestMapping("/shopping-cart/insert-into-cart/{productId}/{redirectPath}")
+	public String insertToCart(String customerId, @PathVariable("productId") String productId, @PathVariable("redirectPath") String redirectPath, HttpSession httpSession,
+			RedirectAttributes attributes, ModelMap model) {
 		Methods method = new Methods(factory);
 		httpSession.setAttribute("listCategory", method.getListCategory());
 		Session session = factory.openSession();
@@ -622,7 +670,8 @@ public class GiftController {
 				method.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername")), (productId));
 		if (method.isProductOutOfStock(productId)) {
 			attributes.addFlashAttribute("message", "Sản phẩm hiện hết hàng");
-			return "redirect:/store/shopping-cart";
+//			return "redirect:/store/shopping-cart";
+			return returnRedirectControl(redirectPath);
 		}
 		if (method.cartItemIsExit(productId, httpSession)) {
 			System.out.println("Exist; increase quantity by 1!");
@@ -634,10 +683,20 @@ public class GiftController {
 						String.valueOf(method.getQuantityOfCartItem(productId, httpSession) + 1), httpSession)) {
 					System.out.println("Exit; increase quantity by 1 successful!");
 					attributes.addFlashAttribute("message", "Thêm thành công");
-					return "redirect:/store/shopping-cart";
+					if ((httpSession.getAttribute("customerUsername") != null)) {
+						int sum = 0;
+						for (CartDetailEntity c : method.getCustomerByUsername((String) httpSession.getAttribute("customerUsername"))
+								.getCartDetails()) {
+							sum = sum + c.getQuantity();
+						}
+						System.out.println(sum);
+						httpSession.setAttribute("customerTotalQuantity", sum);
+						model.addAttribute("listFavorite", method.getListFavourite(method.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername"))));
+					}
+					return returnRedirectControl(redirectPath);
 				} else {
 					System.out.println("Exit; increase quantity by 1 unsuccessful!");
-					return "redirect:/store/shopping-cart";
+					return returnRedirectControl(redirectPath);
 				}
 
 			} else {
@@ -645,7 +704,7 @@ public class GiftController {
 						"Exit; increase quantity by 1 unsuccessful \n because amount of that product incart is equal to its amount in product!");
 				attributes.addFlashAttribute("message",
 						"Số lượng của sản phẩm này trong giỏ đã bằng tồn kho");
-				return "redirect:/store/shopping-cart";
+				return returnRedirectControl(redirectPath);
 			}
 
 		} else {
@@ -662,8 +721,19 @@ public class GiftController {
 				session.close();
 			}
 		}
-
-		return "redirect:/store/shopping-cart";
+		if ((httpSession.getAttribute("customerUsername") != null)) {
+			int sum = 0;
+			for (CartDetailEntity c : method.getCustomerByUsername((String) httpSession.getAttribute("customerUsername"))
+					.getCartDetails()) {
+				sum = sum + c.getQuantity();
+			}
+			System.out.println(sum);
+			httpSession.setAttribute("customerTotalQuantity", sum);
+			model.addAttribute("listFavorite", method.getListFavourite(method.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername"))));
+		}
+		attributes.addFlashAttribute("message", "Thêm vào giỏ thành công");
+		return returnRedirectControl(redirectPath);
+//		return "redirect:/store/shopping-cart";
 	}
 
 	/*
@@ -704,7 +774,8 @@ public class GiftController {
 			httpSession.setAttribute("listRecentSearch", lrs);
 		} else {
 			List<String> lrs = new ArrayList<String>();
-			lrs.add(0, keyword);
+				lrs.add(0, keyword);
+			
 			httpSession.setAttribute("listRecentSearch", lrs);
 		}
 		model.addAttribute("listFavorite", method.getListFavourite(method.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername"))));
@@ -716,10 +787,45 @@ public class GiftController {
 		Methods method = new Methods(factory);
 		httpSession.setAttribute("listCategory", method.getListCategory());
 		model.addAttribute("listFavorite", method.getListFavourite(method.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername"))));
-
+		model.addAttribute("customerEntity",
+				method.getCustomerByUsername((String) httpSession.getAttribute("customerUsername")));
 		return "store/user-favorite";
 	}
 
+
+		@RequestMapping("/insert-to-favlist/{productId}/{redirectPath}")
+		public String insertToFavouriteList(String customerId, @PathVariable("productId") String productId, @PathVariable("redirectPath") String redirectPath, HttpSession httpSession,
+				RedirectAttributes attributes) {
+			Methods method = new Methods(factory);
+			httpSession.setAttribute("listCategory", method.getListCategory());
+			Session session = factory.openSession();
+			Transaction t = session.beginTransaction();
+			FavoriteProductEntity fp = new FavoriteProductEntity();
+			if (method.favItemIsExit(productId, httpSession)) {
+				if(method.deleteProductFromFavourite(productId, httpSession)) {
+					attributes.addFlashAttribute("message", "Đã xóa khỏi danh sách yêu thích");
+					System.out.println("remove from fav list successful!-------------");
+				}
+			} else {
+				fp.setCustomer(method.getCustomerByUsername((String) httpSession.getAttribute("customerUsername")));
+				fp.setProduct(method.getProduct(productId));
+				try {
+					session.save(fp);
+					t.commit();
+					System.out.println("Insert to fav list successful!-------------");
+					attributes.addFlashAttribute("message", "Đã thêm vào danh sách yêu thích");
+
+				} catch (Exception ex) {
+					t.rollback();
+					System.out.println("--------Insert to fav list unsuccessful!");
+				} finally {
+					session.close();
+				}
+			}
+			return returnRedirectControl(redirectPath);
+//			return "redirect:/store/user-info/favorite";
+		}
+	
 	public static final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
 			Pattern.CASE_INSENSITIVE);
 
@@ -1052,45 +1158,46 @@ public class GiftController {
 //		List<ProductEntity> list = query.setParameter("keyword", "%" + keyword + "%").list();
 //		return list;
 //	}
-	
-	
-	
-	
-	
-	
-	
-	
 	// Theem vaof danh sach yeu thich
-	@RequestMapping("/insert-to-favlist/{productId}")
-	public String insertToFavouriteList(String customerId, @PathVariable("productId") String productId, HttpSession httpSession,
-			RedirectAttributes attributes) {
-		Methods method = new Methods(factory);
-		httpSession.setAttribute("listCategory", method.getListCategory());
-		Session session = factory.openSession();
-		Transaction t = session.beginTransaction();
-		FavoriteProductEntity fp = new FavoriteProductEntity();
-		if (method.favItemIsExit(productId, httpSession)) {
-			if(method.deleteProductFromFavourite(productId, httpSession)) {
-				attributes.addFlashAttribute("message", "Đã xóa khỏi danh sách yêu thích");
-				System.out.println("remove from fav list successful!-------------");
-			}
-		} else {
-			fp.setCustomer(method.getCustomerByUsername((String) httpSession.getAttribute("customerUsername")));
-			fp.setProduct(method.getProduct(productId));
-			try {
-				session.save(fp);
-				t.commit();
-				System.out.println("Insert to fav list successful!-------------");
-				attributes.addFlashAttribute("message", "Đã thêm vào danh sách yêu thích");
-
-			} catch (Exception ex) {
-				t.rollback();
-				System.out.println("--------Insert to fav list unsuccessful!");
-			} finally {
-				session.close();
-			}
-		}
-
-		return "redirect:/store/user-info/favorite";
-	}
+//	@RequestMapping("/insert-to-favlist/{productId}")
+//	public String insertToFavouriteList(String customerId, @PathVariable("productId") String productId, HttpSession httpSession,
+//			RedirectAttributes attributes) {
+//		Methods method = new Methods(factory);
+//		httpSession.setAttribute("listCategory", method.getListCategory());
+//		Session session = factory.openSession();
+//		Transaction t = session.beginTransaction();
+//		FavoriteProductEntity fp = new FavoriteProductEntity();
+//		if (method.favItemIsExit(productId, httpSession)) {
+//			if(method.deleteProductFromFavourite(productId, httpSession)) {
+//				attributes.addFlashAttribute("message", "Đã xóa khỏi danh sách yêu thích");
+//				System.out.println("remove from fav list successful!-------------");
+//			}
+//		} else {
+//			fp.setCustomer(method.getCustomerByUsername((String) httpSession.getAttribute("customerUsername")));
+//			fp.setProduct(method.getProduct(productId));
+//			try {
+//				session.save(fp);
+//				t.commit();
+//				System.out.println("Insert to fav list successful!-------------");
+//				attributes.addFlashAttribute("message", "Đã thêm vào danh sách yêu thích");
+//
+//			} catch (Exception ex) {
+//				t.rollback();
+//				System.out.println("--------Insert to fav list unsuccessful!");
+//			} finally {
+//				session.close();
+//			}
+//		}
+//
+//		return "redirect:/store/user-info/favorite";
+//	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

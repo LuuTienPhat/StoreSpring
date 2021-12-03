@@ -26,8 +26,9 @@
 					<div class="ml-5 flex-1 detail__desc">
 						<div class="flex justify-between">
 							<h3 class="text-3xl font-bold mb-2">${product.name}</h3>
-							<a href="store/insert-to-favlist/${product.id}"> <c:set
-									var="contains" value="false" /> <c:forEach var="fav"
+							<a
+								href="store/insert-to-favlist/${product.id}/product-detailseperator${product.id}">
+								<c:set var="contains" value="false" /> <c:forEach var="fav"
 									items="${listFavorite}">
 									<c:if test="${fav.product.id eq product.id}">
 										<c:set var="contains" value="true" />
@@ -39,7 +40,8 @@
 									<i
 										class="fa text-2xl fa-heart text-black  text-2xl transition-colors"></i>
 								</c:if> <!-- <i
-										class="fa text-2xl fa-heart text-white hover:text-indigo-500 transition-colors"></i> --></a>
+										class="fa text-2xl fa-heart text-white hover:text-indigo-500 transition-colors"></i> -->
+							</a>
 						</div>
 						<%-- <h3 class="text-3xl font-bold mb-2">${product.name}</h3> --%>
 						<div class="flex justify-between">
@@ -94,7 +96,8 @@
 
 						</div> --%>
 							<div class="flex my-4 border-gray-300 border-b-2 pb-5">
-								<a href="store/shopping-cart/insert-into-cart/${product.id}"
+								<a
+									href="store/shopping-cart/insert-into-cart/${product.id}/product-detailseperator${product.id}"
 									class="w-full text-center py-2 font-bold bg-indigo-400 hover:bg-indigo-500 transition-colors text-white rounded-md mr-4 add-to-cart">THÊM
 									VÀO GIỎ HÀNG</a>
 								<!-- <button
@@ -149,14 +152,30 @@
 
 										<div
 											class="flex justify-center bg-indigo-300 items-center py-1 absolute item__menu w-full">
-											<!-- <a href="#"><i
-										class="fa text-2xl fa-heart text-white hover:text-indigo-500 transition-colors"></i></a>
-									<div class="border-l-2 border-white h-7 mx-2"></div> -->
-											<a href="store/shopping-cart/insert-into-cart/${p.id}"><i
+											<a
+												href="store/insert-to-favlist/${p.id}/product-detailseperator${p.id}">
+												<c:set var="contains" value="false" /> <c:forEach var="fav"
+													items="${listFavorite}">
+													<c:if test="${fav.product.id eq p.id}">
+														<c:set var="contains" value="true" />
+													</c:if>
+												</c:forEach> <c:if test="${contains==true}">
+													<i
+														class="fa text-2xl fa-heart text-white text-indigo-500 transition-colors"></i>
+												</c:if> <c:if test="${contains==false}">
+													<i
+														class="fa text-2xl fa-heart text-white hover:text-indigo-500 transition-colors"></i>
+												</c:if> <!-- <i
+										class="fa text-2xl fa-heart text-white hover:text-indigo-500 transition-colors"></i> -->
+											</a>
+											<div class="border-l-2 border-white h-7 mx-2"></div>
+											<a
+												href="store/shopping-cart/insert-into-cart/${p.id}/product-detailseperator${p.id}"><i
 												class="fa text-2xl fa-cart-plus text-white hover:text-indigo-200 transition-colors"></i></a>
 										</div>
 									</div>
-									<a href="${applicationScope.productDetailPage}/${p.id}"
+									<a
+										href="${applicationScope.productDetailPage}/${p.id}/product-detailseperator${p.id}"
 										class="item__name block hover:text-indigo-400 transition-colors font-bold my-2">${p.name}</a>
 								</div>
 								<div>
