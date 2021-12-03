@@ -45,7 +45,7 @@
 			<div class="mb-5 font-bold text-xl">
 				<a href="${applicationScope.userInfoPage}"
 					class="hover:text-indigo-500 transition-colors">Hồ sơ cá nhân</a>
-				> <span class="text-indigo-500">Lịch sử mua hàng</span>
+				> <span class="text-indigo-500">Sản phẩm đã thích</span>
 			</div>
 			<div class="flex justify-between info-wrapper">
 				<div class="p-4 pt-0 border-2 mr-4 border-gray-200 user-info-nav">
