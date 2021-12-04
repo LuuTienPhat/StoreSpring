@@ -2,10 +2,6 @@
 	pageEncoding="UTF-8"%>
 <!-- ========== Tag Lib ========= -->
 <%@include file="/WEB-INF/views/admin/includes/header/taglib.jsp"%>
-<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<c:set var="req" value="${pageContext.request}" />
-<c:set var="url">${req.requestURL}</c:set>
-<c:set var="uri" value="${req.requestURI}" />
 
 <!DOCTYPE html>
 <html lang="en">
