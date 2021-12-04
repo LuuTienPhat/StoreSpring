@@ -8,6 +8,16 @@ public class InputValidator {
 		return true;
 	}
 
+	public static Boolean isInputNumberValid(String input) {
+		input = input.trim();
+		if (input.isEmpty()) {
+			return false;
+		} else if (Integer.parseInt(input) < 0) {
+			return false;
+		}
+		return true;
+	}
+
 	public static Boolean isPhoneValid(String phone) {
 		phone = phone.trim();
 		if (phone.isEmpty())
