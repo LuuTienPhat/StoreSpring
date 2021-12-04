@@ -138,4 +138,12 @@ public class CustomerEntity {
 	public void setFavoriteProducts(List<FavoriteProductEntity> favoriteProducts) {
 		this.favoriteProducts = favoriteProducts;
 	}
+	
+	public float getTotalAmountOfOrders() {
+		float amount = 0;
+		for(OrderEntity order: orders) {
+			amount += order.getTotalPrice();
+		}
+		return amount;
+	}
 }
