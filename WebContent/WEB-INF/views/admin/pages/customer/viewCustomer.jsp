@@ -17,6 +17,18 @@
 <!-- ========== All CSS files linkup ========= -->
 <%@include file="/WEB-INF/views/admin/includes/header/styles.jsp"%>
 
+<style type="text/css">
+	.box {
+		width: 100%;
+		height: 100%;
+		display: flex;
+		/* align-items: flex-start;
+		justify-content: center; */
+		flex-direction: column;
+	}
+
+</style>
+
 </head>
 
 <body>
@@ -54,91 +66,84 @@
       </div>
     </div>
 
-    <div class="row">
-      <div class="col-lg-12">
-        <div class="card border-0 shadow">
-          <div class="card-body">
-            <div class="row d-flex">
-              <!-- <div class="icon-shape icon-shape-tertiary rounded me-4 me-sm-0">
-                  <svg class="icon" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd"
-                      d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 0l-2 2a1 1 0 101.414 1.414L8 10.414l1.293 1.293a1 1 0 001.414 0l4-4z"
-                      clip-rule="evenodd"></path>
-                  </svg>
-                </div> -->
-              <div class=" col-md-3 col-sm-4 col-12">
-                <img src="${category.image }" class="img-fluid" style="height: 100%;" />
+     <div class="row">
+        <div class="col-lg-6 mt-lg-0 mt-4">
+          <div class="box card border-0 shadow">
+            <div class="card-body">
+              <div class="mb-3 mb-lg-0">
+                <h1 class="h4">
+                	Thông tin khách hàng
+                </h1>
               </div>
 
-              <div class="d-flex col-md-9 flex-md-row col-sm-8 flex-column mt-2">
-                <div class="col-md-10 col-12 d-flex flex-column justify-content-center">
-                  <div class="">
-                    <h3 class="fw-extrabold  mb-0"> ${customer.lastname } ${customer.firstname }</h3>
-                    <%-- <p class="text-gray-400 mb-2">
-                    	${!customer.description ? "Không có mô tả cho danh mục" : category.description}
-                    </p> --%>
-                  </div>
-                  
-                  <div class="d-flex mt-1">
-                  <div>
-                  <span class="small text-gray-500">Ngày đăng ký:</span>
-                  <span class="fw-normal">${customer.dateAdded}</span>
-                  </div>
-                  </div>
-                  
-                  <div class=" d-flex mt-1">
-                    <div>
-                    <span class="small text-gray-500">Số lượng sản phẩm thuộc danh mục:</span>
-                    <span class="text-success fw-bolder fs-6">${category.products.size() }</span>
-                    </div>
-                  </div>
+              <div class="row">
+                <div class="col-12">
+                  <ul class="">
+                  	 <li><small>#</small> <span class="fw-bold text-danger">${customer.id }</span></li>
+                    <li><small>Họ tên:</small> <span class="fw-bold">${customer.lastname } ${customer.firstname }</span></li>
+                    <li>
+                      <p class="text-truncate my-0">
+                        <small>Địa chỉ:</small>
+                        <span class="ms-1 fw-bold text-primary">
+                          ${customer.address}
+                        </span>
+                      </p>
+                    </li>
+                    <li><small>Số điện thoại:</small> <span class="fw-bold text-primary">${customer.phone }</span></li>
+                    <li><small>Email:</small> <span class="fw-bold text-primary">${customer.email }</span></li>
+                    <li><small>Ngày đăng ký:</small> <span class="fw-bold text-primary">${customer.dateAdded }</span></li>
+                  </ul>
                 </div>
-
-                <div class="col-md-2 col-12 mt-2 d-flex flex-column">
-                  <button class="btn btn-block btn-gray-800 mb-3 ">
-                    Chỉnh sửa <i class="icon i"></i>
-                  </button>
-
-                  <!-- Button Delete -->
-                  <button class="btn btn-block btn-danger mb-3" data-bs-toggle="modal" data-bs-target="#modal-warning">
-                    Xoá
-                  </button>
-                  
-                  <!-- Modal Content -->
-                  <div class="modal fade" id="modal-warning" tabindex="-1" role="dialog" aria-labelledby="modal-warning"
-                    aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered" role="document">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h2 class="h5 modal-title">Bạn có muốn xoá không</h2>
-                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                          <p>Nếu bạn xoá danh mục thì các sản phẩm có thể bị <span class="fw-bolder">ảnh hưởng</span>.
-                          </p>
-                          <p>Hãy chắc chắn danh mục đó không tồn tại sản phẩm nào!</p>
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-danger">Đồng ý</button>
-                          <button type="button" class="btn btn-link text-gray-600 ms-auto"
-                            data-bs-dismiss="modal">Close</button>
-                        </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-lg-6">
+          <div class="box card border-0 shadow">
+            <div class="card-body">
+              <div class="mb-3 mb-lg-0">
+                <h1 class="h4">Thông tin khác</h1>
+              </div>
+              <div class="row">
+                <div class="col-12">
+                  <ul class="">
+                    <li class="">
+                    <div class="d-flex align-items-center">
+                      <small>Sản phẩm yêu thích:</small>
+                      <span class="fw-normal text-danger d-flex align-items-center">
+                      	<svg class="icon icon-xxs me-1 ms-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                        ${customer.favoriteProducts.size()}
+                      </span>
                       </div>
-                    </div>
-                  </div>
-                  <!-- End of Modal Content -->
-                  
+                    </li>
+                    
+                    <li><small>Tổng số đơn hàng:</small> <span class="fw-bold text-bold">${customer.orders.size()}</span></li>
+                    
+                    <li>
+                      <small>Lần đặt hàng cuối:</small>
+                      <span class="fw-bold">
+                        <fmt:formatDate value="${customer.orders.get(0).orderDate}" pattern="dd/MM/yyyy HH:mm:ss" />
+                      </span>
+                    </li>
+                    <li>
+                      <small>Tổng số tiền đặt hàng:</small>
+                      <span class="fw-bold text-success">
+                        <fmt:setLocale value="vi_VN" scope="session" />
+                        <fmt:formatNumber value="${customer.getTotalAmountOfOrders() }" type="currency" />
+                      </span>
+                    </li>
+                  </ul>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-
+    
     <hr class="mt-4">
 
-    <div class="row mt-4">
+	<div class="row mt-4">
 
       <div class="py-4 d-flex justify-content-between w-100 flex-wrap">
         <div class="mb-3 mb-lg-0">
@@ -147,54 +152,71 @@
         </div>
       </div>
 
-      <div class="table-settings mb-4">
-        <div class="row align-items-center justify-content-between">
-          <div class="col col-md-6 col-lg-3 col-xl-4">
-            <div class="input-group me-2 me-lg-3 fmxw-400">
-              <span class="input-group-text">
-                <svg class="icon icon-xs" x-description="Heroicon name: solid/search" xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                  <path fill-rule="evenodd"
-                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                    clip-rule="evenodd"></path>
-                </svg>
-              </span>
-              <input type="text" class="form-control" placeholder="Tìm kiếm sản phẩm">
-            </div>
-          </div>
-          <div class="col-4 col-md-2 col-xl-1 ps-md-0 text-end">
-            <div class="dropdown">
-              <button class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-1"
-                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <svg class="icon icon-sm" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                  <path fill-rule="evenodd"
-                    d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z"
-                    clip-rule="evenodd"></path>
-                </svg>
-                <span class="visually-hidden">Toggle Dropdown</span>
-              </button>
-              <div class="dropdown-menu dropdown-menu-xs dropdown-menu-end pb-0">
-                <span class="small ps-3 fw-bold text-dark">Show</span>
-                <a class="dropdown-item d-flex align-items-center fw-bold" href="#">10 <svg
-                    class="icon icon-xxs ms-auto" fill="currentColor" viewBox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd"
-                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                      clip-rule="evenodd"></path>
-                  </svg></a>
-                <a class="dropdown-item fw-bold" href="#">20</a>
-                <a class="dropdown-item fw-bold rounded-bottom" href="#">30</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+	<%@include file="/WEB-INF/views/admin/includes/nav/sidebar.jsp"%>
 
-      <div class="card card-body border-0 shadow table-wrapper table-responsive overflow-hidden">
-                <table class="table table-hover table-responsive" id = "datatable">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th class="border-gray-200 rounded-start">#</th>
+      <jsp:useBean id="pagedListHolder" scope="request" type="org.springframework.beans.support.PagedListHolder" />
+      <c:url value="${requestScope['javax.servlet.forward.request_uri']}" var="pagedLink">
+         <c:param name="p" value="~" />
+      </c:url>
+
+	 <div class="table-settings mb-4">
+            <div class="row align-items-center justify-content-between">
+               <div class="col col-md-6 col-lg-3 col-xl-4">
+                  <form action="${applicationScope.productPage }" method="get">
+                     <div class="input-group me-2 me-lg-3 fmxw-300">
+                        <input type="text" class="form-control" placeholder="Tìm kiếm" name="search" />
+
+                        <a class="input-group-text" href="${applicationScope.productPage}">
+                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
+                              <path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2v1z" />
+                              <path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466z" />
+                           </svg>
+                        </a>
+
+                        <button class="input-group-text" type="submit">
+                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                              <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                           </svg>
+                        </button>
+                     </div>
+                  </form>
+               </div>
+               <div class="col-4 col-md-2 col-xl-1 ps-md-0 text-end">
+                  <div class="dropdown">
+                     <button class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <svg class="icon icon-sm" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                           <path
+                              fill-rule="evenodd"
+                              d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z"
+                              clip-rule="evenodd"
+                           ></path>
+                        </svg>
+                        <span class="visually-hidden">Toggle Dropdown</span>
+                     </button>
+                     <div class="dropdown-menu dropdown-menu-xs dropdown-menu-end pb-0">
+                        <span class="small ps-3 fw-bold text-dark">Hiển thị</span>
+                        <a class="dropdown-item d-flex align-items-center fw-bold" href="#">
+                           10
+                           <svg class="icon icon-xxs ms-auto" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                           </svg>
+                        </a>
+                        <a class="dropdown-item fw-bold" href="#">20</a>
+                        <a class="dropdown-item fw-bold rounded-bottom" href="#">30</a>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+
+         
+    </div>
+	
+	<div class="card card-body border-0 shadow table-wrapper table-responsive overflow-hidden">
+            <table class="table table-hover table-responsive" id="datatable">
+               <thead class="thead-dark">
+                  <tr>
+                     <th class="border-gray-200 rounded-start">#</th>
                             <th class="border-gray-200">Ngày đặt</th>						
                             <th class="border-gray-200">Địa chỉ</th>
                             <th class="border-gray-200">Tổng số tiền</th>
@@ -204,21 +226,23 @@
                             <th class="border-gray-200">Ngày thêm</th>
                             <th class="border-gray-200">Hình ảnh</th> -->
                             <th class="border-gray-200 rounded-end"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Item -->
-                        <c:forEach items="${customer.orders}" var="order">
+                  </tr>
+               </thead>
+               <tbody>
+                  <!-- Item -->
+                  <c:forEach items="${customer.orders}" var="order">
                         <tr>
                             <td>
-                                <a href="#" class="fw-bold">
+                                <a href="${applicationScope.ordersPage}/${order.id}" class="fw-bold">
                                     ${order.id}
                                 </a>
                             </td>
-	                            <td><span class="fw-normal text-wrap">
-	                            <fmt:formatDate value="${order.shippedDate}" pattern="dd/MM/yyyy" />
+	                            <td>
+	                            <span class="fw-normal text-wrap">
+	                            <fmt:formatDate value="${order.orderDate}" pattern="dd/MM/yyyy" />
 	                            
-	                            </span></td>
+	                            </span>
+	                            </td>
                             <td><span class="fw-bold text-wrap">
                             ${order.shipAddress}
                             
@@ -226,12 +250,15 @@
                                                     
                             <td><span class="fw-normal text-wrap">
                             	<fmt:setLocale value="vi_VN" scope="session" />
-                              <fmt:formatNumber value="${order.orderTotal}" type="currency" />
+                              <fmt:formatNumber value="${order.getTotalPrice()}" type="currency" />
                             </span></td>
                             <%-- <td><span class="fw-bold text-wrap" >${product.price}</span></td>
                             <td><span class="fw-normal text-wrap">${product.description}</span></td> --%>
                             
-                            <td><span class="fw-bold text-warning text-wrap">${product.category.name}</span></td>
+                            <td><span class="fw-bold text-wrap">${order.getTotalQuantity()}</span></td>
+                            <td><span class="fw-bold text-info text-wrap">
+                            	${order.state == 0 ? 'Đơn hàng mới' : order.state == 1 ? 'Khách đã xác nhận' : order.state == 2 ? 'Đang xử lý' : 'Đơn hàng hoàn thành'}
+                            </span></td>
                             <%-- <td><span class="fw-normal text-wrap">${product.dateAdded}</span></td> --%>
                             
 					        <%-- <td>
@@ -249,57 +276,34 @@
                                         <span class="visually-hidden">Toggle Dropdown</span>
                                     </button>
                                     <div class="dropdown-menu py-0">
-                                        <a class="dropdown-item rounded-top" href="${applicationScope.productPage}/${product.id}">
+                                        <a class="dropdown-item rounded-top" href="${applicationScope.ordersPage}/${order.id}">
 	                                        <i class="bi bi-eye-fill dropdown-icon text-gray-400 me-2 icon-sm"></i>
 	                                        Chi tiết
 	                                    </a>
-                                        <a class="dropdown-item text-warning" href="${applicationScope.productPage}/edit/${product.id}">
+                                       <%--  <a class="dropdown-item text-warning" href="${applicationScope.productPage}/edit/${product.id}">
 	                                       <i class="bi bi-pencil-square dropdown-icon me-2"></i>
 	                                        Chỉnh sửa
                                         </a>
                                         <a class="dropdown-item text-danger rounded-bottom" href="${applicationScope.productPage}/delete/${product.id}">
 											<i class="bi bi-trash2-fill dropdown-icon me-2"></i>
 											Xoá
-										</a>
+										</a> --%>
                                     </div>
                                 </div>
                             </td>
                         </tr>   
-                      </c:forEach>      
-                    </tbody>
-                </table>
-                <div class="card-footer px-3 border-0 d-flex flex-column flex-lg-row align-items-center justify-content-between">
-                    <nav aria-label="Page navigation example">
-                        <ul class="pagination mb-0">
-                            <li class="page-item">
-                                <a class="page-link" href="#">Previous</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">1</a>
-                            </li>
-                            <li class="page-item active">
-                                <a class="page-link" href="#">2</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">3</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">4</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">5</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">Next</a>
-                            </li>
-                        </ul>
-                    </nav>
-                    <div class="fw-normal small mt-4 mt-lg-0">Showing <b>5</b> out of <b>25</b> entries</div>
-                </div>
+                      </c:forEach>
+               </tbody>
+            </table>
+
+            <div>
+               <tg:adminPaging pagedListHolder="${pagedListHolder}" pagedLink="${pagedLink}" />
             </div>
-            
-    </div>
-	<%@include file="/WEB-INF/views/admin/includes/footer/script.jsp"%>
+         </div>
+	     
+	<hr class="mt-4">
+	
+	<%@include file="/WEB-INF/views/admin/includes/footer/footer.jsp"%>
      </main>
 	
 	<!-- ========== All JS files linkup ========= -->

@@ -1,8 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c"%>
-<%@ taglib uri = "http://www.springframework.org/tags/form" prefix="form"%>
-<%@ taglib prefix="tg" tagdir="/WEB-INF/tags"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!-- ========== Tag Lib ========= -->
+<%@include file="/WEB-INF/views/admin/includes/header/taglib.jsp"%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -30,8 +28,10 @@
 
 <jsp:useBean id="pagedListHolder" scope="request"
 	type="org.springframework.beans.support.PagedListHolder" />
+	
+
 <c:url
-	value="${requestScope['javax.servlet.forward.request_uri']}"
+	value= "${pagedLink}"
 	var="pagedLink">
 	<c:param name="p" value="~" />
 </c:url>
@@ -50,8 +50,8 @@
                                     </svg>
                                 </a>
                             </li>
-                            <li class="breadcrumb-item"><a href="#">Volt</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">Quản lý danh mục sản phẩm</li>
+                            <li class="breadcrumb-item">Đơn hàng</a></li>
+                            <li class="breadcrumb-item active" aria-current="page"><a href="${requestScope['javax.servlet.forward.request_uri']}">Quản lý đơn hàng</a></li>
                         </ol>
                     </nav>
                     <h2 class="h4">Đơn hàng</h2>
@@ -62,10 +62,10 @@
                         <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
                         Thêm danh mục
                     </a> --%>
-                    <div class="btn-group ms-2 ms-lg-3">
-                        <!-- <button type="button" class="btn btn-sm btn-outline-gray-600">Chia sẻ</button> -->
+                    <!-- <div class="btn-group ms-2 ms-lg-3">
+                        <button type="button" class="btn btn-sm btn-outline-gray-600">Chia sẻ</button>
                         <button type="button" class="btn btn-sm btn-outline-gray-600">Xuất file</button>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             
@@ -74,18 +74,33 @@
             <div class="table-settings mb-4">
                 <div class="row justify-content-between align-items-center">
                     <div class="col-9 col-lg-8 d-md-flex">
+                    
+                    <!-- SEARCH -->
+                        <form action = "${requestScope['javax.servlet.forward.request_uri']}" method="get">
                         <div class="input-group me-2 me-lg-3 fmxw-300">
-                            <span class="input-group-text">
-                                <svg class="icon icon-xs" x-description="Heroicon name: solid/search" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                    <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/>
-                                </svg>
-                            </span><input type="text" class="form-control" placeholder="Search users"></div>
-                        <select class="form-select fmxw-200 d-none d-md-inline" aria-label="Message select example 2">
-                            <option selected="selected">Tất cả</option>
-                            <option value="1">Xử lý xong</option>
-                            <option value="2">Đang xử lý</option>
-                            <option value="3">Đã xử lý</option>
-                            <option value="3">Huỷ đơn hàng</option>
+                            <input type="text" class="form-control" placeholder="Tìm kiếm" name = "search" value="${search }"/>
+                        	<a class="input-group-text" href = "${requestScope['javax.servlet.forward.request_uri']}">
+                        		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
+								  <path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2v1z"/>
+								  <path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466z"/>
+								</svg>
+                        	</a>
+                        	
+                        	<button class="input-group-text" type = "submit" >
+                               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+								  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+								</svg>
+                            </button>
+                        </div>
+                     </form>
+                            
+                        <select id="state-selection" class="form-select fmxw-300 d-none d-md-inline" aria-label="Message select example 2">
+                            <option selected value="">Tất cả</option>
+                            <option value="0" ${state == 0 ? 'selected' : '' }>Mới tiếp nhận</option>
+                            <option value="1" ${state == 1 ? 'selected' : '' }>Xác nhận với khách hàng</option>
+                            <option value="2" ${state == 2 ? 'selected' : '' }>Đang xử lý</option>
+                            <option value="3" ${state == 3 ? 'selected' : '' }>Đã hoàn thành</option>
+                            <option value="-1" ${state == -1 ? 'selected' : '' }>Huỷ đơn hàng</option>
                         </select>
                     </div>
                     <div class="col-3 col-lg-4 d-flex justify-content-end">
@@ -151,9 +166,10 @@
                             <th class="border-bottom text-wrap">#</th>
                             <th class="border-bottom text-wrap">Tên người đặt</th>
                             <th class="border-bottom text-wrap">Ngày đặt</th>
+                            <th class="border-bottom text-wrap">Giờ đặt</th>
                             <th class="border-bottom text-wrap">Địa chỉ</th>
-                            <th class="border-bottom text-wrap">Sản phẩm</th>
-                            <th class="border-bottom text-wrap">Tổng số tiền</th>
+                            <th class="border-bottom text-wrap">SL</th>
+                            <th class="border-bottom text-wrap">Tổng tiền</th>
                             <th class="border-bottom text-wrap">Trạng thái</th>
                             <th class="border-bottom rounded-end"></th>
                         </tr>
@@ -169,10 +185,11 @@
                             <td>
                                <!--  <a href="#" class="d-flex align-items-center"><img src="images/profile-picture-1.jpg" class="avatar rounded-circle me-3" alt="Avatar">
                                      --><div class="d-block">
-                                        <span class="fw-bold">${order.id}</span>
-                                        <div class="small text-gray">
+                                     <a href="${applicationScope.ordersPage }/${order.id}">
+                                        <span class="fw-bold">${order.id}</span></a>
+                                        <!-- <div class="small text-gray">
                                             <span class="__cf_email__" data-cfemail="fd94939b92bd98859c908d9198d39e9290">[email&#160;protected]</span>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </a>
                             </td>
@@ -181,24 +198,43 @@
                             </td>
                             <td>
                                 <span class="fw-normal d-flex align-items-center text-wrap">
-                                    <svg class="icon icon-xxs text-success me-1" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <!-- <svg class="icon icon-xxs text-success me-1" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                    </svg>
-                                    ${order.orderDate}</span>
+                                    </svg> -->
+                                    <fmt:formatDate value="${order.orderDate}" pattern="dd/MM/yyyy" />
+                                    </span>
                             </td>
+                            
                             <td>
-                                <span class="fw-normal text-wrap">${order.shipAddress}</span>
+                                <span class="fw-normal text-wrap">
+                                
+                                <fmt:formatDate value="${order.orderDate}" pattern="HH:mm:ss" />
+                                
+                                </span>
+                            </td>
+                            
+                            <td>
+                                <span class="fw-normal text-wrap">
+                                
+                                <span class="d-inline-block text-truncate" style="max-width: 150px;">
+								  ${order.shipAddress}
+								</span>
+                                
+                                </span>
                             </td>
                             <td>
                            <%--  <span class="fw-normal text-wrap">${order.orderDetails}</span> --%>
                            <span class="fw-normal text-wrap">
-                               <c:forEach items="${order.orderDetails }" var="detail">
-                               		${detail.product.name},
-                               </c:forEach>
+                            	${order.getTotalQuantity()}
                                </span>
                             </td>
                             <td>
-                                <span class="fw-normal">${order.orderTotal}</span>
+                                <span class="fw-normal">
+                                
+                                 <fmt:setLocale value="vi_VN" scope="session" />
+                                 <fmt:formatNumber value="${order.getTotalPrice()}" type="currency" />
+                                
+                                </span>
                             </td>
                             <td>
                                 <span class="fw-normal text-wrap">
@@ -230,12 +266,12 @@
                                             </svg>
                                             Reset Pass
                                         </a>
-                                        <a class="dropdown-item d-flex align-items-center" href="${applicationScope.orderPage }/${order.id}">
+                                        <a class="dropdown-item d-flex align-items-center" href="${applicationScope.ordersPage }/${order.id}">
                                             <svg class="dropdown-icon text-gray-400 me-2" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
                                                 <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
                                             </svg>
-                                            View Details
+                                            Chi tiết đơn hàng
                                         </a>
                                         <a class="dropdown-item d-flex align-items-center" href="#">
                                             <svg class="dropdown-icon text-danger me-2" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -256,11 +292,26 @@
                		<tg:adminPaging pagedListHolder="${pagedListHolder}" pagedLink="${pagedLink}" />
            		</div>
             </div>
-         
+            
+       
+         <!-- ========== All JS files linkup ========= -->
+		<%@include file="/WEB-INF/views/admin/includes/footer/footer.jsp"%>
 </main>
 
 <!-- ========== All JS files linkup ========= -->
 <%@include file="/WEB-INF/views/admin/includes/footer/script.jsp"%>
 
+<!-- ========== Notyf JS linkup ========= -->
+<%@include file="/WEB-INF/views/admin/includes/footer/notyf.jsp"%>
+
 </body>
+
+<script type="text/javascript">
+	const stateSelection = document.getElementById("state-selection");
+	stateSelection.addEventListener('change', () => {
+		console.log(stateSelection.value);
+		const url = "${requestScope['javax.servlet.forward.request_uri']}?state=" + stateSelection.value;
+		window.location.href = url;
+	})
+</script>
 </html>
