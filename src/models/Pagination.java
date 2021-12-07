@@ -61,7 +61,7 @@ public class Pagination {
 		return pagedListHolder;
 	}
 
-	// ORDER DETAIL PAGINATION
+	// ORDER PAGINATION
 	public static PagedListHolder orderDetailPagination(HttpServletRequest request,
 			List<OrderDetailEntity> orderDetails, int maxLinkedPages, int pageSize) {
 		PagedListHolder pagedListHolder = new PagedListHolder(orderDetails);
