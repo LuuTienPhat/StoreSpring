@@ -22,15 +22,10 @@
 <script src="<c:url value='/resources/admin/vendor/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.min.js' />"></script>
 
 <!-- Datepicker -->
-<script src="<c:url value='/resources/admin/vendor/vanillajs-datepicker/dist/js/datepicker.min.js' />"></script>
+<%-- <script src="<c:url value='/resources/admin/vendor/vanillajs-datepicker/dist/js/datepicker.min.js' />"></script> --%>
 
 <!-- Sweet Alerts 2 -->
 <script src="<c:url value='/resources/admin/vendor/sweetalert2/dist/sweetalert2.all.min.js' />"></script>
-
-<!-- Moment JS -->
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script> -->
-
-<!-- Vanilla JS Datepicker -->
 
 <!-- Notyf -->
 <script src="<c:url value='/resources/admin/vendor/notyf/notyf.min.js' />"></script>
@@ -44,7 +39,6 @@
 <!-- Volt JS -->
 <script src="<c:url value='/resources/admin/assets/js/volt.js' />"></script>
 
-<!-- Simplebar -->
 
 <script type="text/javascript">
 	/* const loadingPage = document.getElementById("loading-page");
@@ -53,5 +47,7 @@
 		loadingPage.classList.add("d-none");
 	}) */
 </script>
+
+
 
 

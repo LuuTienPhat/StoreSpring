@@ -45,15 +45,12 @@ public class GlobalInterceptor extends HandlerInterceptorAdapter {
 		application.setAttribute("categoryPage", "admin/categories");
 		application.setAttribute("addCategoryPage", "admin/categories/add");
 		application.setAttribute("mailPage", "admin/mail");
-		application.setAttribute("orderPage", "admin/orders");
+		application.setAttribute("ordersPage", "admin/orders");
 		application.setAttribute("customerPage", "admin/customers");
 		application.setAttribute("profilePage", "admin/profile");
 		application.setAttribute("invoicePage", "admin/invoices");
 		application.setAttribute("addInvoicePage", "admin/invoices/add");
-		
-		EntityData entityData = new EntityData(factory);
-		List<OrderEntity> orders = entityData.getLatestOrders();
-		application.setAttribute("lastestOrders", orders);
+		application.setAttribute("addAdminPage", "admin/add");
 
 		// STORE
 		application.setAttribute("storeIndexPage", "");

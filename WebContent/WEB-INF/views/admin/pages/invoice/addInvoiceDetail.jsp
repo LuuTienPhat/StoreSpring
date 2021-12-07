@@ -106,7 +106,6 @@
       <div class="row mb-4">
         <div class="col-12">
           <div class="card card-body border-0 shadow table-wrapper table-responsive overflow-hidden">
-            <form action="${requestScope['javax.servlet.forward.request_uri']}" method="post">
               <table class="table table-hover table-responsive" id="datatable">
                 <thead class="thead-dark">
                   <tr>
@@ -126,18 +125,22 @@
                   </tr>
                 </thead>
                 <tbody>
+             
+                
                   <!-- Item -->
                   <c:forEach items="${pagedListHolder.pageList}" var="product" varStatus="i">
                     <%--
                     <c:forEach items="${invoice.invoiceDsetails}" var="invoiceDetail" varStatus="j">
                       --%>
-
-                      <input class="form-control d-none" name="product_id" value="${product.id}" />
+                      <%-- <input class="form-control d-none" name="product_id" value="${product.id}" />
+                      <input class="form-control d-none" name="rows" value="${i.count}" /> --%>
                       <tr class="${invoice.hasProduct(product.id) ? 'table-active' : '' }">
                         <td>
-                          <a href="${applicationScope.productPage}/${product.id}" class="fw-bold">
+                        <span class="fw-bold text-wrap">
+                          <a href="${applicationScope.productPage}/${product.id}">
                             ${product.id}
                           </a>
+                          </span>
                         </td>
                         <td><span class="fw-normal text-wrap">${product.name}</span></td>
                         <td><span class="fw-bold text-danger text-wrap">${product.category.name}</span></td>
@@ -149,7 +152,7 @@
                         <td><span class="fw-bold text-wrap">${product.quantity}</span></td>
                         <td>
                           <span class="fw-bold text-wrap">
-                            <input class="form-control" name="quantity" id="quantity" value="${invoice.getQuantity(product.id) == 0 ? '' : invoice.getQuantity(product.id)}" autofocus />
+                            	${invoice.getQuantity(product.id) == 0 ? '' : invoice.getQuantity(product.id)}
                           </span>
                         </td>
                         <%--
@@ -157,28 +160,27 @@
                         --%>
                         <td>
                           <span class="fw-bold text-wrap">
-                            <input class="form-control" name="price" id="price" value="${invoice.getPrice(product.id) == 0 ? '' : invoice.getPrice(product.id)}" autofocus size="70"/>
+                            	${invoice.getPrice(product.id) == 0 ? '' : invoice.getPrice(product.id)}
                           </span>
                         </td>
                         <td>
                           <span class="fw-bold text-wrap">
                           	 <fmt:setLocale value="vi_VN" scope="session" />
-                        		<fmt:formatNumber value="${invoice.getPrice(product.id)*invoice.getQuantity(product.id) == 0 ? '' : invoice.getPrice(product.id)*invoice.getQuantity(product.id)}" type="currency" />
+                        		<fmt:formatNumber value="${invoice.getPrice(product.id)*invoice.getQuantity(product.id) == 0 ? 0 : invoice.getPrice(product.id)*invoice.getQuantity(product.id)}" type="currency" />
                           </span>
                         </td>
-                        <%--
-                        <td><span class="fw-normal text-wrap">${product.description}</span></td>
-                        --%> <%--
-                        <td>
-                          <span class="fw-normal text-wrap">
-                            <fmt:formatDate value="${product.dateAdded}" pattern="dd/MM/yyyy" />
-                          </span>
-                        </td>
-                        --%>
 
                         <td>
                           <span class="fw-normal text-wrap">
-                            <button class="dropdown-item rounded-top" type="submit">
+                            <button class="dropdown-item rounded-top" id="btn-add" 
+	                            data-product-id = "${product.id }" 
+	                            data-product-name = "${product.name }"
+	                            data-product-old-quantity = "${product.quantity}"
+	                            data-product-category = "${product.category.name}"
+	                            data-product-new-quantity = "${invoice.getQuantity(product.id)}"
+	                            data-product-price = "${invoice.getPrice(product.id) }"
+	                            data-product-total = "${invoice.getPrice(product.id)*invoice.getQuantity(product.id)} ">
+	                            
                               <i class="bi bi-plus-circle dropdown-icon text-gray-400 me-1 icon-sm"></i>
                               Cập nhật
                             </button>
@@ -217,7 +219,6 @@
                             </div>
                           </div>
                         </td> --%>
-                       
                       </tr>
                     </c:forEach>
                     <%--
@@ -225,7 +226,6 @@
                   --%>
                 </tbody>
               </table>
-            </form>
 
             <div>
               <tg:adminPaging pagedListHolder="${pagedListHolder}" pagedLink="${pagedLink}" />
@@ -244,17 +244,60 @@
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h2 class="h5 modal-title">Xác nhận</h2>
+            <h2 class="h5 modal-title">Thêm chi tiết hóa đơn</h2>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-          <div class="modal-body text-center">
-            <h5 class="my-0">Bạn có muốn xoá sản phẩm này?</h5>
-            <!-- <small class="my-0 mt-4 text-wrap">Hãy chắc chắn sản phẩm đó không tồn tại trong các hoá đơn hoặc đơn hàng.</small> -->
+          <div class="modal-body">
+            <form action="${requestScope['javax.servlet.forward.request_uri']}" method="POST">
+          <div class="row mb-4">
+           <div class="col-6">
+            <label for="productName">Mã sản phẩm</label>
+            <input type="text" class="form-control" name="productId" id="productId" readonly="readonly"/>
+           	
+           </div>
+           <div class="col-6">
+            <label for="productName">Tên sản phẩm</label>
+            <input type="text" class="form-control" id="productName" readonly="readonly" />
+           </div>
+          </div>
+          
+          <div class="row mb-4">
+          <div class="col-6">
+            <label for="quantity">Danh mục</label>
+            <input value="" type="text" class="form-control" id="category" readonly="readonly"/> 
+           </div> 
+           <div class="col-6">
+            <label for="quantity">Số lượng tồn</label>
+            <input type="text" class="form-control" name="oldQuantity" id="oldQuantity" readonly="readonly" /> 
+           </div> 
+          </div>
+          <div class="row mb-4">
+           <div class="col-6">
+            <label for="quantity">${invoice.invoiceType.id == 1 ? 'Số lượng nhập' : 'Số lượng xuất'}</label>
+            <input type="text" class="form-control ${quantityValid }" name="newQuantity" id="newQuantity" placeholder="${invoice.invoiceType.id == 1 ? 'Nhập số lượng nhập' : 'Nhập số lượng xuất'}" /> 
+           	<p class="invalid-feedback">${errors.get(product.id)}</p>
+           </div>
+           
+           <div class="col-6">
+            <label for="price">Đơn giá</label>
+            <input type="text" class="form-control ${priceValid }" id="price" name="price" placeholder="Nhập đơn giá" />
+           	<p class="invalid-feedback">${errors.get(product.id)}</p>
+           </div>
+          </div>
+          
+          <div class="row mb-4">
+           
+           <div class="col-12">
+            <label for="price">Thành tiền</label>
+            <input type="text" class="form-control" id="total" readonly="readonly" />
+           </div>
+          </div>
           </div>
           <div class="modal-footer">
-            <a type="button" class="btn btn-danger" id="btnConfirm" href="">Đồng ý</a>
-            <button type="button" class="btn btn-link text-gray-600 ms-auto" data-bs-dismiss="modal">Đóng</button>
+            <button type="submit" class="btn btn-danger" id="btnConfirm">Cập nhật</button>
+            <button type="button" class="btn btn-link text-gray-600 ms-auto" data-bs-dismiss="modal">Hủy</button>
           </div>
+          </form>
         </div>
       </div>
     </div>
@@ -266,4 +309,31 @@
     <!-- ========== Notyf JS linkup ========= -->
   <%@include file="/WEB-INF/views/admin/includes/footer/notyf.jsp"%>
   </body>
+  
+  <script type="text/javascript">
+  
+  var myModal = new bootstrap.Modal(document.getElementById('modal-add'), {
+	  keyboard: false
+	});
+  window.addEventListener('load', (event) => {
+	  const btnAdds = document.querySelectorAll("#btn-add");
+	  for(const button of btnAdds) {
+		  button.addEventListener('click', (e) => {
+			  const product = button.dataset;
+			  const productIdEl = document.getElementById('productId').value = product.productId;
+			  const productNameEl = document.getElementById('productName').value = product.productName;
+			  const productOldQuantityEl = document.getElementById('oldQuantity').value = product.productOldQuantity;
+			  const productCategoryEl = document.getElementById('category').value = product.productCategory;
+			  const productNewQuantityEl = document.getElementById('newQuantity').value = product.productNewQuantity;
+			  const productPriceEl = document.getElementById('price').value = product.productPrice;
+			  const productTotalEl = document.getElementById('total').value = product.productTotal;
+			  myModal.show();
+		  }) 
+	  }
+	});
+  
+  
+  
+  
+  </script>
 </html>

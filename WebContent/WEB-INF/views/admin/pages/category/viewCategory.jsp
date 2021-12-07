@@ -286,6 +286,7 @@
          </div>
 	     
     </div>
+		
 		<%@include file="/WEB-INF/views/admin/includes/footer/footer.jsp"%>
      </main>
 	

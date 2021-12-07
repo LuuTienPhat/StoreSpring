@@ -58,10 +58,10 @@
                         </svg>
                         Thêm sản phẩm
                     </a>
-                    <div class="btn-group ms-2 ms-lg-3">
-                        <!-- <button type="button" class="btn btn-sm btn-outline-gray-600">Chia sẻ</button> -->
+                    <!-- <div class="btn-group ms-2 ms-lg-3">
+                        <button type="button" class="btn btn-sm btn-outline-gray-600">Chia sẻ</button>
                         <button type="button" class="btn btn-sm btn-outline-gray-600">Xuất file</button>
-                    </div>
+                    </div> -->
                 </div>
             </div>
 

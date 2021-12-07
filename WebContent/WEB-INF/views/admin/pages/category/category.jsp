@@ -2,10 +2,6 @@
 	pageEncoding="UTF-8"%>
 <!-- ========== Tag Lib ========= -->
 <%@include file="/WEB-INF/views/admin/includes/header/taglib.jsp"%>
-<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<c:set var="req" value="${pageContext.request}" />
-<c:set var="url">${req.requestURL}</c:set>
-<c:set var="uri" value="${req.requestURI}" />
 
 <!DOCTYPE html>
 <html lang="en">
@@ -60,10 +56,10 @@
                         <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
                         Thêm danh mục
                     </a>
-                    <div class="btn-group ms-2 ms-lg-3">
-                        <!-- <button type="button" class="btn btn-sm btn-outline-gray-600">Chia sẻ</button> -->
+                    <!-- <div class="btn-group ms-2 ms-lg-3">
+                        <button type="button" class="btn btn-sm btn-outline-gray-600">Chia sẻ</button>
                         <button type="button" class="btn btn-sm btn-outline-gray-600">Xuất file</button>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             

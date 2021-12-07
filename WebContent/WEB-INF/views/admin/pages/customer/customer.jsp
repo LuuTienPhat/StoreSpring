@@ -22,7 +22,7 @@
 <jsp:useBean id="pagedListHolder" scope="request"
 	type="org.springframework.beans.support.PagedListHolder" />
 <c:url
-	value="admin/categories/"
+	value="${pagedLink }"
 	var="pagedLink">
 	<c:param name="p" value="~" />
 </c:url>
@@ -55,10 +55,10 @@
                         <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
                         Thêm danh mục
                     </a> --%>
-                    <div class="btn-group ms-2 ms-lg-3">
-                        <!-- <button type="button" class="btn btn-sm btn-outline-gray-600">Chia sẻ</button> -->
+                    <!-- <div class="btn-group ms-2 ms-lg-3">
+                        <button type="button" class="btn btn-sm btn-outline-gray-600">Chia sẻ</button>
                         <button type="button" class="btn btn-sm btn-outline-gray-600">Xuất file</button>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             
@@ -72,7 +72,7 @@
                                 <svg class="icon icon-xs" x-description="Heroicon name: solid/search" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                     <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/>
                                 </svg>
-                            </span><input type="text" class="form-control" placeholder="Search users"></div>
+                            </span><input type="text" class="form-control" placeholder="Tìm kiếm" /></div>
                         <select class="form-select fmxw-200 d-none d-md-inline" aria-label="Message select example 2">
                             <option selected="selected">Tất cả</option>
                             <option value="1">Xử lý xong</option>
@@ -124,7 +124,7 @@
                 </div>
             </div>
             <div class="card card-body shadow border-0 table-wrapper table-responsive overflow-hidden">
-                <div class="d-flex mb-3">
+                <!-- <div class="d-flex mb-3">
                     <select class="form-select fmxw-200" aria-label="Message select example">
                         <option selected="selected">Bulk Action</option>
                         <option value="1">Gửi Email</option>
@@ -132,15 +132,15 @@
                         <option value="3">Xoá khách hàng</option>
                     </select>
                     <button class="btn btn-sm px-3 btn-secondary ms-3">Apply</button>
-                </div>
+                </div> -->
                 <table class="table user-table table-hover align-items-center">
                     <thead class="thead-dark">
                         <tr>
-                            <th class="border-bottom rounded-start">
+                            <!-- <th class="border-bottom rounded-start">
                                 <div class="form-check dashboard-check"><input class="form-check-input" type="checkbox" value id="userCheck55">
                                     <label class="form-check-label" for="userCheck55"></label>
                                 </div>
-                            </th>
+                            </th> -->
                             <th class="border-bottom">#</th>
                             <th class="border-bottom">Họ và tên</th>
                             <!-- <th class="border-bottom">Tên khách hàng</th> -->
@@ -155,18 +155,18 @@
                     <tbody>
                     <c:forEach items="${pagedListHolder.pageList}" var="customer">
                         <tr>
-                            <td>
+                            <!-- <td>
                                 <div class="form-check dashboard-check"><input class="form-check-input" type="checkbox" value id="userCheck1">
                                     <label class="form-check-label" for="userCheck1"></label>
                                 </div>
-                            </td>
+                            </td> -->
                             <td>
                                <!--  <a href="#" class="d-flex align-items-center"><img src="images/profile-picture-1.jpg" class="avatar rounded-circle me-3" alt="Avatar">
                                      --><div class="d-block">
                                         <span class="fw-bold">${customer.id}</span>
-                                        <div class="small text-gray">
+                                        <!-- <div class="small text-gray">
                                             <span class="__cf_email__" data-cfemail="fd94939b92bd98859c908d9198d39e9290">[email&#160;protected]</span>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </a>
                             </td>
@@ -194,7 +194,7 @@
                                 <span class="fw-normal">${customer.email}</span>
                             </td>
                             <td>
-                                <span class="fw-normal">01/01/2021</span>
+                                <span class="fw-normal">${customer.dateAdded }</span>
                             </td>
                             <%-- <td>
                                 <span class="fw-normal">

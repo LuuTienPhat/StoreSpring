@@ -39,7 +39,7 @@
            </div>
     </div>
     <div class="card-footer border-top bg-gray-50">
-    	<a class="fw-bold d-flex align-items-center justify-content-center" href="../calendar.html">
+    	<a class="fw-bold d-flex align-items-center justify-content-center" href="${applicationScope.mostViewedProductsPage}">
     		<svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path></svg>
     		Xem tất cả
     	</a>

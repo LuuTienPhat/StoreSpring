@@ -23,7 +23,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import entities.CustomerEntity;
+import entities.InvoiceDetailEntity;
 import models.EntityData;
+import models.Pagination;
 import models.UploadFile;
 
 @Transactional
@@ -40,7 +42,7 @@ public class CustomerController {
 	@Autowired
 	@Qualifier("uploadFile")
 	UploadFile uploadFile;
-	
+
 	EntityData entityData;
 
 	String viewsDirectory = "admin/pages/customer/";
@@ -51,18 +53,18 @@ public class CustomerController {
 
 		List<CustomerEntity> customers = new ArrayList<CustomerEntity>();
 		entityData = new EntityData(factory);
+
+		entityData = new EntityData(factory);
 		if (search != null) {
 			customers = entityData.searchForCustomer(search);
+			model.addAttribute("pagedLink", "/admin/categories?search=" + search);
 
 		} else {
-			customers =  entityData.getCustomers();
+			customers = entityData.getCustomers();
+			model.addAttribute("pagedLink", "/admin/categories");
 		}
 
-		PagedListHolder<CustomerEntity> pagedListHolder = new PagedListHolder<CustomerEntity>(customers);
-		int page = ServletRequestUtils.getIntParameter(request, "p", 0);
-		pagedListHolder.setPage(page);
-		pagedListHolder.setMaxLinkedPages(5);
-		pagedListHolder.setPageSize(5);
+		PagedListHolder<CustomerEntity> pagedListHolder = Pagination.customerPagination(request, customers, 10, 10);
 
 		model.addAttribute("pagedListHolder", pagedListHolder);
 		model.addAttribute("title", "Quản lý Khách hàng");
@@ -71,119 +73,35 @@ public class CustomerController {
 	}
 
 	/*
-	 * @RequestMapping(value = "/add", method = RequestMethod.GET) public String
-	 * renderAddProductPage(ModelMap model) throws IOException {
-	 * model.addAttribute("title", "Thêm sản phẩm");
-	 * model.addAttribute("categories", getCustomer()); //
-	 * model.addAttribute("product", new CustomerEntity()); return viewsDirectory +
-	 * "addProduct"; }
-	 */
-
-	/*
-	 * @RequestMapping(value = "/add", method = RequestMethod.POST) public String
-	 * addProduct(ModelMap model, HttpServletRequest
-	 * request, @RequestParam("images") MultipartFile[] files) throws IOException {
-	 * 
-	 * CategoryEntity category = new CategoryEntity();
-	 * category.setId(request.getParameter("categoryId"));
-	 * 
-	 * CustomerEntity product = new CustomerEntity();
-	 * product.setId(Generate.generateProductId(5));
-	 * product.setName(request.getParameter("name"));
-	 * product.setQuantity(Integer.parseInt(request.getParameter("quantity")));
-	 * product.setUnit(request.getParameter("unit"));
-	 * product.setPrice(Float.parseFloat(request.getParameter("price")));
-	 * product.setDescription(request.getParameter("description"));
-	 * product.setDateAdded(new Date()); product.setCategory(category);
-	 * 
-	 * List<ImageEntity> images = new ArrayList<ImageEntity>(); for (MultipartFile
-	 * image : files) { ImageEntity i = new ImageEntity();
-	 * i.setId(Generate.generateImageId(5)); i.setProduct(product);
-	 * i.setImage(Base64.getEncoder().encodeToString(image.getBytes()));
-	 * images.add(i); }
-	 * 
-	 * product.setImages(images);
+	 * @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET) public
+	 * String deleteCustomer(ModelMap model, @PathVariable("id") String id) throws
+	 * IOException { CustomerEntity customer = new CustomerEntity();
+	 * customer.setId(id);
 	 * 
 	 * Session session = factory.openSession(); Transaction t =
-	 * session.beginTransaction(); try { session.save(product); t.commit();
-	 * System.out.println("Added");
+	 * session.beginTransaction(); try { session.delete(customer); t.commit();
+	 * System.out.println("Deleted");
 	 * 
 	 * } catch (Exception e) { t.rollback(); System.out.println("Error");
 	 * e.printStackTrace(); } finally { session.close(); }
 	 * 
-	 * return "redirect:/admin/customers/add"; }
+	 * return "redirect:/admin/customers"; }
 	 */
-
-	@RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
-	public String deleteCustomer(ModelMap model, @PathVariable("id") String id) throws IOException {
-		CustomerEntity customer = new CustomerEntity();
-		customer.setId(id);
-
-		Session session = factory.openSession();
-		Transaction t = session.beginTransaction();
-		try {
-			session.delete(customer);
-			t.commit();
-			System.out.println("Deleted");
-
-		} catch (Exception e) {
-			t.rollback();
-			System.out.println("Error");
-			e.printStackTrace();
-		} finally {
-			session.close();
-		}
-
-		return "redirect:/admin/customers";
-	}
 
 	// VIEW CUSTOMER
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public String productDetail(ModelMap model, @PathVariable("id") String id) throws IOException {
-		
+	public String productDetail(ModelMap model, @PathVariable("id") String id, HttpServletRequest request)
+			throws IOException {
+
 		entityData = new EntityData(factory);
 		CustomerEntity customer = entityData.getCustomer(id);
 
+		PagedListHolder pagedListHolder = Pagination.ordersPagination(request, customer.getOrders(), 10, 10);
+
+		model.addAttribute("pagedListHolder", pagedListHolder);
+		model.addAttribute("type", "đơn hàng");
 		model.addAttribute("customer", customer);
 		model.addAttribute("title", "Khách hàng " + customer.getId());
 		return viewsDirectory + "viewCustomer";
 	}
-
-	// EDIT PRODUCT
-//	@RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
-//	public String renderEditProductPage(ModelMap model, @PathVariable("id") String id) throws IOException {
-//		model.addAttribute("product", getProduct(id));
-//		model.addAttribute("categories", getCategory());
-//		model.addAttribute("title", "Chi tiết sản phẩm");
-//		return viewsDirectory + "editProduct";
-//	}
-
-	/*
-	 * @RequestMapping(value = "/edit/{id}", method = RequestMethod.POST) public
-	 * String editProduct(ModelMap model, HttpServletRequest request,
-	 * 
-	 * @RequestParam(value = "image", required = false) MultipartFile
-	 * images, @PathVariable("id") String id) throws IOException {
-	 * 
-	 * CategoryEntity category = new CategoryEntity();
-	 * category.setId(request.getParameter("categoryId"));
-	 * 
-	 * CustomerEntity product = getProduct(id);
-	 * product.setName(request.getParameter("name"));
-	 * product.setQuantity(Integer.parseInt(request.getParameter("quantity")));
-	 * product.setUnit(request.getParameter("unit"));
-	 * product.setPrice(Float.parseFloat(request.getParameter("price")));
-	 * product.setDescription(request.getParameter("description"));
-	 * product.setCategory(category);
-	 * 
-	 * Session session = factory.openSession(); Transaction t =
-	 * session.beginTransaction(); try { session.merge(product); t.commit();
-	 * System.out.println("Updated");
-	 * 
-	 * } catch (Exception e) { t.rollback(); System.out.println("Error");
-	 * e.printStackTrace(); } finally { session.close(); }
-	 * 
-	 * return "redirect:/admin/products"; }
-	 */
-
 }

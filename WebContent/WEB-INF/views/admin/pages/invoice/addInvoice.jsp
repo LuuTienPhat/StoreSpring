@@ -56,13 +56,23 @@
                         <div class="col-lg-12 col-sm-12">
                         
                            <form:form action="${requestScope['javax.servlet.forward.request_uri']}" method="POST" enctype="multipart/form-data" modelAttribute="invoice">
-                               <div class="mb-4">
-                                 <label class="my-1 me-2" for="invoice">Loại hoá đơn</label>
+                               <div class="row mb-4">
+                                 <div class="col-12">
+                                    <label for="quantity">Mã hóa đơn</label>
+                                    <form:input type="text" class="form-control ${idValid }" path="id" id="id" placeholder="Nhập mã hóa đơn"/>
+                                 	<form:errors path="id" class="invalid-feedback"/>
+                                 </div>
+                              </div>
+                               
+                               <div class="row mb-4">
+                               <div class="col-12">
+                                 <label class="" for="invoice">Loại hoá đơn</label>
                                  <form:select path="invoiceType.id"  class="form-select ${invoiceTypeValid }" id="invoice-type">
                                      <form:option value="0">Chọn loại hoá đơn</form:option>
                                      <form:options items="${invoiceTypes}" itemLabel="name" itemValue="id"/>
                                  </form:select>
                                  <form:errors path = "invoiceType.id" class="invalid-feedback"/>
+	                          	</div>
 	                          </div>
                                
                                <div class="row mb-4">
