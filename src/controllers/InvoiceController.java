@@ -1,6 +1,9 @@
 package controllers;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,10 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
-import org.hibernate.Query;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.support.PagedListHolder;
@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import entities.AdminEntity;
@@ -33,10 +32,12 @@ import entities.InvoiceDetailEntity;
 import entities.InvoiceEntity;
 import entities.InvoiceTypeEntity;
 import entities.ProductEntity;
-import models.DateTimeValidator;
 import models.EntityData;
 import models.Generate;
+import models.Pagination;
 import models.UploadFile;
+import models.validator.DateTimeValidator;
+import models.validator.InputValidator;
 
 @Controller
 @Transactional
@@ -97,7 +98,12 @@ public class InvoiceController {
 		if (invoice != null)
 			session.setAttribute("invoice", null);
 
-		model.addAttribute("invoice", new InvoiceEntity());
+		invoice = new InvoiceEntity();
+		invoice.setId(Generate.generateInvoiceId(entityData.getInvoices()));
+		invoice.setDate(LocalDate.now().format(DateTimeFormatter.ofPattern("uuuu-MM-dd")));
+		invoice.setTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+
+		model.addAttribute("invoice", invoice);
 		model.addAttribute("invoiceTypes", entityData.getInoivceTypes());
 		model.addAttribute("title", "Thêm hoá đơn");
 		model.addAttribute("pageName", "addInvoice");
@@ -110,8 +116,29 @@ public class InvoiceController {
 			BindingResult errors) throws IOException {
 
 		int errorsCount = 0;
-		String date = request.getParameter("date");
-		String time = request.getParameter("time");
+		String date = invoice.getDate();
+		String time = invoice.getTime();
+		List<InvoiceEntity> invoices = entityData.getInvoices();
+
+		if (invoice.getId().isEmpty()) {
+			errors.rejectValue("id", "invoice", "Nhập mã hóa đơn");
+			model.addAttribute("idValid", "is-invalid");
+			errorsCount++;
+		} else if (invoice.getId().length() > 20) {
+			errors.rejectValue("id", "invoice", "Mã hóa đơn <= 20 ký tự");
+			model.addAttribute("idValid", "is-invalid");
+			errorsCount++;
+		}
+		else if (invoice.getId().charAt(0) != 'I') {
+			errors.rejectValue("id", "invoice", "Mã hóa đơn phải bắt đầu bằng ký tự I");
+			model.addAttribute("idValid", "is-invalid");
+			errorsCount++;
+		}
+		else if (Generate.searchInvoice(invoices, invoice.getId()) != null) {
+			errors.rejectValue("id", "invoice", "Mã hóa đơn đã bị trùng");
+			model.addAttribute("idValid", "is-invalid");
+			errorsCount++;
+		}
 
 		if (date.isEmpty()) {
 			errors.rejectValue("date", "invoice", "Nhập ngày lập hoá đơn");
@@ -133,7 +160,7 @@ public class InvoiceController {
 			errorsCount++;
 		}
 
-		if (invoice.getInvoiceType().getId().isEmpty()) {
+		if (invoice.getInvoiceType().getId() == 0) {
 			errors.rejectValue("invoiceType.id", "invoice", "Chọn loại hoá đơn");
 			model.addAttribute("invoiceTypeValid", "is-invalid");
 			errorsCount++;
@@ -141,16 +168,23 @@ public class InvoiceController {
 
 		if (errorsCount != 0) {
 			model.addAttribute("invoice", invoice);
+			model.addAttribute("invoiceTypes", entityData.getInoivceTypes());
 			model.addAttribute("title", "Thêm hoá đơn");
 			model.addAttribute("pageName", "addInvoice");
 			return viewsDirectory + "addInvoice";
 
 		} else {
+			InvoiceTypeEntity invoiceType = new InvoiceTypeEntity();
+			invoiceType.setId(invoice.getInvoiceType().getId());
+			invoice.setInvoiceType(invoiceType);
+
 			invoice.setDate(date);
 			invoice.setTime(time);
+
 			AdminEntity admin = new AdminEntity();
-			admin.setId(session.getAttribute("admin").toString());
+			admin.setId(session.getAttribute("adminId").toString());
 			invoice.setAdmin(admin);
+
 			session.setAttribute("invoice", invoice);
 			return "redirect:/admin/invoices/add/invoice-detail";
 		}
@@ -179,16 +213,13 @@ public class InvoiceController {
 				model.addAttribute("pagedLink", "/admin/invoices/add/invoice-detail");
 			}
 
-			PagedListHolder pagedListHolder = new PagedListHolder(products);
-			int page = ServletRequestUtils.getIntParameter(request, "p", 0);
-			pagedListHolder.setPage(page);
-			pagedListHolder.setMaxLinkedPages(5);
-			pagedListHolder.setPageSize(5);
+			PagedListHolder pagedListHolder = Pagination.productPagination(request, products, 10, 10);
 
 			model.addAttribute("pagedListHolder", pagedListHolder);
 			model.addAttribute("previousPageLink", "admin/invoices/add");
 			model.addAttribute("nextPageLink", "admin/invoices/add/preview");
 			model.addAttribute("invoice", invoice);
+			model.addAttribute("type", "sản phẩm");
 			model.addAttribute("title", "Thêm hoá đơn");
 			model.addAttribute("pageName", "addInvoiceDetail");
 			return viewsDirectory + "addInvoiceDetail";
@@ -198,37 +229,134 @@ public class InvoiceController {
 	// UPDATE INVOICE DETAIL
 	@RequestMapping(value = "/add/invoice-detail", method = RequestMethod.POST)
 	public String updateInvoiceDetail(ModelMap model, HttpServletRequest request, HttpSession session,
-			RedirectAttributes attributes) throws IOException {
+			RedirectAttributes redirectAttributes) throws IOException {
 		entityData = new EntityData(factory);
 
-		String[] product_ids = request.getParameterValues("product_id");
-		String[] quantities = request.getParameterValues("quantity");
-		String[] prices = request.getParameterValues("price");
-
 		InvoiceEntity invoice = (InvoiceEntity) session.getAttribute("invoice");
-		List<InvoiceDetailEntity> invoiceDetails = invoice.getInvoiceDetails();
-		for (int i = 0; i < product_ids.length; i++) {
-			if (!quantities[i].isEmpty() || !prices[i].isEmpty()) {
-				int index = searhcInvoiceDetail(invoiceDetails, product_ids[i]);
+
+		if (invoice == null) {
+			return "redirect:/admin/invoices/add";
+		} else {
+
+			String url = request.getRequestURI();
+
+			String productId = request.getParameter("productId");
+			String oldQuantity = request.getParameter("oldQuantity");
+			String newQuantity = request.getParameter("newQuantity");
+			String price = request.getParameter("price");
+
+			int errorCount = 0;
+			if (!InputValidator.isInputNumberValid(newQuantity)) {
+				errorCount++;
+			} else if (invoice.getInvoiceType().getId() == 2) {
+				if (Integer.parseInt(oldQuantity) < Integer.parseInt(newQuantity)) {
+					errorCount++;
+				}
+			}
+
+			if (!InputValidator.isInputNumberValid(price)) {
+				errorCount++;
+			}
+
+			if (errorCount != 0) {
+				redirectAttributes.addFlashAttribute("message", "Lỗi cập nhật sản phẩm " + productId + "!");
+				redirectAttributes.addFlashAttribute("messageType", "error");
+			} else {
+				List<InvoiceDetailEntity> invoiceDetails = invoice.getInvoiceDetails();
+				int index = searhcInvoiceDetail(invoiceDetails, productId);
+				// NẾU CHI TIẾT HÓA ĐƠN KHÔNG CÓ SẢN PHẨM
 				if (index == -1) {
 					InvoiceDetailEntity invoiceDetail = new InvoiceDetailEntity();
 					invoiceDetail.setInvoice(invoice);
-					ProductEntity product = entityData.getProduct(product_ids[i]);
+					ProductEntity product = entityData.getProduct(productId);
 					invoiceDetail.setProduct(product);
-					invoiceDetail.setQuantity(Integer.parseInt(quantities[i]));
-					invoiceDetail.setPrice(Float.parseFloat(prices[i]));
+					invoiceDetail.setQuantity(Integer.parseInt(newQuantity));
+					invoiceDetail.setPrice(Float.parseFloat(price));
 					invoiceDetails.add(invoiceDetail);
-				} else {
-					invoiceDetails.get(index).setQuantity(Integer.parseInt(quantities[i]));
-					invoiceDetails.get(index).setPrice(Float.parseFloat(prices[i]));
+				}
+
+//				// NẾU CÓ SẢN PHẨM
+				else {
+					invoiceDetails.get(index).setQuantity(Integer.parseInt(newQuantity));
+					invoiceDetails.get(index).setPrice(Float.parseFloat(price));
+
 				}
 			}
 		}
-
-		invoice.setInvoiceDetails(invoiceDetails);
-		session.setAttribute("invoice", invoice);
 		return "redirect:/admin/invoices/add/invoice-detail";
+
+		// HOA DON NHAP
+//			if(invoice.getInvoiceType().getId() == 1) {
+//			}
+//			
+//			//HOA DON XUAT
+//			else {
+//				
+//			}
+
+//		
+//		String[] product_ids = request.getParameterValues("product_id");
+//		String[] quantities = request.getParameterValues("quantity");
+//		String[] prices = request.getParameterValues("price");
+//		String[] rows = request.getParameterValues("rows");
+//
+//		InvoiceEntity invoice = (InvoiceEntity) session.getAttribute("invoice");
+//		HashMap<String, String> errors = new HashMap<String, String>();
+//
+//		// NẾU HÓA ĐƠN KHÔNG NULL
+//		if (invoice != null) {
+//
+//			// LẤY DANH SÁCH CHI TIẾT HÓA ĐƠN TRONG HÓA ĐƠN
+//			List<InvoiceDetailEntity> invoiceDetails = invoice.getInvoiceDetails();
+//
+//			// DUYỆT QUA TỪNG SẢN PHẨM
+//			for (int i = 0; i < product_ids.length; i++) {
+//
+//				// NẾU SỐ LƯỢNG NHÂP/XUẤT VÀ GIÁ TIỀN KHÔNG RỖNG
+//				if (!quantities[i].isEmpty() && !prices[i].isEmpty()) {
+//
+//					// TÌM KIẾM SẢN PHẨM TRONG DANH SÁCH CHI TIẾT HÓA ĐƠN
+//					int index = searhcInvoiceDetail(invoiceDetails, product_ids[i]);
+//
+//					// NẾU CHI TIẾT HÓA ĐƠN KHÔNG CÓ SẢN PHẨM
+//					if (index == -1) {
+//						InvoiceDetailEntity invoiceDetail = new InvoiceDetailEntity();
+//						invoiceDetail.setInvoice(invoice);
+//						ProductEntity product = entityData.getProduct(product_ids[i]);
+//						invoiceDetail.setProduct(product);
+//						invoiceDetail.setQuantity(Integer.parseInt(quantities[i]));
+//						invoiceDetail.setPrice(Float.parseFloat(prices[i]));
+//						invoiceDetails.add(invoiceDetail);
+//					}
+//
+//					// NẾU CÓ SẢN PHẨM
+//					else {
+//						invoiceDetails.get(index).setQuantity(Integer.parseInt(quantities[i]));
+//						invoiceDetails.get(index).setPrice(Float.parseFloat(prices[i]));
+//					}
+//				}
+//
+//				// NẾU CÓ Ô ĐỂ TRỐNG
+//				else {
+////					redirectAttributes.addFlashAttribute("message", "Không thể cập nhật!");
+////					redirectAttributes.addFlashAttribute("messageType", "error");
+//					errors.put(product_ids[i], "Lỗi nhập liệu");
+//
+//				}
+//			}
+//			redirectAttributes.addFlashAttribute("errors", errors);
+//			invoice.setInvoiceDetails(invoiceDetails);
+//			session.setAttribute("invoice", invoice);
+//		}
+
 	}
+
+//	public String checkError(String newQuantity, String oldQuantity, String price) {
+//		if(newQuantity > oldQuantity) {
+//			return ""
+//		}
+//		
+//	}
 
 	// PREVIEW INVOICE
 	@RequestMapping(value = "/add/preview", method = RequestMethod.GET)
@@ -254,14 +382,27 @@ public class InvoiceController {
 	@RequestMapping(value = "/add/finish", method = RequestMethod.GET)
 	public String finsishInvoice(ModelMap model, HttpSession session, RedirectAttributes redirectAttributes)
 			throws IOException {
-		System.out.println("preview");
+		System.out.println("finish");
 		entityData = new EntityData(factory);
 		InvoiceEntity invoice = (InvoiceEntity) session.getAttribute("invoice");
 
 		if (invoice == null) {
 			return "redirect:/admin/invoices/add";
 		} else {
-			invoice.setId(Generate.generateInvoiceId(entityData.getInvoices()));
+			if (invoice.getInvoiceType().getId() == 1) {
+				for (InvoiceDetailEntity invoiceDetail : invoice.getInvoiceDetails()) {
+					ProductEntity product = entityData.getProduct(invoiceDetail.getProduct().getId());
+					product.setQuantity(product.getQuantity() + invoiceDetail.getQuantity());
+					entityData.updateProductInDB(product);
+				}
+			} else {
+				for (InvoiceDetailEntity invoiceDetail : invoice.getInvoiceDetails()) {
+					ProductEntity product = entityData.getProduct(invoiceDetail.getProduct().getId());
+					product.setQuantity(product.getQuantity() - invoiceDetail.getQuantity());
+					entityData.updateProductInDB(product);
+				}
+			}
+
 			if (entityData.addInvoiceToDB(invoice)) {
 				redirectAttributes.addFlashAttribute("message", "Thêm hoá đơn thành công!");
 				redirectAttributes.addFlashAttribute("messageType", "success");
