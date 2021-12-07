@@ -29,6 +29,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import entities.CategoryEntity;
 import models.EntityData;
 import models.Generate;
+import models.Pagination;
 import models.UploadFile;
 
 @Controller
@@ -68,13 +69,8 @@ public class CategoryController {
 			model.addAttribute("pagedLink", "/admin/categories");
 		}
 
-		PagedListHolder pagedListHolder = new PagedListHolder(categories);
-		int page = ServletRequestUtils.getIntParameter(request, "p", 0);
-		pagedListHolder.setPage(page);
-		pagedListHolder.setMaxLinkedPages(10);
-		pagedListHolder.setPageSize(5);
+		PagedListHolder pagedListHolder = Pagination.categoryPagination(request, categories, 10, 5);
 
-		// model.addAttribute("categories", categories);
 		model.addAttribute("pagedListHolder", pagedListHolder);
 		model.addAttribute("type", "danh mục");
 		model.addAttribute("title", "Quản lý Danh mục");
@@ -248,7 +244,7 @@ public class CategoryController {
 
 				UploadFile.writeFile(fileInServer, image);
 				UploadFile.writeFile(fileInResource, image);
-				
+
 				Thread.sleep(2000);
 			}
 
