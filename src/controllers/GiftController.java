@@ -643,7 +643,7 @@ public class GiftController {
 			newPath = newPath.replaceAll("questionmark", "?");
 			return "redirect:/store/"+ newPath;
 		}
-		if(redirectPath.contains("categporyseperator")) {
+		if(redirectPath.contains("categoryseperator")) {
 			String newPath = redirectPath.replaceAll("seperator", "/");
 			newPath = newPath.replaceAll("questionmark", "?");
 			return "redirect:/store/"+ newPath;
