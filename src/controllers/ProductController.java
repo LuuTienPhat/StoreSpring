@@ -34,6 +34,7 @@ import entities.ImageEntity;
 import entities.ProductEntity;
 import models.EntityData;
 import models.Generate;
+import models.Pagination;
 import models.UploadFile;
 
 @Transactional
@@ -70,11 +71,7 @@ public class ProductController {
 			model.addAttribute("pagedLink", "/admin/products");
 		}
 
-		PagedListHolder pagedListHolder = new PagedListHolder(products);
-		int page = ServletRequestUtils.getIntParameter(request, "p", 0);
-		pagedListHolder.setPage(page);
-		pagedListHolder.setMaxLinkedPages(5);
-		pagedListHolder.setPageSize(5);
+		PagedListHolder pagedListHolder = Pagination.productPagination(request, products, 10, 5);
 
 		// model.addAttribute("products", products);
 		model.addAttribute("pagedListHolder", pagedListHolder);

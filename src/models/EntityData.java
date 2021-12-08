@@ -25,6 +25,7 @@ import entities.InvoiceTypeEntity;
 import entities.OrderDetailEntity;
 import entities.OrderEntity;
 import entities.ProductEntity;
+import models.statistics.OrderStatistics;
 
 @Transactional
 public class EntityData {
@@ -133,26 +134,6 @@ public class EntityData {
 		Session session = factory.openSession();
 		String hql = "FROM ProductEntity";
 		Query query = session.createQuery(hql);
-		List<ProductEntity> products = query.list();
-		session.close();
-		return products;
-	}
-
-	// GET MOST VIEWED PRODUCT
-	public List<ProductEntity> getMostViewedProducts() throws IOException {
-		Session session = factory.openSession();
-		String hql = "FROM ProductEntity p ORDER BY p.views DESC ";
-		Query query = session.createQuery(hql).setMaxResults(7);
-		List<ProductEntity> products = query.list();
-		session.close();
-		return products;
-	}
-
-	// GET TOP FAVORITE PRODUCT
-	public List<ProductEntity> getTopFavoriteProducts() throws IOException {
-		Session session = factory.openSession();
-		String hql = "FROM ProductEntity p ORDER BY p.favoriteProducts.size DESC";
-		Query query = session.createQuery(hql).setMaxResults(7);
 		List<ProductEntity> products = query.list();
 		session.close();
 		return products;
@@ -416,16 +397,16 @@ public class EntityData {
 		session.close();
 		return orders;
 	}
-	
+
 	// GET ORDERS FROM DB WITH STATE
-		public List<OrderEntity> getOrders(int state) throws IOException {
-			Session session = factory.openSession();
-			String hql = "FROM OrderEntity WHERE state = '" + state + "'";
-			Query query = session.createQuery(hql);
-			List<OrderEntity> orders = query.list();
-			session.close();
-			return orders;
-		}
+	public List<OrderEntity> getOrders(int state) throws IOException {
+		Session session = factory.openSession();
+		String hql = "FROM OrderEntity WHERE state = '" + state + "'";
+		Query query = session.createQuery(hql);
+		List<OrderEntity> orders = query.list();
+		session.close();
+		return orders;
+	}
 
 	// GET ORDERS FROM DB
 	public List<OrderEntity> getLatestOrders() throws IOException {
@@ -445,6 +426,24 @@ public class EntityData {
 		OrderEntity order = (OrderEntity) query.list().get(0);
 		session.close();
 		return order;
+	}
+
+	public Boolean updateOrderInDB(OrderEntity order) {
+		Session session = factory.openSession();
+		Transaction t = session.beginTransaction();
+		try {
+			session.merge(order);
+			t.commit();
+			System.out.println("Order is updated");
+			return true;
+		} catch (Exception e) {
+			t.rollback();
+			System.out.println("Error when updating orders");
+			e.printStackTrace();
+			return false;
+		} finally {
+			session.close();
+		}
 	}
 
 	// UPDATE PRODUCTS QUANTITY WHEN FINISH ORDER
@@ -523,8 +522,8 @@ public class EntityData {
 	// GET ORDER STATISTICS
 	public List<OrderStatistics> getOrderStatistics() throws IOException {
 		List<OrderStatistics> orderStatisticsByMonths = new ArrayList<OrderStatistics>();
-		
-		for(int i = 0; i < 6; i++) {
+
+		for (int i = 0; i < 6; i++) {
 			LocalDate now = LocalDate.now().minusMonths(i);
 			LocalDate lastDayOfMonth = now.with(TemporalAdjusters.lastDayOfMonth());
 			LocalDate firstDayOfMonth = now.with(TemporalAdjusters.firstDayOfMonth());
@@ -536,13 +535,13 @@ public class EntityData {
 			String hql = "FROM OrderEntity WHERE orderDate >= '" + firstDayOfMonthString + "' AND orderDate <= '"
 					+ lastDayOfMonthString + "' AND state = '3'";
 			Query query = session.createQuery(hql);
-			
+
 			OrderStatistics orderStatistics = new OrderStatistics();
 			orderStatistics.setDate(java.sql.Date.valueOf(now));
 			orderStatistics.setNumber(query.list().size());
 			orderStatisticsByMonths.add(orderStatistics);
 		}
-		
+
 		return orderStatisticsByMonths;
 	}
 
