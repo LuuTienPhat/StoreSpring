@@ -115,10 +115,15 @@ public class GiftController {
 	}
 
 	@RequestMapping(value = "/sign-in")
-	public String signIn(ModelMap model, HttpSession httpSession) {
+	public String signIn(ModelMap model, HttpSession httpSession, RedirectAttributes attributes) {
 		Methods method = new Methods(factory);
+		
 		httpSession.setAttribute("listCategory", method.getListCategory());
 		model.addAttribute("account", new CustomerLoginAccountModel());
+		if ((httpSession.getAttribute("customerUsername") != null)) {
+			attributes.addFlashAttribute("message", "Vui lòng đăng xuất nếu muốn đăng nhập lại");
+			return returnRedirectControl("index");
+		}
 		return "store/sign-in";
 	}
 
