@@ -38,16 +38,22 @@ public class UploadFile {
 
 	// GET FILE EXTENSION
 	public static String getExtension(String path) {
-		int lastIndexOf = path.lastIndexOf(".");
-		if (lastIndexOf == -1) {
-			return ""; // empty extension
+		try {
+			int lastIndexOf = path.lastIndexOf(".");
+			if (lastIndexOf == -1) {
+				return ""; // empty extension
+			}
+			return path.substring(lastIndexOf);
 		}
-		return path.substring(lastIndexOf);
+		catch (Exception e) {
+			// TODO: handle exception
+			return "jpg";
+		}
 	}
 
 	// WRITE FILE
 	public static void writeFile(File file, MultipartFile image) throws IOException {
-		BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(file));
+		BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(file), 99999999);
 		stream.write(image.getBytes());
 		stream.close();
 	}

@@ -25,6 +25,6 @@
 	<!-- Cấu hình package chứa các controller -->
 	<context:component-scan
 		base-package="controllers, models" />
-	
+
 	<mvc:resources mapping="/resources/**" location="/resources/" />
 </beans>
