@@ -168,30 +168,6 @@
                 
                 
             </div>
-            
-            <!-- Modal Content -->
-       <div class="modal fade" id="modal-warning" tabindex="-1" role="dialog" aria-labelledby="modal-warning"
-         aria-hidden="true">
-         <div class="modal-dialog modal-dialog-centered" role="document">
-           <div class="modal-content">
-             <div class="modal-header">
-               <h2 class="h5 modal-title">Xác nhận</h2>
-               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-             </div>
-             <div class="modal-body text-center">
-               <h5 class="my-0 mb-2">Bạn có muốn xoá danh mục này?</h5>
-               <small class="my-0 mt-4 text-wrap text-gray-500">Hãy chắc chắn danh mục này <span class="fw-bold">không tồn tại</span> sản phẩm nào</small>
-             </div>
-             <div class="modal-footer">
-               <a type="button" class="btn btn-danger" id="btnConfirm" href="">Đồng ý</a>
-               <button type="button" class="btn btn-link text-gray-600 ms-auto"
-                 data-bs-dismiss="modal">Đóng</button>
-             </div>
-           </div>
-         </div>
-       </div>
-       <!-- End of Modal Content -->
-            
 		<%@include file="/WEB-INF/views/admin/includes/footer/footer.jsp"%>
 
 </main>
@@ -202,18 +178,21 @@
 <!-- ========== Notyf JS linkup ========= -->
 <%@include file="/WEB-INF/views/admin/includes/footer/notyf.jsp"%>
 
+<!-- ========== Modal warning linkup ========= -->
+ <%@include file="/WEB-INF/views/admin/pages/category/deleteCategoryModal.jsp"%>
+
 </body>
 
 <script type="text/javascript">
-   		const btnDeletes = document.querySelectorAll("#btnDelete");
-   		
-   		btnDeletes.forEach(btnDelete => {
-   			btnDelete.addEventListener('click', () => {
-   	   			let categoryId = btnDelete.dataset.id;
-   	   			const btnConfirm = document.querySelector("#btnConfirm");
-   	   			btnConfirm.href = "<c:out value='${applicationScope.categoryPage}'/>/delete/" + categoryId;
-   	   		})
-   		})
+ 		const btnDeletes = document.querySelectorAll("#btnDelete");
+ 		
+ 		btnDeletes.forEach(btnDelete => {
+ 			btnDelete.addEventListener('click', () => {
+ 	   			let categoryId = btnDelete.dataset.id;
+ 	   			const btnConfirm = document.querySelector("#btnConfirm");
+ 	   			btnConfirm.href = "<c:out value='${applicationScope.categoryPage}'/>/delete/" + categoryId;
+ 	   		})
+ 		})
    		
    </script>
 </html>
