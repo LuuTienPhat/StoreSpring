@@ -39,21 +39,18 @@
 	                          </div>
 	                          <form:form action="admin/login" class="mt-4" method="post" modelAttribute="account">
 	                              <!-- Form -->
-	                              <c:if test="${message != null}">
+	                              <%-- <c:if test="${message != null}">
 		                              <div class="form-group mb-4">
 			                              	<div class="alert alert-danger text-center" role="alert">
 											  ${message}
 											</div>
 										</div>
-									</c:if>
+									</c:if> --%>
 	                              <div class="form-group mb-4">
 	                                  <label for="username">Tên đăng nhập</label>
 	                                  <div class="input-group">
 	                                      <span class="input-group-text" id="basic-addon1">
-	                                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
-												  <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
-												  <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
-												</svg>
+	                                         <svg class="icon icon-xs text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
 	                                      </span>
 	                                      <form:input type="text" placeholder="Nhập tên đăng nhập..." class="form-control ${usernameValid }" id="username" path="username" autofocus = "autofocus"/>
 	                                      <form:errors path="username" class="invalid-feedback" />
@@ -67,22 +64,20 @@
 	                                      <label for="password">Mật khẩu</label>
 	                                      <div class="input-group">
 	                                          <span class="input-group-text" id="basic-addon2">
-	                                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lock-fill" viewBox="0 0 16 16">
-													  <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
-													</svg>
+	                                              <svg class="icon icon-xs text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"></path></svg>
 	                                          </span>
 	                                          <form:input type="password" placeholder="Nhập mật khẩu..." class="form-control ${passwordValid }" id="password" path = "password" autofocus = "autofocus"/>
 	                                      		<form:errors path="password" class="invalid-feedback" />
 	                                      </div>
 	                                  </div>
 	                                  <!-- End of Form -->
-	                                  <div class="d-flex justify-content-between align-items-top mb-4">
-	                                      <div class="form-check">
+	                                  <div class="d-flex justify-content-end align-items-top mb-4">
+	                                      <!-- <div class="form-check">
 	                                          <input class="form-check-input" type="checkbox" value="" id="remember">
 	                                          <label class="form-check-label mb-0" for="remember">
 	                                              Ghi nhớ tôi
 	                                          </label>
-	                                      </div>
+	                                      </div> -->
 	                                      <div>
 	                                          <a href="${applicationScope.forgotPasswordPage }" class="small text-right">Quên mật khẩu?</a>
 	                                      </div>
@@ -127,6 +122,9 @@
 
 <!-- ========== All JS files linkup ========= -->
 <%@include file="/WEB-INF/views/admin/includes/footer/script.jsp" %>
+
+<!-- ========== Notyf JS linkup ========= -->
+<%@include file="/WEB-INF/views/admin/includes/footer/notyf.jsp"%>
 
 </body>
 
