@@ -27,7 +27,7 @@
               </div> -->
               
               <c:forEach items="${applicationScope.lastestOrders}" var="order" varStatus="i" begin="0" end="4">
-              <a href="${applicationScope.ordersPage}/${order.id}" class="list-group-item list-group-item-action ${i.count == applicationScope.lastestOrders.size() ? '' : 'border-bottom' }">
+              <a href="${applicationScope.ordersPage}/${order.id}" class="list-group-item list-group-item-action ${i.index != i.end ? 'border-bottom' : '' }">
                 <div class="row align-items-center">
                     <div class="col-auto d-flex flex-column">
                     	<small class="text-danger">
