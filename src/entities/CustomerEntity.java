@@ -32,7 +32,9 @@ public class CustomerEntity {
 	private String email;
 	@Column(name = "date_added")
 	private String dateAdded;
-
+	@Column(name="recovery")
+	private String recoveryCode;
+	
 	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	private List<CartDetailEntity> cartDetails;
 	
@@ -146,4 +148,13 @@ public class CustomerEntity {
 		}
 		return amount;
 	}
+
+	public String getRecoveryCode() {
+		return recoveryCode;
+	}
+
+	public void setRecoveryCode(String recoveryCode) {
+		this.recoveryCode = recoveryCode;
+	}
+	
 }

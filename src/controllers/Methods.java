@@ -10,6 +10,8 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
+import entities.AccountEntity;
+import entities.AdminEntity;
 import entities.CartDetailEntity;
 import entities.CategoryEntity;
 import entities.CustomerEntity;
@@ -127,7 +129,22 @@ public class Methods {
 		query.setParameter("password", customer.getPassword());
 		return query.executeUpdate() > 0;
 	}
-
+	public boolean updateCustomerForgotPassword(CustomerEntity customer, HttpSession httpSession) {
+		Session session = factory.getCurrentSession();
+		String hql = "UPDATE CustomerEntity c SET c.password=:password WHERE c.id=:id";
+		Query query = session.createQuery(hql).setParameter("id",
+				customer.getId());
+		query.setParameter("password", customer.getPassword());
+		return query.executeUpdate() > 0;
+	}
+	public boolean updateCustomerRecoveryCode(CustomerEntity customer, HttpSession httpSession) {
+		Session session = factory.getCurrentSession();
+		String hql = "UPDATE CustomerEntity c SET c.recoveryCode=:recoveryCode WHERE c.id=:id";
+		Query query = session.createQuery(hql).setParameter("id",
+				customer.getId());
+		query.setParameter("recoveryCode", AdminAuthController.generateId(5));
+		return query.executeUpdate() > 0;
+	}
 	public boolean updateProductQuantityFromCartDetail(String productId, String quantity, HttpSession httpSession) {
 		Session session = factory.getCurrentSession();
 		String hql = "UPDATE CartDetailEntity c SET c.quantity=:quantity WHERE c.id.customer_id=:customerId and c.id.product_id=:productId";
@@ -336,6 +353,14 @@ public class Methods {
 		CustomerEntity customer = (CustomerEntity) query.setParameter("username", username).uniqueResult();
 		return customer != null;
 	}
+	public boolean isAdminWithUsernameExit(String username) {
+		Session session = factory.getCurrentSession();
+		String hql = "FROM AccountEntity a WHERE a.username=:username";
+		Query query = session.createQuery(hql);
+
+		AccountEntity admin = (AccountEntity) query.setParameter("username", username).uniqueResult();
+		return admin != null;
+	}
 
 	public String getPasswordOfCustomerWithUsername(String username) {
 		Session session = factory.getCurrentSession();
@@ -344,7 +369,20 @@ public class Methods {
 		String password = (String) query.setParameter("username", username).uniqueResult();
 		return password;
 	}
-	
+	public String getEmailOfCustomerWithUsername(String username) {
+		Session session = factory.getCurrentSession();
+		String hql = "SELECT c.email FROM CustomerEntity c WHERE c.username=:username";
+		Query query = session.createQuery(hql);
+		String email = (String) query.setParameter("username", username).uniqueResult();
+		return email;
+	}
+	public String getRecoveryCodeOfCustomerWithUsername(String username) {
+		Session session = factory.getCurrentSession();
+		String hql = "SELECT c.recoveryCode FROM CustomerEntity c WHERE c.username=:username";
+		Query query = session.createQuery(hql);
+		String recoveryCode = (String) query.setParameter("username", username).uniqueResult();
+		return recoveryCode.trim();
+	}
 	//testing
 	public List<FavoriteProductEntity> getListFavourite(String customerId) {
 		Session session = factory.getCurrentSession();

@@ -36,6 +36,7 @@
 			<mvc:exclude-mapping path="/store/all/**"/>
 			<mvc:exclude-mapping path="/store/search/**"/>
 			<mvc:exclude-mapping path="/store/category/**"/>
+			<mvc:exclude-mapping path="/store/forgot-password"/>
 			<mvc:exclude-mapping path="/store/product-detail/**"/>
 			<bean class="interceptors.CustomerAuthInterceptor" />
 		</mvc:interceptor>
