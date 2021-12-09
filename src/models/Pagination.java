@@ -93,4 +93,15 @@ public class Pagination {
 		pagedListHolder.setPageSize(pageSize);
 		return pagedListHolder;
 	}
+
+	// LIST PAGINATION
+	public static PagedListHolder listPagination(HttpServletRequest request, List list, int maxLinkedPages,
+			int pageSize) {
+		PagedListHolder pagedListHolder = new PagedListHolder(list);
+		int page = ServletRequestUtils.getIntParameter(request, "p", 0);
+		pagedListHolder.setPage(page);
+		pagedListHolder.setMaxLinkedPages(maxLinkedPages);
+		pagedListHolder.setPageSize(pageSize);
+		return pagedListHolder;
+	}
 }
