@@ -51,8 +51,9 @@ public class GlobalInterceptor extends HandlerInterceptorAdapter {
 		application.setAttribute("invoicePage", "admin/invoices");
 		application.setAttribute("addInvoicePage", "admin/invoices/add");
 		application.setAttribute("addAdminPage", "admin/add");
-		application.setAttribute("topFavoriteProductsPage", "admin/dashboard/top-favorite-products");
-		application.setAttribute("mostViewedProductsPage", "admin/dashboard/most-viewed-products");
+		application.setAttribute("topFavoriteProductsPage", "top-favorite-products");
+		application.setAttribute("mostViewedProductsPage", "most-viewed-products");
+		application.setAttribute("topRevenueProductsPage", "top-revenue-products");
 
 		// STORE
 		application.setAttribute("storeIndexPage", "");
