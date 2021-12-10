@@ -48,9 +48,10 @@
 							<h6 class="mb-2 text-gray-500">Mã sản phẩm: ${product.id}</h6>
 
 							<div class="flex">
-								<h6 class="mb-2 text-gray-500">Tồn kho:
+								<h6 class="mb-2 text-gray-500 mr-4">Tồn kho:
 									${product.quantity}</h6>
-
+								<h6 class="mb-2 text-gray-500">Lượt xem:
+									${product.views}</h6>
 								<!-- <div class="border-l-2 border-white h-7 mx-2"></div> -->
 								<!-- <i
 								class="fa fa-share-alt text-2xl hover:text-indigo-500 text-2xl mr-2 cursor-pointer"></i>

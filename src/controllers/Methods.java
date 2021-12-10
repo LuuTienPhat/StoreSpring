@@ -163,6 +163,14 @@ public class Methods {
 		query.setParameter("quantity", quantity);
 		return query.executeUpdate() > 0;
 	}
+	public boolean updateProductViews(String productId, int views) {
+		Session session = factory.getCurrentSession();
+		String hql = "UPDATE ProductEntity p SET p.views=:views WHERE p.id=:productId";
+		Query query = session.createQuery(hql);
+		query.setParameter("productId", productId);
+		query.setParameter("views", views);
+		return query.executeUpdate() > 0;
+	}
 
 	public boolean deleteProductFromCartDetail(String productId, HttpSession httpSession) {
 		Session session = factory.getCurrentSession();

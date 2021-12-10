@@ -112,6 +112,7 @@ public class GiftController {
 			lpe.add(0, method.getProduct(productId));
 			httpSession.setAttribute("listRecentViewProducts", lpe);
 		}
+		method.updateProductViews(productId, method.getProduct(productId).getViews()+1);
 		model.addAttribute("product", method.getProduct(productId));
 		model.addAttribute("listFavorite", method.getListFavourite(
 				method.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername"))));
