@@ -330,7 +330,7 @@ public class GiftController {
 			ce.setLastname(customer.getLastName().trim());
 			ce.setPhone(customer.getTelephone().trim());
 			ce.setDateAdded(new SimpleDateFormat("MM-dd-yyyy").format(new Date()));
-			ce.setRecoveryCode(AdminAuthController.generateId(5));
+			ce.setRecoveryCode(AdminAuthController.generateRecoveryCode(5));
 
 			// ce.setAddress(customer.getSpecificAddress().trim() + ", " +
 			// customer.getDistrict().trim() + ", "

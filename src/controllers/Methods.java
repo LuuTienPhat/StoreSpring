@@ -142,7 +142,7 @@ public class Methods {
 		String hql = "UPDATE CustomerEntity c SET c.recoveryCode=:recoveryCode WHERE c.id=:id";
 		Query query = session.createQuery(hql).setParameter("id",
 				customer.getId());
-		query.setParameter("recoveryCode", AdminAuthController.generateId(5));
+		query.setParameter("recoveryCode", AdminAuthController.generateRecoveryCode(5));
 		return query.executeUpdate() > 0;
 	}
 	public boolean updateProductQuantityFromCartDetail(String productId, String quantity, HttpSession httpSession) {
