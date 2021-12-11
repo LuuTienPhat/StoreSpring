@@ -159,7 +159,7 @@
          <c:param name="p" value="~" />
       </c:url>
 
-	 <div class="table-settings mb-4">
+	 <%-- <div class="table-settings mb-4">
             <div class="row align-items-center justify-content-between">
                <div class="col col-md-6 col-lg-3 col-xl-4">
                   <form action="${applicationScope.productPage }" method="get">
@@ -207,7 +207,7 @@
                   </div>
                </div>
             </div>
-         </div>
+         </div> --%>
 
          
     </div>
