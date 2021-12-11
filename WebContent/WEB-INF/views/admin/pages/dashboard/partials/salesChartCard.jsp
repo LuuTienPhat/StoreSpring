@@ -7,17 +7,40 @@
 	<div class="card-header d-sm-flex flex-row align-items-center flex-0">
 		<div class="d-block mb-3 mb-sm-0">
 			<div class="fs-5 fw-normal mb-2">Doanh thu trong ngày</div>
-			<h2 class="fs-3 fw-extrabold">$10,567</h2>
+			<h2 class="fs-3 fw-extrabold">
+				<fmt:setLocale value="vi_VN" scope="session" />
+            	<fmt:formatNumber value="${grossRevenueToday}" type="currency" />
+			</h2>
 			<div class="small mt-2">
-				<span class="fw-normal me-2">Hôm qua</span> <span
+				<span class="fw-normal me-2">So với hôm qua</span> <span
 					class="fas fa-angle-up text-success"></span> <span
-					class="text-success fw-bold">10.57%</span>
+					class="text-primary fw-bold">
+						<c:set var="percentageGrowth" value="${ratioOfOrdersComparedToYesterday}"></c:set>
+						<c:if test="${percentageGrowth > 0}">
+                    		<svg class="icon icon-xs text-success me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7l4-4m0 0l4 4m-4-4v18"></path></svg>
+                    		<fmt:setLocale value="vi_VN" scope="session" />
+                        	<fmt:formatNumber value="${percentageGrowth}" type="number" />%
+                    	</c:if>
+                    	
+                    	<c:if test="${percentageGrowth < 0}">
+                    		<svg class="icon icon-xs text-danger me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 17l-4 4m0 0l-4-4m4 4V3"></path></svg>
+                    		<fmt:setLocale value="vi_VN" scope="session" />
+                        	<fmt:formatNumber value="${-percentageGrowth}" type="number" />%
+                    	</c:if>
+                    	
+                    	<c:if test="${percentageGrowth== 0}">
+                    		<svg class="icon icon-xs text-gray-400 me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path></svg>
+                    		<fmt:setLocale value="vi_VN" scope="session" />
+                        	<fmt:formatNumber value="${percentageGrowth}" type="number" />%
+                    		
+                    	</c:if>
+					</span>
 			</div>
 		</div>
 		<div class="d-flex ms-auto">
 			<!-- <a href="#" class="btn btn-secondary text-dark btn-sm me-2">Ngày</a> -->
-			<a href="#" class="btn btn-secondary text-dark btn-sm me-2">Tháng</a>
-			<a href="#" class="btn btn-dark btn-sm me-3">Tuần</a>
+			<!-- <span class="btn btn-dark btn-sm me-3" id="btn-revenue-by-day">Ngày</span> -->
+			<span class="btn btn-secondary text-dark btn-sm me-2" id="btn-revenue-by-month">Tháng</span>
 		</div>
 	</div>
 	<div class="card-body p-2">
