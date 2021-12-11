@@ -1,5 +1,6 @@
 package controllers;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
@@ -18,6 +19,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import entities.AccountEntity;
@@ -50,16 +53,36 @@ public class ProfileControler {
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public String renderProfilePage(ModelMap model, HttpSession session) throws IOException {
 
-		AdminEntity admin = (AdminEntity) session.getAttribute("admin");
-		model.addAttribute("admin", admin);
-		model.addAttribute("title", "Thông tin");
-		model.addAttribute("type", "admin");
-		return viewsDirectory + "profile";
+		String adminId = null;
+		AdminEntity admin = null;
+
+		entityData = new EntityData(factory);
+
+		try {
+			// admin = (AdminEntity) session.getAttribute("admin");
+			adminId = session.getAttribute("adminId").toString();
+			admin = entityData.getAdmin(adminId);
+
+			model.addAttribute("admin", admin);
+			model.addAttribute("title", "Thông tin");
+			model.addAttribute("type", "admin");
+			return viewsDirectory + "profile";
+		} catch (Exception e) {
+			// TODO: handle exception
+
+		}
+
+		session.removeAttribute("adminId");
+		session.removeAttribute("admin");
+		return "redirect:/admin/logn";
 	}
 
 	@RequestMapping(value = "", method = RequestMethod.POST)
-	public String updateProfile(ModelMap model, HttpSession session, @ModelAttribute("admin") AdminEntity modifiedAdmin,
-			BindingResult errors, RedirectAttributes redirectAttributes) {
+	public String updateProfile(ModelMap model, HttpSession session,
+			@RequestParam(value = "image", required = false) MultipartFile image,
+			@RequestParam(value = "cover", required = false) MultipartFile cover,
+			@ModelAttribute("admin") AdminEntity modifiedAdmin, BindingResult errors,
+			RedirectAttributes redirectAttributes) throws IOException, InterruptedException {
 
 		int errorsCount = 0;
 
@@ -109,7 +132,9 @@ public class ProfileControler {
 
 		} else {
 			EntityData entityData = new EntityData(factory);
-			AdminEntity admin = (AdminEntity) session.getAttribute("admin");
+			String adminId = session.getAttribute("adminId").toString();
+			// AdminEntity admin = (AdminEntity) session.getAttribute("admin");
+			AdminEntity admin = entityData.getAdmin(adminId);
 			admin.setFirstname(modifiedAdmin.getFirstname());
 			admin.setLastname(modifiedAdmin.getLastname());
 			admin.setBirthday(modifiedAdmin.getBirthday());
@@ -117,6 +142,66 @@ public class ProfileControler {
 			admin.setAddress(modifiedAdmin.getAddress());
 			admin.setGender(modifiedAdmin.getGender());
 			admin.setEmail(modifiedAdmin.getEmail());
+
+			if (image.getSize() != 0) {
+				String oldImageFileName = "image" + UploadFile.getExtension(admin.getImage());
+				String imageFileName = "image" + UploadFile.getExtension(image.getOriginalFilename());
+				String imagePath = uploadFile.getRelativeUploadPath() + "admins/" + admin.getId() + "/" + imageFileName;
+				admin.setImage(imagePath);
+
+				File oldFileInServer = new File(
+						uploadFile.getUploadPathOnServer(context) + "admins/" + admin.getId() + "/" + oldImageFileName);
+				File oldFileInResource = new File(
+						uploadFile.getUploadPath() + "admins/" + admin.getId() + "/" + oldImageFileName);
+
+				File fileInServer = new File(
+						uploadFile.getUploadPathOnServer(context) + "admins/" + admin.getId() + "/" + imageFileName);
+				File fileInResource = new File(
+						uploadFile.getUploadPath() + "admins/" + admin.getId() + "/" + imageFileName);
+
+				if (oldFileInResource.exists()) {
+					oldFileInResource.delete();
+				}
+
+				if (oldFileInServer.exists()) {
+					oldFileInServer.delete();
+				}
+
+				UploadFile.writeFile(fileInServer, image);
+				UploadFile.writeFile(fileInResource, image);
+
+				Thread.sleep(2000);
+			}
+			
+			if (cover.getSize() != 0) {
+				String oldImageFileName = "cover" + UploadFile.getExtension(admin.getImage());
+				String imageFileName = "cover" + UploadFile.getExtension(cover.getOriginalFilename());
+				String imagePath = uploadFile.getRelativeUploadPath() + "admins/" + admin.getId() + "/" + imageFileName;
+				admin.setCover(imagePath);
+
+				File oldFileInServer = new File(
+						uploadFile.getUploadPathOnServer(context) + "admins/" + admin.getId() + "/" + oldImageFileName);
+				File oldFileInResource = new File(
+						uploadFile.getUploadPath() + "admins/" + admin.getId() + "/" + oldImageFileName);
+
+				File fileInServer = new File(
+						uploadFile.getUploadPathOnServer(context) + "admins/" + admin.getId() + "/" + imageFileName);
+				File fileInResource = new File(
+						uploadFile.getUploadPath() + "admins/" + admin.getId() + "/" + imageFileName);
+
+				if (oldFileInResource.exists()) {
+					oldFileInResource.delete();
+				}
+
+				if (oldFileInServer.exists()) {
+					oldFileInServer.delete();
+				}
+
+				UploadFile.writeFile(fileInServer, cover);
+				UploadFile.writeFile(fileInResource, cover);
+
+				Thread.sleep(2000);
+			}
 
 			if (entityData.updateAdminInDB(admin)) {
 				redirectAttributes.addFlashAttribute("message", "Cập nhật thông tin thành công!");
