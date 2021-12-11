@@ -71,7 +71,7 @@ public class ProductController {
 			model.addAttribute("pagedLink", "/admin/products");
 		}
 
-		PagedListHolder pagedListHolder = Pagination.productPagination(request, products, 10, 5);
+		PagedListHolder pagedListHolder = Pagination.productPagination(request, products, 5, 10);
 
 		// model.addAttribute("products", products);
 		model.addAttribute("pagedListHolder", pagedListHolder);

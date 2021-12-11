@@ -66,22 +66,27 @@
             <!-- START FROM HERE -->
             <div class="table-settings mb-4">
                 <div class="row justify-content-between align-items-center">
-                    <div class="col-9 col-lg-8 d-md-flex">
+                    <div class="col col-md-6 col-lg-3 col-xl-4 ">
+                    <form action = "${requestScope['javax.servlet.forward.request_uri']}" method="get">
                         <div class="input-group me-2 me-lg-3 fmxw-300">
-                            <span class="input-group-text">
-                                <svg class="icon icon-xs" x-description="Heroicon name: solid/search" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                    <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/>
-                                </svg>
-                            </span><input type="text" class="form-control" placeholder="Tìm kiếm" /></div>
-                        <select class="form-select fmxw-200 d-none d-md-inline" aria-label="Message select example 2">
-                            <option selected="selected">Tất cả</option>
-                            <option value="1">Xử lý xong</option>
-                            <option value="2">Đang xử lý</option>
-                            <option value="3">Đã xử lý</option>
-                            <option value="3">Huỷ đơn hàng</option>
-                        </select>
+                            <input type="text" class="form-control" placeholder="Tìm kiếm" name = "search"/>
+                        	<a class="input-group-text" href = "${applicationScope.customerPage}">
+                        		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
+								  <path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2v1z"/>
+								  <path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466z"/>
+								</svg>
+                        	</a>
+                        	
+                        	<button class="input-group-text" type = "submit" >
+                               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+								  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+								</svg>
+                            </button>
+                        </div>
+                     </form>
+                      
                     </div>
-                    <div class="col-3 col-lg-4 d-flex justify-content-end">
+                    <!-- <div class="col-3 col-lg-4 d-flex justify-content-end">
                         <div class="btn-group">
                             <div class="dropdown me-1">
                                 <button class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -120,7 +125,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <div class="card card-body shadow border-0 table-wrapper table-responsive overflow-hidden">
@@ -163,7 +168,7 @@
                             <td>
                                <!--  <a href="#" class="d-flex align-items-center"><img src="images/profile-picture-1.jpg" class="avatar rounded-circle me-3" alt="Avatar">
                                      --><div class="d-block">
-                                        <span class="fw-bold">${customer.id}</span>
+                                        <span class="fw-bold"><a href="${applicationScope.customerPage }/${customer.id}">${customer.id}</a></span>
                                         <!-- <div class="small text-gray">
                                             <span class="__cf_email__" data-cfemail="fd94939b92bd98859c908d9198d39e9290">[email&#160;protected]</span>
                                         </div> -->
@@ -194,7 +199,11 @@
                                 <span class="fw-normal">${customer.email}</span>
                             </td>
                             <td>
-                                <span class="fw-normal">${customer.dateAdded }</span>
+                                <span class="fw-normal">
+                                	<fmt:setLocale value="vi_VN" scope="session"/>
+                                	<fmt:parseDate  value="${customer.dateAdded }"  type="date" pattern="yyyy-MM-dd" var="parsedDate" />
+	                            	<fmt:formatDate value="${parsedDate }" pattern="dd/MM/yyyy"/>
+                                </span>
                             </td>
                             <%-- <td>
                                 <span class="fw-normal">
@@ -220,13 +229,15 @@
                                         <span class="visually-hidden">Toggle Dropdown</span>
                                     </button>
                                     <div class="dropdown-menu dashboard-dropdown dropdown-menu-start mt-2 py-1">
-                                        <a class="dropdown-item d-flex align-items-center" href="${applicationScope.mailPage}">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-envelope dropdown-icon text-info me-2" viewBox="0 0 16 16">
-										  <path fill-rule="evenodd" d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2Zm13 2.383-4.708 2.825L15 11.105V5.383Zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741ZM1 11.105l4.708-2.897L1 5.383v5.722Z"/>
-										</svg>
-                                           
-                                            Send E-Mail
-                                        </a>
+                                    	<form action="${applicationScope.mailPage }" method="post">
+                                    		<input class="d-none" name="email" value="${customer.email }" />
+	                                        <button class="dropdown-item d-flex align-items-center" type="submit">
+	                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-envelope dropdown-icon text-info me-2" viewBox="0 0 16 16">
+											  <path fill-rule="evenodd" d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2Zm13 2.383-4.708 2.825L15 11.105V5.383Zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741ZM1 11.105l4.708-2.897L1 5.383v5.722Z"/>
+											</svg>
+	                                            Gửi E-Mail
+	                                        </button>
+                                        </form>
                                         <a class="dropdown-item d-flex align-items-center" href="${applicationScope.customerPage }/${customer.id}">
                                             <svg class="dropdown-icon text-gray-400 me-2" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
