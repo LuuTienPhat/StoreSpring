@@ -52,14 +52,19 @@ public class AdminAuthController {
 	@RequestMapping(value = "login", method = RequestMethod.GET)
 	public String renderLoginPage(HttpServletRequest request, ModelMap model) {
 		HttpSession session = request.getSession();
-		if (session.getAttribute("admin") != null) {
-			return "redirect:/admin/dashboard";
-		}
-		else {
+		AdminEntity admin = null;
+		String adminId = "";
+		try {
+			adminId = session.getAttribute("adminId").toString();
+			admin = (AdminEntity) session.getAttribute("admin");
+		} catch (Exception e) {
+			// TODO: handle exception
 			model.addAttribute("account", new AccountEntity());
 			model.addAttribute("title", "Admin Đăng nhập");
 			return viewsDirectory + "login";
+
 		}
+		return "redirect:/admin/dashboard";
 	}
 
 	@RequestMapping(value = "login", method = RequestMethod.POST)
@@ -247,6 +252,7 @@ public class AdminAuthController {
 					account.setPassword(resetPassword.getNewPassword());
 					account.setRecovery("");
 					dao.updateAccount(account);
+					session.removeAttribute("adminId");
 					redirectAttributes.addFlashAttribute("message", "Khôi phục mật khẩu thành công!");
 					redirectAttributes.addFlashAttribute("messageType", "success");
 					return "redirect:/admin/login";
@@ -268,7 +274,8 @@ public class AdminAuthController {
 	@RequestMapping("logout")
 	public String logout(HttpServletRequest request) throws IOException {
 		HttpSession session = request.getSession();
-		session.setAttribute("admin", null);
+		session.removeAttribute("adminId");
+		session.removeAttribute("admin");
 		return "redirect:/admin/login";
 	}
 
