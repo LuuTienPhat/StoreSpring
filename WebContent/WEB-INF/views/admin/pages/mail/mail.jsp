@@ -60,6 +60,7 @@
                                         <div class="mb-4">
                                             <label for="email">Người nhận</label>
                                             <input
+                                            	value = "${email}"
                                                 type="email"
                                                 name="email"
                                                 placeholder="Nhập người nhận"
