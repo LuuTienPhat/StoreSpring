@@ -92,7 +92,7 @@
             <div class="row pt-4">
                 <div class="col-12 col-xl-8">
                     <div class="card card-body border-0 shadow">
-                        <h2 class="h5 mb-4">Thông tin sản phẩm</h2>
+                        <h2 class="h5 mb-4">Thông tin sản phẩm </h2>
                         <form:form action ="${applicationScope.productPage }/edit/${product.id}" method = "post" modelAttribute="product" enctype="multipart/form-data">
                             <div class="row mb-3">
                                 <div class="col-md-6">
@@ -105,15 +105,7 @@
                                     <div>
                                         <label for="last_name">Tên sản phẩm</label>
                                         <div class="input-group">
-                                        	<span class="input-group-text">
-                                        	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-text" viewBox="0 0 16 16">
-												  <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
-												  <path d="M3 5.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3 8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 8zm0 2.5a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5z"/>
-												</svg>
-											</span>
-											
                                         	<form:input path="name" class="form-control" id="productName"  type="text" value = "${product.name}" />
-                                    		
                                     	</div>	
                                     </div>
                                 </div>
@@ -140,11 +132,8 @@
                                         <label for="price">Giá tiền</label>
                                         <div class="input-group">
                                         	<span class="input-group-text">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cash-stack" viewBox="0 0 16 16">
-										  <path d="M1 3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1H1zm7 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/>
-										  <path d="M0 5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V5zm3 0a2 2 0 0 1-2 2v4a2 2 0 0 1 2 2h10a2 2 0 0 1 2-2V7a2 2 0 0 1-2-2H3z"/>
-										</svg>
-												</span>
+                                        		<svg class="icon icon-xs" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+											</span>
                                         <form:input class="form-control" id="price" path="price" type="text" label="<fmt:formatNumber value='${product.price}' type='number' groupingUsed = 'false' />" />
                                     	</div>
                                     </div>
@@ -191,9 +180,7 @@
                                     <label for="birthday">Ngày thêm</label>
                                     <div class="input-group">
                                         <span class="input-group-text">
-                                            <svg class="icon icon-xs" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
-                                            </svg>
+                                           <svg class="icon icon-xs" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                                         </span>
                                         
                                         <form:input path="dateAdded" label ="<fmt:formatDate value='${product.dateAdded}' pattern='dd/MM/yyyy' />" class="form-control" id="dateAdded" type="text" readonly="true" />                                               
@@ -202,7 +189,10 @@
                             </div>
                             
                             <div class="mt-4">
-                                <button class="btn btn-gray-800 mt-2 animate-up-2" type="submit">Lưu</button>
+                                <button class="btn btn-gray-800 mt-2 animate-up-2 d-inline-flex align-items-center" type="submit">
+                                	<svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                	Lưu
+                                </button>
                             </div>
                             
                     </div>
@@ -217,16 +207,24 @@
                                 </div>
                                 <div class="card-body pb-5">
                                     <!-- <img src="../assets/img/team/profile-picture-1.jpg" class="avatar-xl rounded-circle mx-auto mt-n7 mb-4" alt="Neil Portrait"> -->
-                                    <h4 class="h3">${product.name }</h4>
-                                    <h6 class="fw-normal">${product.category.name}</h6>
-                                    <p class="text-gray mb-4">#: ${product.id }</p>
+                                    <h4>${product.name }</h4>
+                                    <h6 class="fw-normal text-success">${product.category.name}</h6>
+                                    <h4 class="text-gray d-flex align-items-center justify-content-center">
+                                    	<svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"></path></svg>
+                                    	${product.id }
+                                    </h4>
+                                    <p class="text-danger d-flex align-items-center justify-content-center mb-0">
+                                    	<svg class="icon icon-xs me-2" fill="currentColor" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                                    	${product.favoriteProducts.size() }
+                                    </p>
+                                    <p class="text-info mb-4 d-flex align-items-center justify-content-center">
+                                    	<svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                                    	${product.views }
+                                    </p>
                                     
-                                    <a class="btn btn-sm btn-secondary d-inline-flex align-items-center me-2" href="${applicationScope.productPage }/${product.id }">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill me-2" viewBox="0 0 16 16">
-										  <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
-										  <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
-										</svg>
-                                        Xem sản phẩm
+                                    <a class="btn btn-sm btn-secondary d-inline-flex align-items-center" href="${applicationScope.productPage }/${product.id }">
+                                        <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                        <span>Xem sản phẩm</span>
                                     </a>
                                 </div>
                              </div>
@@ -272,6 +270,7 @@
            
            let index = 1;
            let dt = new DataTransfer();
+           let numberOfFile = "${product.images.size()}";
            
            if(imageElements.length != 0) {
 	           for(let imageEle of imageElements) {
