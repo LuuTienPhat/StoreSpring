@@ -11,7 +11,7 @@
     </div>
     <div class="card-body">
         <div class="list-group list-group-flush list my--3">
-        	<c:forEach items="${mostViewedProducts}" var="product" varStatus="i" begin="0" end="6">
+        	<c:forEach items="${mostViewedProducts}" var="product" varStatus="i" begin="0" end="4">
             	<a class="list-group-item list-group-item-action px-2 ${i.index != i.end ? 'border-bottom' : '' }" aria-current="true" href="${applicationScope.productPage }/${product.id}">
     			<div class="row align-items-center justify-content-between">
                 <div class="col-auto">
