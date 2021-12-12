@@ -38,13 +38,13 @@
               </svg>
             </a>
           </li>
-          <li class="breadcrumb-item"><a href="#">Sản phẩm</a></li>
+          <li class="breadcrumb-item"><a href="${applicationScope.productPage }">Sản phẩm</a></li>
           <li class="breadcrumb-item active" aria-current="page">${product.id}</li>
         </ol>
       </nav>
       <div class="d-flex justify-content-between w-100 flex-wrap">
         <div class="mb-3 mb-lg-0">
-          <h1 class="h4">Thông tin danh mục </h1>
+          <h1 class="h4">Thông tin sản phẩm</h1>
           <!-- <p class="mb-0">Dozens of reusable components built to provide buttons, alerts, popovers, and more.</p> -->
         </div>
         <!-- <div>
@@ -82,14 +82,35 @@
                   <div class="">
                     <h3 class="fw-extrabold  mb-0"> ${product.name }</h3>
                     <p class="text-gray-400 mb-2">
-                    	${!product.description ? "Không có mô tả cho danh mục" : product.description}
+                    	${!product.description ? "Không có mô tả cho sản phẩm" : product.description}
                     </p>
                   </div>
                   
                   <div class="d-flex mt-1">
                   <div>
+                  <span class="small text-info">Lượt xem:</span>
+                  <span class="fw-normal">
+                  	${product.views }
+                  </span>
+                  </div>
+                  </div>
+                  
+                  <div class="d-flex mt-1">
+                  <div>
+                  <span class="small text-danger">Yêu thích:</span>
+                  <span class="fw-normal">
+                  	${product.favoriteProducts.size() }
+                  </span>
+                  </div>
+                  </div>
+                  
+                  <div class="d-flex mt-1">
+                  <div>
                   <span class="small text-gray-500">Ngày thêm:</span>
-                  <span class="fw-normal">18/10/2021</span>
+                  <span class="fw-normal">
+                  	<fmt:setLocale value="vi_VN" scope="session"/>
+                     	<fmt:formatDate value="${product.dateAdded}" pattern="dd/MM/yyyy"/>
+                  </span>
                   </div>
                   </div>
                   
@@ -102,16 +123,19 @@
                 </div>
 
                 <div class="col-md-2 col-12 mt-2 d-flex flex-column">
-                  <button class="btn btn-block btn-gray-800 mb-3 ">
-                    Chỉnh sửa <i class="icon i"></i>
-                  </button>
+                  <a href="${applicationScope.productPage }/edit/${product.id}" class="btn btn-block btn-gray-800 mb-3 d-inline-flex align-items-center justify-content-center">
+                  <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+	                                 
+                    Chỉnh sửa
+                  </a>
 
                   <!-- Button Delete -->
-                  <button class="btn btn-block btn-danger mb-3" data-bs-toggle="modal" data-bs-target="#modal-warning">
+                  <button id="btn-delete" data-id="${product.id }" class="btn btn-block btn-danger mb-3 d-inline-flex align-items-center justify-content-center" data-bs-toggle="modal" data-bs-target="#modal-warning">
+                     <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>           
                     Xoá
                   </button>
                   <!-- Modal Content -->
-                  <div class="modal fade" id="modal-warning" tabindex="-1" role="dialog" aria-labelledby="modal-warning"
+                  <!-- <div class="modal fade" id="modal-warning" tabindex="-1" role="dialog" aria-labelledby="modal-warning"
                     aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered" role="document">
                       <div class="modal-content">
@@ -131,7 +155,7 @@
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> -->
                   <!-- End of Modal Content -->
                 </div>
               </div>
@@ -143,7 +167,7 @@
 
     <hr class="mt-4">
 
-    <div class="row mt-4">
+    <!-- <div class="row mt-4">
 
       <div class="py-4 d-flex justify-content-between w-100 flex-wrap">
         <div class="mb-3 mb-lg-0">
@@ -209,7 +233,7 @@
             </tr>
           </thead>
           <tbody>
-            <!-- Item -->
+            Item
             <tr>
               <td>
                 <a href="#" class="fw-bold">
@@ -241,7 +265,7 @@
                 </div>
               </td>
             </tr>
-            <!-- Item -->
+            Item
             <tr>
               <td>
                 <a href="#" class="fw-bold">
@@ -273,7 +297,7 @@
                 </div>
               </td>
             </tr>
-            <!-- Item -->
+            Item
             <tr>
               <td>
                 <a href="#" class="fw-bold">
@@ -305,7 +329,7 @@
                 </div>
               </td>
             </tr>
-            <!-- Item -->
+            Item
             <tr>
               <td>
                 <a href="#" class="fw-bold">
@@ -337,7 +361,7 @@
                 </div>
               </td>
             </tr>
-            <!-- Item -->
+            Item
             <tr>
               <td>
                 <a href="#" class="fw-bold">
@@ -369,7 +393,7 @@
                 </div>
               </td>
             </tr>
-            <!-- Item -->
+            Item
             <tr>
               <td>
                 <a href="#" class="fw-bold">
@@ -401,8 +425,8 @@
                 </div>
               </td>
             </tr>
-            <!-- Item -->
-            <!-- Item -->
+            Item
+            Item
             <tr>
               <td>
                 <a href="#" class="fw-bold">
@@ -434,7 +458,7 @@
                 </div>
               </td>
             </tr>
-            <!-- Item -->
+            Item
             <tr>
               <td>
                 <a href="#" class="fw-bold">
@@ -466,7 +490,7 @@
                 </div>
               </td>
             </tr>
-            <!-- Item -->
+            Item
             <tr>
               <td>
                 <a href="#" class="fw-bold">
@@ -498,7 +522,7 @@
                 </div>
               </td>
             </tr>
-            <!-- Item -->
+            Item
             <tr>
               <td>
                 <a href="#" class="fw-bold">
@@ -563,12 +587,25 @@
         </div>
       </div>
 
-    </div>
+    </div> -->
 	<%@include file="/WEB-INF/views/admin/includes/footer/footer.jsp"%>
      </main>
 	
 	<!-- ========== All JS files linkup ========= -->
 <%@include file="/WEB-INF/views/admin/includes/footer/script.jsp"%>
+
+<!-- ========== Modal warning linkup ========= -->
+ <%@include file="/WEB-INF/views/admin/pages/product/deleteProductModal.jsp"%>
+ 
+  <script type="text/javascript">
+	const btnDelete = document.querySelector("#btn-delete");
+	
+	btnDelete.addEventListener('click', () => {
+			let id = btnDelete.dataset.id;
+			const btnConfirm = document.querySelector("#btnConfirm");
+			btnConfirm.href = "<c:out value='${applicationScope.productPage}'/>/delete/" + id;
+		})
+ </script>
 
 </body>
 
