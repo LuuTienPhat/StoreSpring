@@ -9,12 +9,10 @@
       <div class="d-flex align-items-center">  
       
         <!-- Clock -->
-        <button class = "btn btn-outline-gray-900" style="width: 270px">
+        <button class = "btn btn-outline-gray-900" style="width: 290px">
         	<div class="d-flex align-items-center">
-	        	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clock-fill me-2" viewBox="0 0 16 16">
-				  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"/>
-				</svg>
-			<span id="clock" class="fw-bold font-small" ></span>
+	        	<svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+				<span id="clock" class="fw-bold font-small my-0" ></span>
 			</div>
         </button>
         
