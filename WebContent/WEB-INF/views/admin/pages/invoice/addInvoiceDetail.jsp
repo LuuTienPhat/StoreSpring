@@ -75,7 +75,7 @@
                             </div>
                         </form>
                     </div>
-                    <div class="col-4 col-md-2 col-xl-1 ps-md-0 text-end">
+                    <!-- <div class="col-4 col-md-2 col-xl-1 ps-md-0 text-end">
                         <div class="dropdown">
                             <button class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <svg class="icon icon-sm" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -99,7 +99,7 @@
                                 <a class="dropdown-item fw-bold rounded-bottom" href="#">30</a>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
 
