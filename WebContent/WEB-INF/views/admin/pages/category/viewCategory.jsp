@@ -115,11 +115,11 @@
          <%@include file="/WEB-INF/views/admin/includes/nav/sidebar.jsp"%>
 
          <jsp:useBean id="pagedListHolder" scope="request" type="org.springframework.beans.support.PagedListHolder" />
-         <c:url value="${requestScope['javax.servlet.forward.request_uri']}" var="pagedLink">
+         <c:url value="${pagedLink }" var="pagedLink">
              <c:param name="p" value="~" />
          </c:url>
 
-         <div class="table-settings mb-4">
+         <%-- <div class="table-settings mb-4">
              <div class="row align-items-center justify-content-between">
                  <div class="col col-md-6 col-lg-3 col-xl-4">
                      <form action="${applicationScope.productPage }" method="get">
@@ -169,7 +169,7 @@
                      </div>
                  </div>
              </div>
-         </div>
+         </div> --%>
      </div>
      <div class="card card-body border-0 shadow table-wrapper table-responsive overflow-hidden">
          <table class="table table-hover table-responsive" id="datatable">
@@ -189,7 +189,7 @@
              </thead>
              <tbody>
                  <!-- Item -->
-                 <c:forEach items="${category.products}" var="product">
+                 <c:forEach items="${pagedListHolder.pageList}" var="product">
                      <tr>
                          <td>
                              <a href="${applicationScope.productPage}/${product.id}" class="fw-bold">

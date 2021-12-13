@@ -82,10 +82,10 @@
             <div>
               <h4>SPRING STORE 21.</h4>
               <ul class="list-group simple-list">
-                <li class="list-group-item fw-normal">
+                <!-- <li class="list-group-item fw-normal">
                   7 Le Loi
                 </li>
-                <li class="list-group-item fw-normal">Quận 1, TPHCM</li>
+                <li class="list-group-item fw-normal">Quận 1, TPHCM</li> -->
                 <li class="list-group-item fw-normal">
                   <a class="fw-bold text-primary" href="#">
                   <span class="__cf_email__"
@@ -96,25 +96,25 @@
           </div>
           <div class="mb-6 d-flex align-items-center justify-content-center">
             <h2 class="h1 mb-0">Hoá đơn #${invoice.id }</h2>
-            <span class="badge badge-lg bg-success ms-4">Paid</span>
+            <!-- <span class="badge badge-lg bg-success ms-4">Paid</span> -->
           </div>
           <div class="row justify-content-between mb-4 mb-md-5">
-            <div class="col-sm">
+            <!-- <div class="col-sm">
               <h5>Thông tin người giao:</h5>
               <div>
                 <ul class="list-group simple-list">
                   <li class="list-group-item fw-normal">Henry M. Pike</li>
-                  <!-- <li class="list-group-item fw-normal">Themesberg LLC</li>
+                  <li class="list-group-item fw-normal">Themesberg LLC</li>
                   <li class="list-group-item fw-normal">
                     311 West Mechanic Lane Middletown, NY 10940
                   </li>
                   <li class="list-group-item fw-normal">
                     <a class="fw-bold text-primary" href="#"><span class="__cf_email__"
                         data-cfemail="9bf5faf6fedbf8f4f6ebfaf5e2b5f8f4f6">[email&#160;protected]</span></a>
-                  </li> -->
+                  </li>
                 </ul>
               </div>
-            </div>
+            </div> -->
             
             <div class="col-sm col-lg-4">
               <dl class="row text-sm-right">
@@ -209,9 +209,9 @@
                   </table>
                 </div>
               </div>
-              <h4>Payments to:</h4>
+              <!-- <h4>Payments to:</h4>
               <span><a href="/cdn-cgi/l/email-protection" class="__cf_email__"
-                  data-cfemail="f585948c98909b81b5839a9981db969a98">[email&#160;protected]</a></span>
+                  data-cfemail="f585948c98909b81b5839a9981db969a98">[email&#160;protected]</a></span> -->
             </div>
           </div>
         </div>

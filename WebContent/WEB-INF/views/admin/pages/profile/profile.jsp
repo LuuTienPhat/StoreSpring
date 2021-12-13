@@ -102,7 +102,7 @@
                 <div class="col-12 col-xl-8">
                     <div class="card card-body border-0 shadow mb-4">
                         <h2 class="h5 mb-4">Thông tin chung</h2>
-                        <form:form action="${applicationScope.profilePage }" method="post" modelAttribute="admin" enctype="multipart/form-data">
+                        <form:form action="${applicationScope.profilePage }" method="post" modelAttribute="modifiedAdmin" enctype="multipart/form-data">
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <div>

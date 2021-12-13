@@ -113,9 +113,7 @@
                                     <label for="birthday">Ngày thêm</label>
                                     <div class="input-group">
                                         <span class="input-group-text">
-                                            <svg class="icon icon-xs" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
-                                            </svg>
+                                            <svg class="icon icon-xs" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                                         </span>
                                         <form:input path="dateAdded" label="<fmt:formatDate value='${category.dateAdded}' pattern='dd/MM/yyyy'/>" class="form-control" id="dateAdded" type="text" readonly="true" />                                               
                                      </div>
@@ -130,7 +128,10 @@
                                 </div>
                             </div>
                             <div class="mt-3">
-                                <button class="btn btn-gray-800 mt-2 animate-up-2" type="submit">Lưu</button>
+                                <button class="btn btn-gray-800 mt-2 animate-up-2 d-inline-flex align-items-center" type="submit">
+                                	<svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                	Lưu
+                                </button>
                             </div>
                         
                     </div>
@@ -147,13 +148,13 @@
                                     <!-- <img src="../assets/img/team/profile-picture-1.jpg" class="avatar-xl rounded-circle mx-auto mt-n7 mb-4" alt="Neil Portrait"> -->
                                     <h4 class="h3">${category.name }</h4>
                                     <h6 class="fw-normal">Sản phẩm: ${category.products.size()}</h6>
-                                    <p class="text-gray mb-4">#: ${category.id }</p>
+                                    <p class="text-gray mb-4 d-flex align-items-center justify-content-center">
+                                    <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"></path></svg>
+                                    	${category.id }
+                                    </p>
                                     
-                                    <a class="btn btn-sm btn-secondary d-inline-flex align-items-center me-2" href="${applicationScope.categoryPage }/${category.id }">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill me-2" viewBox="0 0 16 16">
-										  <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
-										  <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
-										</svg>
+                                    <a class="btn btn-sm btn-secondary d-inline-flex align-items-center" href="${applicationScope.categoryPage }/${category.id }">
+                                        <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                                         Xem sản phẩm
                                     </a>
                                 </div>
@@ -175,7 +176,7 @@
 												  <path d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0V3z"/>
 												</svg>		
 												
-                                                <input type="file" name = "image" id="image-upload">
+                                                <input type="file" name = "image" id="image-upload" accept="image/*">
                                                 <div class="d-md-block text-left">
                                                     <div class="fw-normal text-dark mb-1">Chọn hình ảnh</div>
                                                     <div class="text-gray small">JPG, GIF hoặc PNG. Kích thước tối đa 800K</div>
