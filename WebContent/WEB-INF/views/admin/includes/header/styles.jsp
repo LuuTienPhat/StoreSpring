@@ -22,9 +22,8 @@
 <!-- Apex Charts -->
 <script src="<c:url value='/resources/admin/vendor/apexcharts/apexcharts.min.js' />"></script>
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-<!-- <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/confetti.css"> -->
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-<script src="https://npmcdn.com/flatpickr/dist/l10n/vn.js"></script>
+<link rel="stylesheet" href="<c:url value='/resources/admin/vendor/flatpickr/flatpickr.min.css' />">
+<script src="<c:url value='/resources/admin/vendor/flatpickr/flatpickr.js' />"></script>
+<script src="<c:url value='/resources/admin/vendor/flatpickr/vn.js' />"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="<c:url value='/resources/admin/vendor/axios/axios.min.js' />"></script>
