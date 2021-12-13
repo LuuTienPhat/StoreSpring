@@ -80,17 +80,12 @@
                         <div class="input-group me-2 me-lg-3 fmxw-300">
                             <input type="text" class="form-control" placeholder="Tìm kiếm" name = "search" value="${search }"/>
                         	<a class="input-group-text" href = "${requestScope['javax.servlet.forward.request_uri']}">
-                        		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
-								  <path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2v1z"/>
-								  <path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466z"/>
-								</svg>
-                        	</a>
-                        	
-                        	<button class="input-group-text" type = "submit" >
-                               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-								  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-								</svg>
-                            </button>
+                        		<svg class="icon icon-xs" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                </a>
+
+                                <button class="input-group-text" type="submit">
+                                    <svg class="icon icon-xs" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                                </button>
                         </div>
                      </form>
                             
@@ -100,10 +95,10 @@
                             <option value="1" ${state == 1 ? 'selected' : '' }>Xác nhận với khách hàng</option>
                             <option value="2" ${state == 2 ? 'selected' : '' }>Đang xử lý</option>
                             <option value="3" ${state == 3 ? 'selected' : '' }>Đã hoàn thành</option>
-                            <option value="-1" ${state == -1 ? 'selected' : '' }>Huỷ đơn hàng</option>
+                            <option value="-1" ${state == -1 ? 'selected' : '' }>Đơn hàng đã hủy</option>
                         </select>
                     </div>
-                    <div class="col-3 col-lg-4 d-flex justify-content-end">
+                    <!-- <div class="col-3 col-lg-4 d-flex justify-content-end">
                         <div class="btn-group">
                             <div class="dropdown me-1">
                                 <button class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -142,11 +137,11 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
-            <div class="card card-body shadow border-0 table-wrapper table-responsive">
-                <div class="d-flex mb-3">
+            <div class="card card-body shadow border-0 table-wrapper table-responsive overflow-hidden">
+                <!-- <div class="d-flex mb-3">
                     <select class="form-select fmxw-200" aria-label="Message select example">
                         <option selected="selected">Bulk Action</option>
                         <option value="1">Send Email</option>
@@ -154,16 +149,16 @@
                         <option value="3">Delete User</option>
                     </select>
                     <button class="btn btn-sm px-3 btn-secondary ms-3">Apply</button>
-                </div>
+                </div> -->
                 <table class="table user-table table-hover align-items-center">
                     <thead class="thead-dark">
                         <tr>
-                            <th class="border-bottom rounded-start">
+                            <!-- <th class="border-bottom rounded-start">
                                 <div class="form-check dashboard-check"><input class="form-check-input" type="checkbox" value id="userCheck55">
                                     <label class="form-check-label" for="userCheck55"></label>
                                 </div>
-                            </th>
-                            <th class="border-bottom text-wrap">#</th>
+                            </th> -->
+                            <th class="border-bottom text-wrap rounded-start">#</th>
                             <th class="border-bottom text-wrap">Tên người đặt</th>
                             <th class="border-bottom text-wrap">Ngày đặt</th>
                             <th class="border-bottom text-wrap">Giờ đặt</th>
@@ -177,11 +172,11 @@
                     <tbody>
                     <c:forEach items="${pagedListHolder.pageList}" var="order">
                         <tr>
-                            <td>
+                            <!-- <td>
                                 <div class="form-check dashboard-check"><input class="form-check-input" type="checkbox" value id="userCheck1">
                                     <label class="form-check-label" for="userCheck1"></label>
                                 </div>
-                            </td>
+                            </td> -->
                             <td>
                                <!--  <a href="#" class="d-flex align-items-center"><img src="images/profile-picture-1.jpg" class="avatar rounded-circle me-3" alt="Avatar">
                                      --><div class="d-block">
@@ -239,14 +234,20 @@
                             <td>
                                 <span class="fw-normal text-wrap">
                                 <c:choose>
+                                <c:when test="${order.state == -1}">
+								  	<span class="text-danger">Đơn hàng đã hủy</span>  
+								  </c:when>
 								  <c:when test="${order.state == 0}">
-								  	<span class="text-warning">Khách mới đặt</span>  
+								  	<span class="text-info">Đơn hàng mới</span>  
 								  </c:when>
 								   <c:when test="${order.state == 1}">
-								  		<span class="text-info">Đang xử lý</span>
+								  		<span class="text-tertiary">Đơn hàng đã xác nhận</span>
+								  </c:when>
+								  <c:when test="${order.state == 2}">
+								  		<span class="text-secondary">Đơn hàng đang xử lý</span>
 								  </c:when>
 								  <c:otherwise>
-								    <span class="text-success">Đã giao cho khách hàng</span>
+								    <span class="text-success">Đơn hàng hoàn thành</span>
 								  </c:otherwise>
 								</c:choose>
                                 </span>
@@ -260,12 +261,12 @@
                                         <span class="visually-hidden">Toggle Dropdown</span>
                                     </button>
                                     <div class="dropdown-menu dashboard-dropdown dropdown-menu-start mt-2 py-1">
-                                        <a class="dropdown-item d-flex align-items-center" href="#">
+                                        <!-- <a class="dropdown-item d-flex align-items-center" href="#">
                                             <svg class="dropdown-icon text-gray-400 me-2" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                                 <path fill-rule="evenodd" d="M10 1.944A11.954 11.954 0 012.166 5C2.056 5.649 2 6.319 2 7c0 5.225 3.34 9.67 8 11.317C14.66 16.67 18 12.225 18 7c0-.682-.057-1.35-.166-2.001A11.954 11.954 0 0110 1.944zM11 14a1 1 0 11-2 0 1 1 0 012 0zm0-7a1 1 0 10-2 0v3a1 1 0 102 0V7z" clip-rule="evenodd"/>
                                             </svg>
                                             Reset Pass
-                                        </a>
+                                        </a> -->
                                         <a class="dropdown-item d-flex align-items-center" href="${applicationScope.ordersPage }/${order.id}">
                                             <svg class="dropdown-icon text-gray-400 me-2" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
@@ -273,16 +274,16 @@
                                             </svg>
                                             Chi tiết đơn hàng
                                         </a>
-                                        <a class="dropdown-item d-flex align-items-center" href="#">
+                                        <!-- <a class="dropdown-item d-flex align-items-center" href="#">
                                             <svg class="dropdown-icon text-danger me-2" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M11 6a3 3 0 11-6 0 3 3 0 016 0zM14 17a6 6 0 00-12 0h12zM13 8a1 1 0 100 2h4a1 1 0 100-2h-4z"/>
                                             </svg>
-                                            Suspend</a>
+                                            Suspend</a> -->
                                     </div>
                                 </div>
-                                <svg class="icon icon-xs text-danger ms-1" title="Delete" data-bs-toggle="tooltip" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <!-- <svg class="icon icon-xs text-danger ms-1" title="Delete" data-bs-toggle="tooltip" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
-                                </svg>
+                                </svg> -->
                             </td>
                         </tr>
                         </c:forEach>
