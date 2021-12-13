@@ -119,7 +119,7 @@
           </div>
         </div>
 
-        <div class="table-settings mb-4">
+        <!-- <div class="table-settings mb-4">
           <div class="row align-items-center justify-content-between">
             <div class="col col-md-6 col-lg-3 col-xl-4">
               <div class="input-group me-2 me-lg-3 fmxw-400">
@@ -157,7 +157,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
 
       <div class="card card-body border-0 shadow table-wrapper table-responsive overflow-hidden">
@@ -253,16 +253,20 @@
 
       <footer class="bg-white rounded shadow py-3 px-4 mb-4 mt-4">
         <div class="row d-flex align-items-center">
-          <div class="col-12 col-md-4 col-xl-4 mb-4 mb-md-0">
+          <div class="col-12 col-md-2 col-xl-2 mb-4 mb-md-0">
             <h6 class="mb-0 text-center text-lg-start">Trạng thái đơn hàng</h6>
             <!-- <p class="mb-0 text-center text-lg-start">© 2019-<span class="current-year"></span> <a class="text-primary fw-normal" href="https://themesberg.com" target="_blank">Themesberg</a></p> -->
           </div>
-          <div class="col-12 col-md-8 col-xl-8 text-center text-lg-start">
+          <div class="col-12 col-md-10 col-xl-10 text-center text-lg-start">
             <!-- List -->
             <form action="${applicationScope.ordersPage }/${order.id}" method="post">
               <ul class="list-inline list-group-flush list-group-borderless text-md-end mb-0">
+              	<li class="list-inline-item px-0 px-sm-2">
+                  <button class="btn ${order.state == -1 ? 'btn-danger' : '' }" name="state" value="-1">Hủy đơn hàng</button>
+                </li>
+              
                 <li class="list-inline-item px-0 px-sm-2">
-                  <button class="btn ${order.state == 0 ? 'btn-danger' : '' }" name="state" value="0">Đơn hàng mới đến</button>
+                  <button class="btn ${order.state == 0 ? 'btn-info' : '' }" name="state" value="0">Đơn hàng mới đến</button>
                 </li>
 
                 <li class="list-inline-item px-0 px-sm-2">
