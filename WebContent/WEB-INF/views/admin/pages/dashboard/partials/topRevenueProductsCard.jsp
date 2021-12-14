@@ -39,39 +39,40 @@
             <c:forEach items="${topRevenueProducts}" begin="0" end="4" var="product" varStatus="i">
             	<tr>
                     <th class="text-gray-900 text-truncate" scope="row" colspan="2">
-                        ${product[0].name }
+                        <a href="${applicationScope.productPage }/${product.getProduct().id}">
+                        	${product.getProduct().name }
+                        </a>
                     </th>
-                    <td class="fw-bolder text-gray-500">
-                    	<fmt:setLocale value="vi_VN" scope="session" />
-                        <fmt:formatNumber value="${product[0].price * product[1].quantity }" type="currency" />
-                        
+                    <td>
+                    	<span class="fw-bolder text-gray-500">
+                    		<fmt:setLocale value="vi_VN" scope="session" />
+                        	<fmt:formatNumber value="${product.thisMonthRevenue }" type="currency" />
+                        </span>
                     </td>
                     <td class="fw-bolder text-gray-500">
                     	<span class="d-flex align-items-center">
-                    	<c:set var="bounceRate" value="${product[0].getBounceRate(product[0].id)}"></c:set>
+                    	<c:set var="bounceRate" value="${product.growthRatePercentage}"></c:set>
                     	<c:if test="${bounceRate > 0}">
                     		<svg class="icon icon-xs text-success me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7l4-4m0 0l4 4m-4-4v18"></path></svg>
                     		<fmt:setLocale value="vi_VN" scope="session" />
-                        	<fmt:formatNumber value="${bounceRate}" type="number" />%
+                        	<fmt:formatNumber value="${bounceRate}" type="number" maxFractionDigits="0"/>%
                     	</c:if>
-                    	
                     	<c:if test="${bounceRate < 0}">
                     		<svg class="icon icon-xs text-danger me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 17l-4 4m0 0l-4-4m4 4V3"></path></svg>
                     		<fmt:setLocale value="vi_VN" scope="session" />
-                        	<fmt:formatNumber value="${-bounceRate}" type="number" />%
+                        	<fmt:formatNumber value="${-bounceRate}" type="number" maxFractionDigits="0"/>%
                     	</c:if>
-                    	
                     	<c:if test="${bounceRate == 0}">
                     		<svg class="icon icon-xs text-gray-400 me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path></svg>
                     		<fmt:setLocale value="vi_VN" scope="session" />
-                        	<fmt:formatNumber value="${bounceRate}" type="number" />%
+                        	<fmt:formatNumber value="${bounceRate}" type="number" maxFractionDigits="0"/>%
                     		
                     	</c:if>
                     	</span>
                     </td>
                     <td class="fw-bolder text-gray-500">
                     	<fmt:setLocale value="vi_VN" scope="session" />
-                        <fmt:formatNumber value="${product[0].getGrossRevenueInOrders(product[0].id)}" type="currency" />
+                        <fmt:formatNumber value="${product.allTimeRevenue}" type="currency" />
                     </td>
                     <%-- <td class="fw-bolder text-gray-500">
                         <div class="d-flex">
