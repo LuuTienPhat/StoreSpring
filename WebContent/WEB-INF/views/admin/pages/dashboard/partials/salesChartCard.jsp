@@ -9,13 +9,13 @@
 			<div class="fs-5 fw-normal mb-2">Doanh thu trong ngày</div>
 			<h2 class="fs-3 fw-extrabold">
 				<fmt:setLocale value="vi_VN" scope="session" />
-            	<fmt:formatNumber value="${grossRevenueToday}" type="currency" />
+            	<fmt:formatNumber value="${todayTotalRevenue}" type="currency" />
 			</h2>
 			<div class="small mt-2">
 				<span class="fw-normal me-2">So với hôm qua</span> <span
 					class="fas fa-angle-up text-success"></span> <span
 					class="text-primary fw-bold">
-						<c:set var="percentageGrowth" value="${ratioOfOrdersComparedToYesterday}"></c:set>
+						<c:set var="percentageGrowth" value="${growthRateOfOrdersComparedToYesterday}"></c:set>
 						<c:if test="${percentageGrowth > 0}">
                     		<svg class="icon icon-xs text-success me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7l4-4m0 0l4 4m-4-4v18"></path></svg>
                     		<fmt:setLocale value="vi_VN" scope="session" />
