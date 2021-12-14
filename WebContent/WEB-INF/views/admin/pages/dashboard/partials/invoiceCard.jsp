@@ -33,10 +33,10 @@
                     <h2 class="h6 text-gray-400 mb-0">Hóa đơn</h2>
                     <span class="fw-extrabold mb-2 d-inline-flex align-items-baseline ">
                     <span class="me-3">
-                    	<small>Nhập:</small><span class="my-0 h3 ms-1 fw-extrabold">${thisMonthInvoices.getImportInvoices().size() }</span>
+                    	<small>Nhập:</small><span class="my-0 h3 ms-1 fw-extrabold">${thisMonthInvoices.getImportInvoices().size()}</span>
                     </span>
                    	<span>
-                   		<small>Xuất:</small><span class="my-0 ms-1 h3 fw-extrabold">${thisMonthInvoices.getExportInvoices().size() }</span>
+                   		<small>Xuất:</small><span class="my-0 ms-1 h3 fw-extrabold">${thisMonthInvoices.getExportInvoices().size()}</span>
                    	</span>
                     </span>
                   </div>
