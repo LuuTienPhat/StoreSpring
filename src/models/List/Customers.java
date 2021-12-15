@@ -6,26 +6,25 @@ import java.util.List;
 import entities.CustomerEntity;
 
 public class Customers {
-	private List<CustomerEntity> customers;
-	
+	private List<CustomerEntity> list;
+
 	public Customers() {
 		// TODO Auto-generated constructor stub
 		super();
-		this.customers = new ArrayList<CustomerEntity>();
+		this.list = new ArrayList<CustomerEntity>();
 	}
 
 	public Customers(List<CustomerEntity> customers) {
 		super();
-		this.customers = customers;
+		this.list = customers;
 	}
 
-	public List<CustomerEntity> getCustomers() {
-		return customers;
+	public List<CustomerEntity> getList() {
+		return list;
 	}
 
-	public void setCustomers(List<CustomerEntity> customers) {
-		this.customers = customers;
+	public void setList(List<CustomerEntity> customers) {
+		this.list = customers;
 	}
-	
-	
+
 }

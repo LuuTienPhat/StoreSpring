@@ -31,6 +31,9 @@ import models.EntityData;
 import models.Generate;
 import models.Pagination;
 import models.UploadFile;
+import models.List.Categories;
+import models.dao.CategoryDAO;
+import models.dao.DAO;
 
 @Controller
 @Transactional
@@ -48,7 +51,7 @@ public class CategoryController {
 	@Qualifier("uploadFile")
 	UploadFile uploadFile;
 
-	EntityData entitydata;
+	CategoryDAO categoryDAO;
 
 	String viewsDirectory = "admin/pages/category/";
 
@@ -56,20 +59,19 @@ public class CategoryController {
 	public String renderCategoryPage(ModelMap model, HttpServletRequest request,
 			@RequestParam(value = "search", required = false) String search) throws IOException {
 
-		List<CategoryEntity> categories = new ArrayList<CategoryEntity>();
-		entitydata = new EntityData(factory);
+		Categories categories = new Categories();
+		categoryDAO = new CategoryDAO(factory);
 
 		if (search != null) {
-
-			categories = entitydata.searchForCategory(search);
+			categories = categoryDAO.searchForCategory(search);
 			model.addAttribute("pagedLink", "/admin/categories?search=" + search);
 
 		} else {
-			categories = entitydata.getCategories();
+			categories = categoryDAO.getCategories();
 			model.addAttribute("pagedLink", "/admin/categories");
 		}
 
-		PagedListHolder pagedListHolder = Pagination.categoryPagination(request, categories, 10, 5);
+		PagedListHolder pagedListHolder = Pagination.categoryPagination(request, categories.getList(), 10, 5);
 
 		model.addAttribute("pagedListHolder", pagedListHolder);
 		model.addAttribute("type", "danh mục");
@@ -103,9 +105,10 @@ public class CategoryController {
 			return viewsDirectory + "addCategory";
 
 		} else {
-			entitydata = new EntityData(factory);
-			List<CategoryEntity> categories = entitydata.getCategories();
-			String categoryId = Generate.generateCategoryId(categories);
+			categoryDAO = new CategoryDAO(factory);
+			Categories categories = categoryDAO.getCategories();
+			String categoryId = Generate.generateCategoryId(categories.getList());
+
 			category.setId(categoryId);
 			category.setDateAdded(new Date());
 
@@ -124,7 +127,7 @@ public class CategoryController {
 				}
 			}
 
-			if (entitydata.addCategoryInDB(category)) {
+			if (categoryDAO.addCategoryInDB(category)) {
 				redirectAttributes.addFlashAttribute("message", "Thêm danh mục thành công!");
 				redirectAttributes.addFlashAttribute("messageType", "success");
 			} else {
@@ -140,10 +143,10 @@ public class CategoryController {
 	@RequestMapping(value = "/delete/{id}")
 	public String deleteCategory(ModelMap model, @PathVariable("id") String id, RedirectAttributes redirectAttributes) {
 
-		entitydata = new EntityData(factory);
-		CategoryEntity category = entitydata.getCategory(id);
+		categoryDAO = new CategoryDAO(factory);
+		CategoryEntity category = categoryDAO.getCategory(id);
 
-		if (entitydata.deleteCategoryInDB(category)) {
+		if (categoryDAO.deleteCategoryInDB(category)) {
 			String imageFileName = category.getId() + UploadFile.getExtension(category.getImage());
 			File fileInServer = new File(uploadFile.getUploadPathOnServer(context) + "categories/" + imageFileName);
 			File fileInResource = new File(uploadFile.getUploadPath() + "categories/" + imageFileName);
@@ -171,18 +174,15 @@ public class CategoryController {
 	public String categoryDetail(ModelMap model, HttpServletRequest request, @PathVariable(value = "id") String id) {
 		System.out.println("Id: " + id);
 
-		entitydata = new EntityData(factory);
-		CategoryEntity category = entitydata.getCategory(id);
+		categoryDAO = new CategoryDAO(factory);
+		CategoryEntity category = categoryDAO.getCategory(id);
 		model.addAttribute("category", category);
 		model.addAttribute("title", "Danh mục " + category.getName());
 
-		PagedListHolder pagedListHolder = new PagedListHolder(category.getProducts());
-		int page = ServletRequestUtils.getIntParameter(request, "p", 0);
-		pagedListHolder.setPage(page);
-		pagedListHolder.setMaxLinkedPages(10);
-		pagedListHolder.setPageSize(5);
-
+		PagedListHolder pagedListHolder = Pagination.productPagination(request, category.getProducts(), 5, 5);
+		model.addAttribute("pagedLink", "/admin/categories/" + id);
 		model.addAttribute("pagedListHolder", pagedListHolder);
+		model.addAttribute("type", "sản phẩm");
 
 		return viewsDirectory + "viewCategory";
 	}
@@ -191,8 +191,8 @@ public class CategoryController {
 	@RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
 	public String renderEditCategoryPage(ModelMap model, @PathVariable(value = "id") String id) {
 
-		entitydata = new EntityData(factory);
-		CategoryEntity category = entitydata.getCategory(id);
+		categoryDAO = new CategoryDAO(factory);
+		CategoryEntity category = categoryDAO.getCategory(id);
 		model.addAttribute("category", category);
 		model.addAttribute("title", "Sửa danh mục");
 		return viewsDirectory + "editCategory";
@@ -204,20 +204,20 @@ public class CategoryController {
 			@ModelAttribute("category") CategoryEntity modifiedCategory, BindingResult errors,
 			RedirectAttributes redirectAttributes) throws IOException, InterruptedException {
 
-		entitydata = new EntityData(factory);
+		categoryDAO = new CategoryDAO(factory);
 		if (modifiedCategory.getName().isEmpty()) {
 			errors.rejectValue("name", "category", "Nhập tên danh mục");
 			model.addAttribute("nameValid", "is-invalid");
 		}
 
 		if (errors.hasFieldErrors("name")) {
-			CategoryEntity category = entitydata.getCategory(id);
+			CategoryEntity category = categoryDAO.getCategory(id);
 			modifiedCategory.setImage(category.getImage());
 			model.addAttribute("category", modifiedCategory);
 			model.addAttribute("title", "Thêm Danh Mục");
 			return viewsDirectory + "editCategory";
 		} else {
-			CategoryEntity category = entitydata.getCategory(id);
+			CategoryEntity category = categoryDAO.getCategory(id);
 			category.setName(modifiedCategory.getName());
 			category.setDescription(modifiedCategory.getDescription());
 
@@ -245,10 +245,10 @@ public class CategoryController {
 				UploadFile.writeFile(fileInServer, image);
 				UploadFile.writeFile(fileInResource, image);
 
-				Thread.sleep(2000);
+				Thread.sleep(5000);
 			}
 
-			if (entitydata.updateCategoryInDB(category)) {
+			if (categoryDAO.updateCategoryInDB(category)) {
 				redirectAttributes.addFlashAttribute("message", "Cập nhật danh mục thành công!");
 				redirectAttributes.addFlashAttribute("messageType", "success");
 			} else {
