@@ -1,12 +1,13 @@
 package models.statistics;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalAdjuster;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.hibernate.Query;
@@ -15,11 +16,16 @@ import org.hibernate.SessionFactory;
 
 import entities.OrderEntity;
 import entities.ProductEntity;
-import models.Revenue;
-import models.List.Orders;
+import models.List.Categories;
 import models.List.Customers;
 import models.List.Invoices;
 import models.List.Orders;
+import models.List.Products;
+import models.dao.CategoryDAO;
+import models.dao.CustomerDAO;
+import models.dao.InvoiceDAO;
+import models.dao.OrderDAO;
+import models.dao.ProductDAO;
 
 public class Statistics {
 	private SessionFactory factory;
@@ -86,26 +92,6 @@ public class Statistics {
 		return montlyRevenue;
 	}
 
-	// GET TOP FAVORITE PRODUCTS
-	public List<ProductEntity> gettopFavoriteProducts() throws IOException {
-		Session session = factory.openSession();
-		String hql = "FROM ProductEntity p ORDER BY p.favoriteProducts.size DESC";
-		Query query = session.createQuery(hql);
-		List<ProductEntity> products = query.list();
-		session.close();
-		return products;
-	}
-
-	// GET MOST VIEWED PRODUCT
-	public List<ProductEntity> getMostViewedProducts() throws IOException {
-		Session session = factory.openSession();
-		String hql = "FROM ProductEntity p ORDER BY p.views DESC ";
-		Query query = session.createQuery(hql);
-		List<ProductEntity> products = query.list();
-		session.close();
-		return products;
-	}
-
 	// GET TOP REVENUE PRODUCTS IN ORDERS IN THIS MONTH
 	public List getTopGrossRevenueProductsInOrdersInThisMonth() throws IOException {
 		LocalDate now = LocalDate.now();
@@ -124,42 +110,66 @@ public class Statistics {
 		return products;
 	}
 
-	// GET GROSS REVENUE ORDERS TODAY
-	public Orders getOrdersToday() throws IOException {
+	// GET TOP REVENUE PRODUCTS IN ORDERS IN THIS MONTH
+	public List<TopRevenueProduct> getTopRevenueProductsInOrders() throws IOException, ParseException {
 		LocalDate now = LocalDate.now();
-		/*
-		 * String today = now.format(DateTimeFormatter.ofPattern("uuuu-MM-dd")); Date
-		 * date = new Date();
-		 * 
-		 * Session session = factory.openSession(); String hql =
-		 * "from OrderEntity o WHERE o.orderDate =:date"; Query query =
-		 * session.createQuery(hql).setParameter("date", date); List<OrderEntity>
-		 * orders2 = query.list();
-		 */
-		Orders orders = getOrders(now, now.plusDays(1));
-		// session.close();
-		return orders;
 
-		/*
-		 * float revenue = 0; for (OrderEntity order : orders) { revenue +=
-		 * order.getTotalPrice(); } return revenue;
-		 */
-	}
+		ProductDAO productDAO = new ProductDAO(factory);
+		Products products = productDAO.getProducts();
 
-	// GET GROSS REVENUE ORDERS YESTERDAY
-	public Orders getOrdersYesterDay() throws IOException {
-		LocalDate yesterday = LocalDate.now().minusDays(1);
-		Orders orders = getOrders(yesterday, LocalDate.now());
-		/* session.close(); */
-		return orders;
+		List<TopRevenueProduct> topRevenueProducts = new ArrayList<TopRevenueProduct>();
+
+		for (ProductEntity product : products.getList()) {
+			TopRevenueProduct topRevenueProduct = new TopRevenueProduct();
+			topRevenueProduct.setProduct(product);
+			topRevenueProduct.setAllTimeRevenue(product.getTotalRevenueInOrders());
+
+			float revenueThisMonth = product.getTotalRevenueInOrders(now.with(TemporalAdjusters.firstDayOfMonth()),
+					now.with(TemporalAdjusters.lastDayOfMonth()));
+			float revenueLastMonth = product.getTotalRevenueInOrders(
+					now.minusMonths(1).with(TemporalAdjusters.firstDayOfMonth()),
+					now.minusMonths(1).with(TemporalAdjusters.lastDayOfMonth()));
+
+			float growthRate = 0;
+			if (revenueThisMonth == revenueLastMonth)
+				growthRate = 0;
+			else if (revenueLastMonth == 0) {
+				growthRate = ((revenueLastMonth + revenueThisMonth) / revenueThisMonth) * 100;
+			} else
+				growthRate = ((revenueThisMonth - revenueLastMonth) / revenueLastMonth) * 100;
+
+			topRevenueProduct.setThisMonthRevenue(revenueThisMonth);
+			topRevenueProduct.setGrowthRatePercentage(growthRate);
+			topRevenueProducts.add(topRevenueProduct);
+		}
+
+		Collections.sort(topRevenueProducts, new Comparator<TopRevenueProduct>() {
+
+			@Override
+			public int compare(TopRevenueProduct o1, TopRevenueProduct o2) {
+				// TODO Auto-generated method stub
+				if (o1.getThisMonthRevenue() > o2.getThisMonthRevenue())
+					return -1;
+				else if (o1.getThisMonthRevenue() < o2.getThisMonthRevenue())
+					return 1;
+				else
+					return 0;
+			}
+
+		});
+
+		return topRevenueProducts;
 	}
 
 	// GET GROSS REVENUE ORDERS TODAY
-	public float getRatioOfOrdersComparedToYesterday() throws IOException {
-		Orders todayOrders = getOrdersToday();
-		Orders yesterdayOrders = getOrdersYesterDay();
-		float revenueToday = todayOrders.getGrossRevenueOfAllOrders();
-		float revenueYesterDay = yesterdayOrders.getGrossRevenueOfAllOrders();
+	public float getDayOverDayGrowthRateOfOrders() throws IOException {
+		OrderDAO orderDAO = new OrderDAO(factory);
+		LocalDate now = LocalDate.now();
+
+		Orders todayOrders = orderDAO.getOrders(now, now.plusDays(1));
+		Orders yesterdayOrders = orderDAO.getOrders(now.minusDays(1), now);
+		float revenueToday = todayOrders.getTotalRevenue();
+		float revenueYesterDay = yesterdayOrders.getTotalRevenue();
 		if (revenueToday == revenueYesterDay)
 			return 0;
 		else if (revenueYesterDay == 0) {
@@ -171,14 +181,15 @@ public class Statistics {
 	// GET MONTH OVER MONTH REVENUE
 	public float getMonthOverMonthGrowthRateOfRevenue() throws IOException {
 		LocalDate now = LocalDate.now();
+		OrderDAO orderDAO = new OrderDAO(factory);
 
-		Orders ordersThisMonth = getOrders(now.with(TemporalAdjusters.firstDayOfMonth()),
-				now.with(TemporalAdjusters.lastDayOfMonth()));
-		Orders ordersLastMonth = getOrders(now.minusMonths(1).with(TemporalAdjusters.firstDayOfMonth()),
-				now.minusMonths(1).with(TemporalAdjusters.lastDayOfMonth()));
+		Orders ordersThisMonth = orderDAO.getOrders(now.with(TemporalAdjusters.firstDayOfMonth()),
+				now.with(TemporalAdjusters.lastDayOfMonth()), "3");
+		Orders ordersLastMonth = orderDAO.getOrders(now.minusMonths(1).with(TemporalAdjusters.firstDayOfMonth()),
+				now.minusMonths(1).with(TemporalAdjusters.lastDayOfMonth()), "3");
 
-		float revenueThisMonth = ordersThisMonth.getGrossRevenueOfAllOrders();
-		float revenueLastMonth = ordersLastMonth.getGrossRevenueOfAllOrders();
+		float revenueThisMonth = ordersThisMonth.getTotalRevenue();
+		float revenueLastMonth = ordersLastMonth.getTotalRevenue();
 		if (revenueThisMonth == revenueLastMonth)
 			return 0;
 		else if (revenueLastMonth == 0) {
@@ -187,108 +198,112 @@ public class Statistics {
 			return ((revenueThisMonth - revenueLastMonth) / revenueLastMonth) * 100;
 	}
 
-	// GET INVOICES BY MONTH
-	public Invoices getInvoicesByMonth(LocalDate month) throws IOException {
-		String lastDayOfMonth = month.with(TemporalAdjusters.lastDayOfMonth())
-				.format(DateTimeFormatter.ofPattern("uuuu-MM-dd"));
-		String firstDayOfMonth = month.with(TemporalAdjusters.firstDayOfMonth())
-				.format(DateTimeFormatter.ofPattern("uuuu-MM-dd"));
-
-		Session session = factory.openSession();
-		String hql = "from InvoiceEntity i WHERE i.date BETWEEN '" + firstDayOfMonth + "' AND '" + lastDayOfMonth + "'";
-		Query query = session.createQuery(hql);
-		/* Orders orders = new Orders(query.list()); */
-		Invoices invoices = new Invoices(query.list());
-		session.close();
-		return invoices;
-	}
-
 	// GET GROWTH PERCENTAGE OF INVOICES BY MONTH
 	public float getMonthOverMonthGrowthRateOfInvoices() throws IOException {
 		LocalDate now = LocalDate.now();
+		InvoiceDAO invoiceDAO = new InvoiceDAO(factory);
 
-		Invoices invoicesRegiteredThisMonth = getInvoicesByMonth(now);
-		Invoices invoicesRegiteredLastMonth = getInvoicesByMonth(now.minusMonths(1));
+		Invoices thisMonthInvoices = invoiceDAO.getInvoices(now.with(TemporalAdjusters.firstDayOfMonth()),
+				now.with(TemporalAdjusters.lastDayOfMonth()));
+		Invoices lastMonthInvoices = invoiceDAO.getInvoices(
+				now.minusMonths(1).with(TemporalAdjusters.firstDayOfMonth()),
+				now.minusMonths(1).with(TemporalAdjusters.lastDayOfMonth()));
 
-		float numberOfInvoiceRegisteredThisMonth = invoicesRegiteredThisMonth.getInvoices().size();
-		float numberOfInvoiceRegisteredLastMonth = invoicesRegiteredLastMonth.getInvoices().size();
-		if (numberOfInvoiceRegisteredThisMonth == numberOfInvoiceRegisteredLastMonth)
+		float numberOfInvoicesThisMonth = thisMonthInvoices.getList().size();
+		float numberOfInvoiceSLastMonth = lastMonthInvoices.getList().size();
+		if (numberOfInvoicesThisMonth == numberOfInvoiceSLastMonth)
 			return 0;
-		else if (numberOfInvoiceRegisteredLastMonth == 0) {
-			return ((numberOfInvoiceRegisteredLastMonth + numberOfInvoiceRegisteredThisMonth)
-					/ numberOfInvoiceRegisteredThisMonth) * 100;
+		else if (numberOfInvoiceSLastMonth == 0) {
+			return ((numberOfInvoiceSLastMonth + numberOfInvoicesThisMonth) / numberOfInvoicesThisMonth) * 100;
 		} else
-			return ((numberOfInvoiceRegisteredThisMonth - numberOfInvoiceRegisteredLastMonth)
-					/ numberOfInvoiceRegisteredLastMonth) * 100;
-	}
-
-	// GET CUSTOMERS BY MONTH
-	public Customers getCustomersByMonth(LocalDate month) throws IOException {
-		String lastDayOfMonth = month.with(TemporalAdjusters.lastDayOfMonth())
-				.format(DateTimeFormatter.ofPattern("uuuu-MM-dd"));
-		String firstDayOfMonth = month.with(TemporalAdjusters.firstDayOfMonth())
-				.format(DateTimeFormatter.ofPattern("uuuu-MM-dd"));
-
-		Session session = factory.openSession();
-		String hql = "from CustomerEntity i WHERE i.dateAdded BETWEEN '" + firstDayOfMonth + "' AND '" + lastDayOfMonth
-				+ "'";
-		Query query = session.createQuery(hql);
-		/* Orders orders = new Orders(query.list()); */
-		Customers users = new Customers(query.list());
-		session.close();
-		return users;
+			return ((numberOfInvoicesThisMonth - numberOfInvoiceSLastMonth) / numberOfInvoiceSLastMonth) * 100;
 	}
 
 	// GET GROWTH PERCENTAGE OF USERS BY MONTH
 	public float getMonthOverMonthGrowthRateOfCustomers() throws IOException {
 		LocalDate now = LocalDate.now();
+		CustomerDAO customerDAO = new CustomerDAO(factory);
 
-		Customers customersRegiteredThisMonth = getCustomersByMonth(now);
-		Customers customersRegiteredLastMonth = getCustomersByMonth(now.minusMonths(1));
+		Customers customersRegiteredThisMonth = customerDAO.getCustomers(now.with(TemporalAdjusters.firstDayOfMonth()),
+				now.with(TemporalAdjusters.lastDayOfMonth()));
+		Customers customersRegiteredLastMonth = customerDAO.getCustomers(
+				now.minusMonths(1).with(TemporalAdjusters.firstDayOfMonth()),
+				now.minusMonths(1).with(TemporalAdjusters.lastDayOfMonth()));
 
-		float numberOfCustomerRegisteredThisMonth = customersRegiteredThisMonth.getCustomers().size();
-		float numberOfCustomerRegisteredLastMonth = customersRegiteredLastMonth.getCustomers().size();
-		if (numberOfCustomerRegisteredThisMonth == numberOfCustomerRegisteredLastMonth)
+		float numberOfCustomersRegisteredThisMonth = customersRegiteredThisMonth.getList().size();
+		float numberOfCustomersRegisteredLastMonth = customersRegiteredLastMonth.getList().size();
+		if (numberOfCustomersRegisteredThisMonth == numberOfCustomersRegisteredLastMonth)
 			return 0;
-		else if (numberOfCustomerRegisteredLastMonth == 0) {
-			return ((numberOfCustomerRegisteredLastMonth + numberOfCustomerRegisteredThisMonth)
-					/ numberOfCustomerRegisteredThisMonth) * 100;
+		else if (numberOfCustomersRegisteredLastMonth == 0) {
+			return ((numberOfCustomersRegisteredLastMonth + numberOfCustomersRegisteredThisMonth)
+					/ numberOfCustomersRegisteredThisMonth) * 100;
 		} else
-			return ((numberOfCustomerRegisteredThisMonth - numberOfCustomerRegisteredLastMonth)
-					/ numberOfCustomerRegisteredLastMonth) * 100;
-	}
-
-	// GET ORDERS WITH SPECIFIC BEGIN AND END DATE
-	public Orders getOrders(LocalDate beginDate, LocalDate endDate) throws IOException {
-		String firstDayOfMonth = beginDate.format(DateTimeFormatter.ofPattern("uuuu-MM-dd"));
-		String lastDayOfMonth = endDate.format(DateTimeFormatter.ofPattern("uuuu-MM-dd"));
-
-		Session session = factory.openSession();
-		String hql = "from OrderEntity o WHERE o.orderDate BETWEEN '" + firstDayOfMonth + "' AND '" + lastDayOfMonth
-				+ "'";
-		Query query = session.createQuery(hql);
-		/* Orders orders = new Orders(query.list()); */
-		Orders orders = new Orders(query.list());
-		session.close();
-		return orders;
+			return ((numberOfCustomersRegisteredThisMonth - numberOfCustomersRegisteredLastMonth)
+					/ numberOfCustomersRegisteredLastMonth) * 100;
 	}
 
 	// GET GROWTH PERCENTAGE OF ORDERS
 	public float getMonthOverMonthGrowthRateOfOrders() throws IOException {
+		OrderDAO orderDAO = new OrderDAO(factory);
+
 		LocalDate now = LocalDate.now();
 
-		Orders ordersThisMonth = getOrders(now.with(TemporalAdjusters.firstDayOfMonth()),
+		Orders ordersThisMonth = orderDAO.getOrders(now.with(TemporalAdjusters.firstDayOfMonth()),
 				now.with(TemporalAdjusters.lastDayOfMonth()));
-		Orders ordersLastMonth = getOrders(now.minusMonths(1).with(TemporalAdjusters.firstDayOfMonth()),
+		Orders ordersLastMonth = orderDAO.getOrders(now.minusMonths(1).with(TemporalAdjusters.firstDayOfMonth()),
 				now.minusMonths(1).with(TemporalAdjusters.lastDayOfMonth()));
 
-		float numberOfOrdersThisMonth = ordersThisMonth.getOrders().size();
-		float numberOfOrdersLastMonth = ordersLastMonth.getOrders().size();
+		float numberOfOrdersThisMonth = ordersThisMonth.getList().size();
+		float numberOfOrdersLastMonth = ordersLastMonth.getList().size();
 		if (numberOfOrdersThisMonth == numberOfOrdersLastMonth)
 			return 0;
 		else if (numberOfOrdersLastMonth == 0) {
 			return ((numberOfOrdersLastMonth + numberOfOrdersThisMonth) / numberOfOrdersThisMonth) * 100;
 		} else
 			return ((numberOfOrdersThisMonth - numberOfOrdersLastMonth) / numberOfOrdersLastMonth) * 100;
+	}
+
+	// GET GROWTH PERCENTAGE OF CATEGORIES
+	public float getMonthOverMonthGrowthRateOfCategories() throws IOException {
+		CategoryDAO categoryDAO = new CategoryDAO(factory);
+
+		LocalDate now = LocalDate.now();
+
+		Categories thisMonthCategories = categoryDAO.getCategories(now.with(TemporalAdjusters.firstDayOfMonth()),
+				now.with(TemporalAdjusters.lastDayOfMonth()));
+		Categories lastMonthCategories = categoryDAO.getCategories(
+				now.minusMonths(1).with(TemporalAdjusters.firstDayOfMonth()),
+				now.minusMonths(1).with(TemporalAdjusters.lastDayOfMonth()));
+
+		float numberOfCategoriesThisMonth = thisMonthCategories.getList().size();
+		float numberOfCategoriesLastMonth = lastMonthCategories.getList().size();
+		if (numberOfCategoriesThisMonth == numberOfCategoriesLastMonth)
+			return 0;
+		else if (numberOfCategoriesLastMonth == 0) {
+			return ((numberOfCategoriesLastMonth + numberOfCategoriesThisMonth) / numberOfCategoriesThisMonth) * 100;
+		} else
+			return ((numberOfCategoriesThisMonth - numberOfCategoriesLastMonth) / numberOfCategoriesLastMonth) * 100;
+	}
+
+	// GET GROWTH PERCENTAGE OF CATEGORIES
+	public float getMonthOverMonthGrowthRateOfProducts() throws IOException {
+		ProductDAO productDAO = new ProductDAO(factory);
+
+		LocalDate now = LocalDate.now();
+
+		Products thisMonthProducts = productDAO.getProducts(now.with(TemporalAdjusters.firstDayOfMonth()),
+				now.with(TemporalAdjusters.lastDayOfMonth()));
+		Products lastMonthProducts = productDAO.getProducts(
+				now.minusMonths(1).with(TemporalAdjusters.firstDayOfMonth()),
+				now.minusMonths(1).with(TemporalAdjusters.lastDayOfMonth()));
+
+		float numberOfProductsThisMonth = thisMonthProducts.getList().size();
+		float numberOfProductsLastMonth = lastMonthProducts.getList().size();
+		if (numberOfProductsThisMonth == numberOfProductsLastMonth)
+			return 0;
+		else if (numberOfProductsLastMonth == 0) {
+			return ((numberOfProductsLastMonth + numberOfProductsThisMonth) / numberOfProductsThisMonth) * 100;
+		} else
+			return ((numberOfProductsThisMonth - numberOfProductsLastMonth) / numberOfProductsLastMonth) * 100;
 	}
 }
