@@ -1,10 +1,13 @@
 package models.validator;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
+import java.util.Date;
 
 public class DateTimeValidator {
 	private static DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("uuuu-MM-dd");
@@ -51,16 +54,18 @@ public class DateTimeValidator {
 			return false;
 		}
 	}
-	
-	
-	/*
-	 * public static String getlastDayOfMonth(LocalDate date) {
-	 * 
-	 * }
-	 * 
-	 * public static String getfirstDayOfMonth(LocalDate date) {
-	 * 
-	 * }
-	 */
-	 
+
+	public static LocalDateTime convertToLocalDateTimeViaInstant(Date dateToConvert) {
+		return dateToConvert.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+	}
+
+	public static LocalDate convertToLocalDateViaInstant(Date dateToConvert) {
+		return dateToConvert.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+	}
+
+	public static LocalDate convertToLocalDate(String dateToConvert) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDate date = LocalDate.parse(dateToConvert, formatter);
+		return date;
+	}
 }
