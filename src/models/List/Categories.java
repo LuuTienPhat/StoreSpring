@@ -3,24 +3,26 @@ package models.List;
 import java.util.ArrayList;
 import java.util.List;
 
+import entities.CategoryEntity;
+
 public class Categories {
-	private List<Categories> categories;
+	private List<CategoryEntity> list;
 
 	public Categories() {
 		// TODO Auto-generated constructor stub
-		categories = new ArrayList<Categories>();
+		list = new ArrayList<CategoryEntity>();
 	}
 
-	public Categories(List<Categories> categories) {
+	public Categories(List<CategoryEntity> categories) {
 		// TODO Auto-generated constructor stub
-		this.categories = categories;
+		this.list = categories;
 	}
 
-	public List<Categories> getCategories() {
-		return categories;
+	public List<CategoryEntity> getList() {
+		return list;
 	}
 
-	public void setCategories(List<Categories> categories) {
-		this.categories = categories;
+	public void setList(List<CategoryEntity> categories) {
+		this.list = categories;
 	}
 }
