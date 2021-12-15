@@ -2,6 +2,7 @@ package models.validator;
 
 public class InputValidator {
 	public static Boolean isInputValid(String input) {
+		if(input == null) return false;
 		input = input.trim();
 		if (input.isEmpty())
 			return false;
