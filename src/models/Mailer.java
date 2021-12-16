@@ -31,7 +31,7 @@ public class Mailer {
 		}
 	}
 
-	public void send(String to, String subject, String body) {
+	public boolean send(String to, String subject, String body) {
 		try {
 			MimeMessage mail = mailer.createMimeMessage();
 			MimeMessageHelper helper = new MimeMessageHelper(mail, true, "utf-8");
@@ -42,9 +42,11 @@ public class Mailer {
 			helper.setText(body, true);
 //			mail.setContent(body,"text/html");
 			mailer.send(mail);
+			return true;
 
 		} catch (Exception ex) {
-			throw new RuntimeException(ex);
+			ex.printStackTrace();
+			return false;
 		}
 	}
 }
