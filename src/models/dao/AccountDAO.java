@@ -30,6 +30,21 @@ public class AccountDAO extends DAO {
 		return account;
 	}
 
+	public AccountEntity getAccountAuth(String username, String password) {
+		AccountEntity account = null;
+		Session session = factory.openSession();
+		try {
+			String hql = "FROM AccountEntity WHERE username = '" + username + "' AND password = '" + password + "'";
+			Query query = session.createQuery(hql);
+			account = (AccountEntity) query.list().get(0);
+		} catch (Exception e) {
+
+		} finally {
+			session.close();
+		}
+		return account;
+	}
+
 	public AccountEntity getAccount(String adminId, String recoveryCode) {
 		AccountEntity account = null;
 		Session session = factory.openSession();
