@@ -1,29 +1,33 @@
 package models.dao;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+
+import javax.transaction.Transactional;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-
 import entities.CategoryEntity;
+import models.List.Categories;
 
+@Transactional
 public class CategoryDAO extends DAO {
 	public CategoryDAO(SessionFactory factory) {
 		super(factory);
 		// TODO Auto-generated constructor stub
 	}
 
-	// ==================== CATEGORIES ====================
-
 	// GET CATEGORIES FROM DB
-	public List<CategoryEntity> getCategories() throws IOException {
+	public Categories getCategories() throws IOException {
 		Session session = factory.openSession();
 		String hql = "FROM CategoryEntity";
 		Query query = session.createQuery(hql);
-		List<CategoryEntity> categories = query.list();
+		List<CategoryEntity> list = query.list();
+		Categories categories = new Categories(list);
 		session.close();
 		return categories;
 	}
@@ -38,12 +42,28 @@ public class CategoryDAO extends DAO {
 		return category;
 	}
 
+	// GET CATEGORIES FROM BEGIN DATE TO END DATE
+	public Categories getCategories(LocalDate beginDate, LocalDate endDate) {
+		String beginDateString = beginDate.format(DateTimeFormatter.ofPattern("uuuu-MM-dd"));
+		String endDateString = endDate.format(DateTimeFormatter.ofPattern("uuuu-MM-dd"));
+
+		Session session = factory.openSession();
+		String hql = "FROM CategoryEntity c WHERE c.dateAdded BETWEEN '" + beginDateString + "' AND '" + endDateString
+				+ "'";
+		Query query = session.createQuery(hql);
+		List<CategoryEntity> list = query.list();
+		Categories categories = new Categories(list);
+		session.close();
+		return categories;
+	}
+
 	// SEARCH CATEGORY
-	public List<CategoryEntity> searchForCategory(String keyword) {
+	public Categories searchForCategory(String keyword) {
 		Session session = factory.openSession();
 		String hql = "FROM CategoryEntity c WHERE c.name LIKE :keyword OR c.id LIKE:keyword OR c.description LIKE:keyword";
 		Query query = session.createQuery(hql).setParameter("keyword", "%" + keyword + "%");
-		List<CategoryEntity> categories = query.setParameter("keyword", "%" + keyword + "%").list();
+		List<CategoryEntity> list = query.setParameter("keyword", "%" + keyword + "%").list();
+		Categories categories = new Categories(list);
 		session.close();
 		return categories;
 	}
@@ -104,6 +124,4 @@ public class CategoryDAO extends DAO {
 			session.close();
 		}
 	}
-
-	// ==================== END OF CATEGORIES ====================
 }

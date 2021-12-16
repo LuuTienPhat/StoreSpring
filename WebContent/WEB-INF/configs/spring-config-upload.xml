@@ -24,7 +24,7 @@
 		<property name="uploadResourcePath" value="D:/eclipse-workspace/StoreSpring/WebContent/resources/uploads/"></property>
 	</bean>-->
 	<bean id="uploadFile" class="models.UploadFile">
-		<property name="uploadResourcePath" value="C:/Users/t0168/OneDrive/Documents/GitHub/StoreSpring/WebContent/resources/uploads/"></property>
+		<property name="uploadResourcePath" value="C:/Users/Phat/Documents/eclipse-workspace/StoreSpring/WebContent/resources/uploads/"></property>
 	</bean>
 </beans>
 
