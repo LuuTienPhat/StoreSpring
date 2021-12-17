@@ -26,6 +26,8 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import models.validator.DateTimeValidator;
+
 @Entity
 @Table(name = "Product")
 public class ProductEntity {
@@ -230,8 +232,10 @@ public class ProductEntity {
 	}
 
 	public float getBounceRate(float revenueThisMonth, float revenueLastMonth) {
-		if(revenueLastMonth == 0) return 0;
-		else return ((revenueLastMonth - revenueThisMonth) / revenueLastMonth) * 100;
+		if (revenueLastMonth == 0)
+			return 0;
+		else
+			return ((revenueLastMonth - revenueThisMonth) / revenueLastMonth) * 100;
 	}
 
 	public float getGrossRevenueInOrdersOfLastMonth(String productId) throws ParseException {
@@ -254,6 +258,24 @@ public class ProductEntity {
 					revenue += orderDetail.getQuantity() * orderDetail.getProduct().getPrice();
 				}
 			}
+		}
+		return revenue;
+	}
+
+	public float getTotalRevenueInOrders() throws ParseException {
+		float revenue = 0;
+		for (OrderDetailEntity orderDetail : this.orderDetails) {
+			revenue += orderDetail.getQuantity() * orderDetail.getProduct().getPrice();
+		}
+		return revenue;
+	}
+
+	public float getTotalRevenueInOrders(LocalDate beginDate, LocalDate endDate) throws ParseException {
+		float revenue = 0;
+		for (OrderDetailEntity orderDetail : this.orderDetails) {
+			LocalDate orderDate = DateTimeValidator.convertToLocalDateViaInstant(orderDetail.getOrder().getOrderDate());
+			if (orderDate.isAfter(beginDate) && orderDate.isBefore(endDate))
+				revenue += orderDetail.getQuantity() * orderDetail.getProduct().getPrice();
 		}
 		return revenue;
 	}

@@ -26,9 +26,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import entities.AccountEntity;
 import entities.AdminEntity;
 import entities.ProductEntity;
-import models.EntityData;
 import models.Generate;
 import models.UploadFile;
+import models.dao.AdminDAO;
 import models.validator.DateTimeValidator;
 import models.validator.InputValidator;
 
@@ -46,7 +46,7 @@ public class ProfileControler {
 	@Qualifier("uploadFile")
 	UploadFile uploadFile;
 
-	EntityData entityData;
+	AdminDAO adminDAO;
 
 	String viewsDirectory = "admin/pages/profile/";
 
@@ -56,14 +56,14 @@ public class ProfileControler {
 		String adminId = null;
 		AdminEntity admin = null;
 
-		entityData = new EntityData(factory);
+		adminDAO = new AdminDAO(factory);
 
 		try {
 			// admin = (AdminEntity) session.getAttribute("admin");
 			adminId = session.getAttribute("adminId").toString();
-			admin = entityData.getAdmin(adminId);
+			admin = adminDAO.getAdmin(adminId);
 
-			model.addAttribute("admin", admin);
+			model.addAttribute("modifiedAdmin", admin);
 			model.addAttribute("title", "Thông tin");
 			model.addAttribute("type", "admin");
 			return viewsDirectory + "profile";
@@ -81,7 +81,7 @@ public class ProfileControler {
 	public String updateProfile(ModelMap model, HttpSession session,
 			@RequestParam(value = "image", required = false) MultipartFile image,
 			@RequestParam(value = "cover", required = false) MultipartFile cover,
-			@ModelAttribute("admin") AdminEntity modifiedAdmin, BindingResult errors,
+			@ModelAttribute("modifiedAdmin") AdminEntity modifiedAdmin, BindingResult errors,
 			RedirectAttributes redirectAttributes) throws IOException, InterruptedException {
 
 		int errorsCount = 0;
@@ -123,7 +123,7 @@ public class ProfileControler {
 		}
 
 		if (errorsCount != 0) {
-			model.addAttribute("admin", modifiedAdmin);
+			model.addAttribute("modifiedAdmin", modifiedAdmin);
 			model.addAttribute("title", "Thông tin");
 			model.addAttribute("pageName", "profile");
 			model.addAttribute("message", "Vui lòng điền đầy đủ thông tin!");
@@ -131,10 +131,10 @@ public class ProfileControler {
 			return viewsDirectory + "profile";
 
 		} else {
-			EntityData entityData = new EntityData(factory);
+			adminDAO = new AdminDAO(factory);
 			String adminId = session.getAttribute("adminId").toString();
 			// AdminEntity admin = (AdminEntity) session.getAttribute("admin");
-			AdminEntity admin = entityData.getAdmin(adminId);
+			AdminEntity admin = adminDAO.getAdmin(adminId);
 			admin.setFirstname(modifiedAdmin.getFirstname());
 			admin.setLastname(modifiedAdmin.getLastname());
 			admin.setBirthday(modifiedAdmin.getBirthday());
@@ -172,7 +172,7 @@ public class ProfileControler {
 
 				Thread.sleep(2000);
 			}
-			
+
 			if (cover.getSize() != 0) {
 				String oldImageFileName = "cover" + UploadFile.getExtension(admin.getImage());
 				String imageFileName = "cover" + UploadFile.getExtension(cover.getOriginalFilename());
@@ -203,7 +203,7 @@ public class ProfileControler {
 				Thread.sleep(2000);
 			}
 
-			if (entityData.updateAdminInDB(admin)) {
+			if (adminDAO.updateAdminInDB(admin)) {
 				redirectAttributes.addFlashAttribute("message", "Cập nhật thông tin thành công!");
 				redirectAttributes.addFlashAttribute("messageType", "success");
 			} else {
