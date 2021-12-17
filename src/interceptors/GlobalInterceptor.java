@@ -17,7 +17,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import entities.OrderEntity;
-import models.EntityData;
 
 @Transactional
 public class GlobalInterceptor extends HandlerInterceptorAdapter {
