@@ -27,6 +27,7 @@ public class CategoryEntity {
 	private String image;
 	@Temporal(TemporalType.DATE)
 	@Column(name = "date_added", updatable = false)
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date dateAdded;
 	@Column(name = "description")
 	private String description;
