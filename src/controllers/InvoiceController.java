@@ -32,10 +32,13 @@ import entities.InvoiceDetailEntity;
 import entities.InvoiceEntity;
 import entities.InvoiceTypeEntity;
 import entities.ProductEntity;
-import models.EntityData;
 import models.Generate;
 import models.Pagination;
 import models.UploadFile;
+import models.List.Invoices;
+import models.List.Products;
+import models.dao.InvoiceDAO;
+import models.dao.ProductDAO;
 import models.validator.DateTimeValidator;
 import models.validator.InputValidator;
 
@@ -57,29 +60,26 @@ public class InvoiceController {
 
 	String viewsDirectory = "admin/pages/invoice/";
 
-	EntityData entityData;
+	InvoiceDAO invoiceDAO;
+	ProductDAO productDAO;
 
 	@RequestMapping("")
 	public String renderCategoryPage(ModelMap model, HttpServletRequest request,
 			@RequestParam(value = "search", required = false) String search) throws IOException {
 
-		List<InvoiceEntity> invoices = new ArrayList<InvoiceEntity>();
-		entityData = new EntityData(factory);
+		invoiceDAO = new InvoiceDAO(factory);
+		Invoices invoices = new Invoices();
 
 		if (search != null) {
-			invoices = entityData.searchForInvoice(search);
+			invoices = invoiceDAO.searchForInvoice(search);
 			model.addAttribute("pagedLink", "/admin/invoices?search=" + search);
 
 		} else {
-			invoices = entityData.getInvoices();
+			invoices = invoiceDAO.getInvoices();
 			model.addAttribute("pagedLink", "/admin/invoices");
 		}
 
-		PagedListHolder<InvoiceEntity> pagedListHolder = new PagedListHolder<InvoiceEntity>(invoices);
-		int page = ServletRequestUtils.getIntParameter(request, "p", 0);
-		pagedListHolder.setPage(page);
-		pagedListHolder.setMaxLinkedPages(10);
-		pagedListHolder.setPageSize(5);
+		PagedListHolder pagedListHolder = Pagination.invoicePagination(request, invoices.getList(), 5, 5);
 
 		model.addAttribute("pagedListHolder", pagedListHolder);
 		model.addAttribute("type", "hoá đơn");
@@ -93,18 +93,20 @@ public class InvoiceController {
 	public String renderAddInvoicePage(ModelMap model, HttpSession session, RedirectAttributes redirectAttributes)
 			throws IOException {
 
-		entityData = new EntityData(factory);
+		invoiceDAO = new InvoiceDAO(factory);
+
 		InvoiceEntity invoice = (InvoiceEntity) session.getAttribute("invoice");
 		if (invoice != null)
 			session.setAttribute("invoice", null);
 
 		invoice = new InvoiceEntity();
-		invoice.setId(Generate.generateInvoiceId(entityData.getInvoices()));
+		Invoices invoices = invoiceDAO.getInvoices();
+		invoice.setId(Generate.generateInvoiceId(invoices.getList()));
 		invoice.setDate(LocalDate.now().format(DateTimeFormatter.ofPattern("uuuu-MM-dd")));
 		invoice.setTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
 
 		model.addAttribute("invoice", invoice);
-		model.addAttribute("invoiceTypes", entityData.getInoivceTypes());
+		model.addAttribute("invoiceTypes", invoiceDAO.getInoivceTypes());
 		model.addAttribute("title", "Thêm hoá đơn");
 		model.addAttribute("pageName", "addInvoice");
 		return viewsDirectory + "addInvoice";
@@ -118,7 +120,8 @@ public class InvoiceController {
 		int errorsCount = 0;
 		String date = invoice.getDate();
 		String time = invoice.getTime();
-		List<InvoiceEntity> invoices = entityData.getInvoices();
+		invoiceDAO = new InvoiceDAO(factory);
+		Invoices invoices = invoiceDAO.getInvoices();
 
 		if (invoice.getId().isEmpty()) {
 			errors.rejectValue("id", "invoice", "Nhập mã hóa đơn");
@@ -128,13 +131,11 @@ public class InvoiceController {
 			errors.rejectValue("id", "invoice", "Mã hóa đơn <= 20 ký tự");
 			model.addAttribute("idValid", "is-invalid");
 			errorsCount++;
-		}
-		else if (invoice.getId().charAt(0) != 'I') {
+		} else if (invoice.getId().charAt(0) != 'I') {
 			errors.rejectValue("id", "invoice", "Mã hóa đơn phải bắt đầu bằng ký tự I");
 			model.addAttribute("idValid", "is-invalid");
 			errorsCount++;
-		}
-		else if (Generate.searchInvoice(invoices, invoice.getId()) != null) {
+		} else if (Generate.searchInvoice(invoices.getList(), invoice.getId()) != null) {
 			errors.rejectValue("id", "invoice", "Mã hóa đơn đã bị trùng");
 			model.addAttribute("idValid", "is-invalid");
 			errorsCount++;
@@ -168,7 +169,7 @@ public class InvoiceController {
 
 		if (errorsCount != 0) {
 			model.addAttribute("invoice", invoice);
-			model.addAttribute("invoiceTypes", entityData.getInoivceTypes());
+			model.addAttribute("invoiceTypes", invoiceDAO.getInoivceTypes());
 			model.addAttribute("title", "Thêm hoá đơn");
 			model.addAttribute("pageName", "addInvoice");
 			return viewsDirectory + "addInvoice";
@@ -201,19 +202,20 @@ public class InvoiceController {
 		if (invoice == null) {
 			return "redirect:/admin/invoices/add";
 		} else {
-			List<ProductEntity> products = new ArrayList<ProductEntity>();
-			entityData = new EntityData(factory);
+			productDAO = new ProductDAO(factory);
+			invoiceDAO = new InvoiceDAO(factory);
+			Products products = new Products();
 
 			if (search != null) {
-				products = entityData.searchForProduct(search);
+				products = productDAO.searchForProduct(search);
 				model.addAttribute("pagedLink", "/admin/invoices/add/invoice-detail?search=" + search);
 
 			} else {
-				products = entityData.getProducts();
+				products = productDAO.getProducts();
 				model.addAttribute("pagedLink", "/admin/invoices/add/invoice-detail");
 			}
 
-			PagedListHolder pagedListHolder = Pagination.productPagination(request, products, 10, 10);
+			PagedListHolder pagedListHolder = Pagination.productPagination(request, products.getList(), 10, 10);
 
 			model.addAttribute("pagedListHolder", pagedListHolder);
 			model.addAttribute("previousPageLink", "admin/invoices/add");
@@ -230,7 +232,8 @@ public class InvoiceController {
 	@RequestMapping(value = "/add/invoice-detail", method = RequestMethod.POST)
 	public String updateInvoiceDetail(ModelMap model, HttpServletRequest request, HttpSession session,
 			RedirectAttributes redirectAttributes) throws IOException {
-		entityData = new EntityData(factory);
+		invoiceDAO = new InvoiceDAO(factory);
+		productDAO = new ProductDAO(factory);
 
 		InvoiceEntity invoice = (InvoiceEntity) session.getAttribute("invoice");
 
@@ -268,7 +271,7 @@ public class InvoiceController {
 				if (index == -1) {
 					InvoiceDetailEntity invoiceDetail = new InvoiceDetailEntity();
 					invoiceDetail.setInvoice(invoice);
-					ProductEntity product = entityData.getProduct(productId);
+					ProductEntity product = productDAO.getProduct(productId);
 					invoiceDetail.setProduct(product);
 					invoiceDetail.setQuantity(Integer.parseInt(newQuantity));
 					invoiceDetail.setPrice(Float.parseFloat(price));
@@ -383,7 +386,9 @@ public class InvoiceController {
 	public String finsishInvoice(ModelMap model, HttpSession session, RedirectAttributes redirectAttributes)
 			throws IOException {
 		System.out.println("finish");
-		entityData = new EntityData(factory);
+		invoiceDAO = new InvoiceDAO(factory);
+		productDAO = new ProductDAO(factory);
+
 		InvoiceEntity invoice = (InvoiceEntity) session.getAttribute("invoice");
 
 		if (invoice == null) {
@@ -391,19 +396,19 @@ public class InvoiceController {
 		} else {
 			if (invoice.getInvoiceType().getId() == 1) {
 				for (InvoiceDetailEntity invoiceDetail : invoice.getInvoiceDetails()) {
-					ProductEntity product = entityData.getProduct(invoiceDetail.getProduct().getId());
+					ProductEntity product = productDAO.getProduct(invoiceDetail.getProduct().getId());
 					product.setQuantity(product.getQuantity() + invoiceDetail.getQuantity());
-					entityData.updateProductInDB(product);
+					productDAO.updateProductInDB(product);
 				}
 			} else {
 				for (InvoiceDetailEntity invoiceDetail : invoice.getInvoiceDetails()) {
-					ProductEntity product = entityData.getProduct(invoiceDetail.getProduct().getId());
+					ProductEntity product = productDAO.getProduct(invoiceDetail.getProduct().getId());
 					product.setQuantity(product.getQuantity() - invoiceDetail.getQuantity());
-					entityData.updateProductInDB(product);
+					productDAO.updateProductInDB(product);
 				}
 			}
 
-			if (entityData.addInvoiceToDB(invoice)) {
+			if (invoiceDAO.addInvoiceToDB(invoice)) {
 				redirectAttributes.addFlashAttribute("message", "Thêm hoá đơn thành công!");
 				redirectAttributes.addFlashAttribute("messageType", "success");
 			} else {
@@ -418,8 +423,8 @@ public class InvoiceController {
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public String viewInvoiceDetail(ModelMap model, HttpServletRequest request, @PathVariable(value = "id") String id) {
 		System.out.println("Id: " + id);
-		entityData = new EntityData(factory);
-		InvoiceEntity invoice = entityData.getInvoice(id);
+		invoiceDAO = new InvoiceDAO(factory);
+		InvoiceEntity invoice = invoiceDAO.getInvoice(id);
 		model.addAttribute("invoice", invoice);
 		model.addAttribute("title", "Hoá đơn " + invoice.getId());
 		return viewsDirectory + "viewInvoice";
