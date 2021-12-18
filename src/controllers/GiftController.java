@@ -1,6 +1,5 @@
 package controllers;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -11,14 +10,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.PagedListHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.ServletRequestUtils;
@@ -26,22 +23,19 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import entities.CartDetailEntity;
-import entities.CategoryEntity;
 import entities.CustomerEntity;
 import entities.FavoriteProductEntity;
-import entities.OrderDetailEntity;
 import entities.OrderEntity;
 import entities.ProductEntity;
 import models.ChangePasswordModel;
 import models.CustomerForgotPasswordModel;
 import models.CustomerLoginAccountModel;
 import models.CustomerValidateModel;
-import models.OrderModel;
 import models.Mailer;
+import models.OrderModel;
 
 @Transactional
 @Controller
@@ -112,7 +106,7 @@ public class GiftController {
 			lpe.add(0, method.getProduct(productId));
 			httpSession.setAttribute("listRecentViewProducts", lpe);
 		}
-		method.updateProductViews(productId, method.getProduct(productId).getViews()+1);
+		method.updateProductViews(productId, method.getProduct(productId).getViews() + 1);
 		model.addAttribute("product", method.getProduct(productId));
 		model.addAttribute("listFavorite", method.getListFavourite(
 				method.getCustomerIdByUserName((String) httpSession.getAttribute("customerUsername"))));
@@ -152,7 +146,7 @@ public class GiftController {
 			BindingResult errors, HttpSession httpSession, RedirectAttributes attributes) {
 		Methods method = new Methods(factory);
 		httpSession.setAttribute("listCategory", method.getListCategory());
-		if (account.getUsername().trim().length()==0) {
+		if (account.getUsername().trim().length() == 0) {
 			errors.rejectValue("username", "account", "Vui lòng nhập tên đăng nhập!");
 		} else if (!method.isCustomerWithUsernameExit(account.getUsername())) {
 			errors.rejectValue("username", "account", "Tên đăng nhập không tồn tại!");
@@ -169,27 +163,29 @@ public class GiftController {
 
 			return "store/forgot-password";
 		} else {
-			if(account.getRecoveryCode().trim().length()==0) {
-				String body = "<h3  style='margin: 8px 0;'>Mã khôi phục của bạn là: <span style='display: inline-block; padding: 4px 8px; background-color: yellow'>"+method.getRecoveryCodeOfCustomerWithUsername(account.getUsername())+"</span></h3>";
-				body = body +"<p>Sau khi nhập mã khôi phục mật khẩu của bạn sẽ trở thành 12345</p>"
+			if (account.getRecoveryCode().trim().length() == 0) {
+				String body = "<h3  style='margin: 8px 0;'>Mã khôi phục của bạn là: <span style='display: inline-block; padding: 4px 8px; background-color: yellow'>"
+						+ method.getRecoveryCodeOfCustomerWithUsername(account.getUsername()) + "</span></h3>";
+				body = body + "<p>Sau khi nhập mã khôi phục mật khẩu của bạn sẽ trở thành 12345</p>"
 						+ "<p>Để tăng tính bảo mật hãy đổi mật khẩu ngay sau khi khôi phục</p>";
 				try {
-					mailer.send("storespring21@gmail.com", account.getEmail(),
-							"Email về việc cấp lại mật khẩu.", body);
+					mailer.send("storespring21@gmail.com", account.getEmail(), "Email về việc cấp lại mật khẩu.",
+							body);
 					model.addAttribute("message", "Đã gửi mail khôi phục mật khẩu!");
-					
+
 					System.out.println("Gửi email thành công!");
 					return "store/forgot-password";
 				} catch (Exception ex) {
 					System.out.println("Gửi email thất bại!");
 				}
-			}else if(account.getRecoveryCode().trim().length()!=0) {
-				if(account.getRecoveryCode().trim().equals(method.getRecoveryCodeOfCustomerWithUsername(account.getUsername()))) {
+			} else if (account.getRecoveryCode().trim().length() != 0) {
+				if (account.getRecoveryCode().trim()
+						.equals(method.getRecoveryCodeOfCustomerWithUsername(account.getUsername()))) {
 					CustomerEntity ce = new CustomerEntity();
 					ce.setPassword("12345");
 					ce.setId(method.getCustomerIdByUserName(account.getUsername().trim()));
-					if(method.updateCustomerForgotPassword(ce, httpSession)) {
-						if(method.updateCustomerRecoveryCode(ce, httpSession)) {
+					if (method.updateCustomerForgotPassword(ce, httpSession)) {
+						if (method.updateCustomerRecoveryCode(ce, httpSession)) {
 							attributes.addFlashAttribute("message", "Khôi phục mật khẩu thành công!");
 							return "redirect:/store/sign-in";
 						}
@@ -197,9 +193,9 @@ public class GiftController {
 						model.addAttribute("message", "Đã xảy ra lỗi!");
 						return "store/forgot-password";
 					}
-					
+
 				}
-			}else {
+			} else {
 				errors.rejectValue("recoveryCode", "account", "Sai mã xác nhận!");
 				return "store/forgot-password";
 			}
@@ -210,8 +206,7 @@ public class GiftController {
 //			}
 //			System.out.println(sum);
 //			httpSession.setAttribute("customerTotalQuantity", sum);
-			
-			
+
 		}
 		return "store/forgot-password";
 	}
@@ -330,7 +325,7 @@ public class GiftController {
 			ce.setFirstname(customer.getFirstName().trim());
 			ce.setLastname(customer.getLastName().trim());
 			ce.setPhone(customer.getTelephone().trim());
-			ce.setDateAdded(new SimpleDateFormat("MM-dd-yyyy").format(new Date()));
+			ce.setDateAdded(new Date());
 			ce.setRecoveryCode(AdminAuthController.generateRecoveryCode(5));
 
 			// ce.setAddress(customer.getSpecificAddress().trim() + ", " +
