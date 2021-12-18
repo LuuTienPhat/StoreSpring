@@ -32,10 +32,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import entities.CategoryEntity;
 import entities.ImageEntity;
 import entities.ProductEntity;
-import models.EntityData;
 import models.Generate;
 import models.Pagination;
 import models.UploadFile;
+import models.List.Categories;
+import models.List.Products;
+import models.dao.CategoryDAO;
+import models.dao.ProductDAO;
 
 @Transactional
 @Controller
@@ -52,7 +55,9 @@ public class ProductController {
 	@Qualifier("uploadFile")
 	UploadFile uploadFile;
 
-	EntityData entityData;
+	// EntityData entityData;
+
+	ProductDAO productDAO;
 
 	String viewsDirectory = "admin/pages/product/";
 
@@ -60,20 +65,19 @@ public class ProductController {
 	public String renderProductPage(ModelMap model, HttpServletRequest request,
 			@RequestParam(value = "search", required = false) String search) throws IOException {
 
-		entityData = new EntityData(factory);
-		List<ProductEntity> products = new ArrayList<ProductEntity>();
+		productDAO = new ProductDAO(factory);
+		Products products = new Products();
 
 		if (search != null) {
-			products = entityData.searchForProduct(search);
+			products = productDAO.searchForProduct(search);
 			model.addAttribute("pagedLink", "/admin/products?search=" + search);
 		} else {
-			products = entityData.getProducts();
+			products = productDAO.getProducts();
 			model.addAttribute("pagedLink", "/admin/products");
 		}
 
-		PagedListHolder pagedListHolder = Pagination.productPagination(request, products, 5, 10);
+		PagedListHolder pagedListHolder = Pagination.productPagination(request, products.getList(), 5, 10);
 
-		// model.addAttribute("products", products);
 		model.addAttribute("pagedListHolder", pagedListHolder);
 		model.addAttribute("title", "Quản lý sản phẩm");
 		model.addAttribute("type", "sản phẩm");
@@ -82,8 +86,10 @@ public class ProductController {
 
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	public String renderAddProductPage(ModelMap model) throws IOException {
-		EntityData entityData = new EntityData(factory);
-		model.addAttribute("categories", entityData.getCategories());
+		CategoryDAO categoryDAO = new CategoryDAO(factory);
+		Categories categories = categoryDAO.getCategories();
+
+		model.addAttribute("categories", categories.getList());
 		model.addAttribute("product", new ProductEntity());
 		model.addAttribute("title", "Thêm sản phẩm");
 		return viewsDirectory + "addProduct";
@@ -93,6 +99,7 @@ public class ProductController {
 	public String addProduct(ModelMap model, HttpServletRequest request, @RequestParam("images") MultipartFile[] files,
 			@ModelAttribute("product") ProductEntity product, BindingResult errors,
 			RedirectAttributes redirectAttributes) throws IOException {
+
 		int errorsCount = 0;
 
 		if (product.getName().isEmpty()) {
@@ -120,7 +127,8 @@ public class ProductController {
 		}
 
 		if (errorsCount != 0) {
-			model.addAttribute("categories", entityData.getCategories());
+			CategoryDAO categoryDAO = new CategoryDAO(factory);
+			model.addAttribute("categories", categoryDAO.getCategories().getList());
 			model.addAttribute("product", product);
 			model.addAttribute("message", "Vui lòng điền đầy đủ thông tin!");
 			model.addAttribute("messageType", "warning");
@@ -128,9 +136,10 @@ public class ProductController {
 			return viewsDirectory + "addProduct";
 
 		} else {
-			EntityData entityData = new EntityData(factory);
-			List<ProductEntity> products = entityData.getProducts();
-			String productId = Generate.generateProductId(products);
+			productDAO = new ProductDAO(factory);
+			Products products = productDAO.getProducts();
+			String productId = Generate.generateProductId(products.getList());
+
 			product.setId(productId);
 			product.setDateAdded(new Date());
 
@@ -175,7 +184,7 @@ public class ProductController {
 				product.setImages(images);
 			}
 
-			if (entityData.addProductToDB(product)) {
+			if (productDAO.addProductToDB(product)) {
 				redirectAttributes.addFlashAttribute("message", "Thêm sản phẩm thành công!");
 				redirectAttributes.addFlashAttribute("messageType", "success");
 			} else {
@@ -190,24 +199,30 @@ public class ProductController {
 	public String deleteProduct(ModelMap model, @PathVariable("id") String productId,
 			RedirectAttributes redirectAttributes) throws IOException {
 		if (!productId.isEmpty()) {
-			ProductEntity product = new ProductEntity();
-			product.setId(productId);
+			productDAO = new ProductDAO(factory);
+			ProductEntity product = productDAO.getProduct(productId);
 
-			File folderInServer = new File(uploadFile.getUploadPathOnServer(context) + "products/" + productId + "/");
-			File folderInResource = new File(uploadFile.getUploadPath() + "products/" + productId + "/");
+			if (product != null) {
+				File folderInServer = new File(
+						uploadFile.getUploadPathOnServer(context) + "products/" + productId + "/");
+				File folderInResource = new File(uploadFile.getUploadPath() + "products/" + productId + "/");
 
-			if (folderInResource.exists()) {
-				UploadFile.deleteDirectory(folderInResource);
-			}
-			if (folderInServer.exists()) {
-				UploadFile.deleteDirectory(folderInServer);
-			}
+				if (folderInResource.exists()) {
+					UploadFile.deleteDirectory(folderInResource);
+				}
+				if (folderInServer.exists()) {
+					UploadFile.deleteDirectory(folderInServer);
+				}
 
-			if (entityData.deleteProductInDB(product)) {
-				redirectAttributes.addFlashAttribute("message", "Xoá sản phẩm thành công!");
-				redirectAttributes.addFlashAttribute("messageType", "success");
+				if (productDAO.deleteProductInDB(product)) {
+					redirectAttributes.addFlashAttribute("message", "Xoá sản phẩm thành công!");
+					redirectAttributes.addFlashAttribute("messageType", "success");
+				} else {
+					redirectAttributes.addFlashAttribute("message", "Không thể xoá sản phẩm này!");
+					redirectAttributes.addFlashAttribute("messageType", "error");
+				}
 			} else {
-				redirectAttributes.addFlashAttribute("message", "Không thể xoá sản phẩm này!");
+				redirectAttributes.addFlashAttribute("message", "Không tồn tại sản phẩm này");
 				redirectAttributes.addFlashAttribute("messageType", "error");
 			}
 		}
@@ -217,8 +232,8 @@ public class ProductController {
 	// VIEW PRODUCT
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public String productDetail(ModelMap model, @PathVariable("id") String id) throws IOException {
-		entityData = new EntityData(factory);
-		ProductEntity product = entityData.getProduct(id);
+		productDAO = new ProductDAO(factory);
+		ProductEntity product = productDAO.getProduct(id);
 		model.addAttribute("product", product);
 		model.addAttribute("title", "Chi tiết " + product.getId());
 		return viewsDirectory + "viewProduct";
@@ -227,9 +242,12 @@ public class ProductController {
 	// EDIT PRODUCT
 	@RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
 	public String renderEditProductPage(ModelMap model, @PathVariable("id") String id) throws IOException {
-		entityData = new EntityData(factory);
-		ProductEntity product = entityData.getProduct(id);
-		model.addAttribute("categories", entityData.getCategories());
+		productDAO = new ProductDAO(factory);
+		ProductEntity product = productDAO.getProduct(id);
+		CategoryDAO categoryDAO = new CategoryDAO(factory);
+		Categories categories = categoryDAO.getCategories();
+
+		model.addAttribute("categories", categories.getList());
 		model.addAttribute("product", product);
 		model.addAttribute("title", "Chỉnh sửa sản phẩm");
 		return viewsDirectory + "editProduct";
@@ -275,8 +293,8 @@ public class ProductController {
 			model.addAttribute("messageType", "warning");
 			return viewsDirectory + "editProduct";
 		} else {
-			entityData = new EntityData(factory);
-			ProductEntity product = entityData.getProduct(id);
+			productDAO = new ProductDAO(factory);
+			ProductEntity product = productDAO.getProduct(id);
 			product.setName(moddifiedProduct.getName());
 			product.setQuantity(moddifiedProduct.getQuantity());
 			product.setCategory(moddifiedProduct.getCategory());
@@ -333,7 +351,7 @@ public class ProductController {
 
 			product.setImages(images);
 
-			if (entityData.updateProductInDB(product)) {
+			if (productDAO.updateProductInDB(product)) {
 				redirectAttributes.addFlashAttribute("message", "Cập nhật sản phẩm thành công!");
 				redirectAttributes.addFlashAttribute("messageType", "success");
 			} else {
