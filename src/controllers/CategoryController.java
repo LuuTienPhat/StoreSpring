@@ -27,7 +27,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import entities.CategoryEntity;
-import models.EntityData;
 import models.Generate;
 import models.Pagination;
 import models.UploadFile;
