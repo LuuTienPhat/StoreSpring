@@ -26,8 +26,9 @@ import entities.CategoryEntity;
 import entities.OrderDetailEntity;
 import entities.OrderEntity;
 import entities.ProductEntity;
-import models.EntityData;
 import models.Pagination;
+import models.List.Orders;
+import models.dao.OrderDAO;
 
 @Controller
 @Transactional
@@ -38,7 +39,7 @@ public class OrdersController {
 	@Qualifier("sessionFactory")
 	SessionFactory factory;
 
-	EntityData entityData;
+	OrderDAO orderDAO;
 
 	String viewsDirectory = "admin/pages/order/";
 
@@ -47,36 +48,32 @@ public class OrdersController {
 			@RequestParam(value = "search", required = false) String search,
 			@RequestParam(value = "state", required = false) String state) throws IOException {
 
-		entityData = new EntityData(factory);
-		List<OrderEntity> orders = new ArrayList<OrderEntity>();
-		Session session = factory.getCurrentSession();
-		String hql = "FROM OrderEntity WHERE state LIKE '%" + state + "%'";
+		orderDAO = new OrderDAO(factory);
+		Orders orders = new Orders();
 
 		String hql2 = "FROM OrderEntity WHERE id LIKE '%" + search + "%' OR orderDate LIKE '%" + search
-				+ "%' OR shipName LIKE '%" + search + "%' OR shipAddress LIKE '%" + search + "%' OR total LIKE '%"
-				+ search + "%' OR shipAddress LIKE '%" + search + "%'"
-				+ (state != null ? "OR state LIKE '%" + state + "%'" : "");
+				+ "%' OR shipName LIKE '%" + search + "%' OR shipAddress LIKE '%" + search + "%' OR shipAddress LIKE '%"
+				+ search + "%'" + (state != null ? "OR state LIKE '%" + state + "%'" : "");
 
 		if (search != null) {
+			Session session = factory.openSession();
 			Query query = session.createQuery(hql2);
-			orders = query.list();
-			model.addAttribute("pagedLink", "/admin/categories?search=" + search + "&&state=" + state);
+			orders = new Orders(query.list());
+			session.close();
+			model.addAttribute("pagedLink", "/admin/orders?search=" + search + "&&state=" + state);
 		} else if (state != null) {
-			{
-				Query query = session.createQuery(hql);
-				orders = query.list();
-				model.addAttribute("pagedLink", "/admin/categories?state=" + state);
-			}
+			orders = orderDAO.getOrders(state);
+			model.addAttribute("pagedLink", "/admin/orders?state=" + state);
 		} else {
-			orders = entityData.getOrders();
-			model.addAttribute("pagedLink", "/admin/categories");
+			orders = orderDAO.getOrders();
+			model.addAttribute("pagedLink", "/admin/orders");
 		}
 
+		PagedListHolder pagedListHolder = Pagination.ordersPagination(request, orders.getList(), 10, 5);
+		model.addAttribute("pagedListHolder", pagedListHolder);
 		model.addAttribute("title", "Quản lý đơn hàng");
 		model.addAttribute("state", state);
-		PagedListHolder pagedListHolder = Pagination.ordersPagination(request, orders, 10, 10);
 		model.addAttribute("type", "đơn hàng");
-		model.addAttribute("pagedListHolder", pagedListHolder);
 		return viewsDirectory + "order";
 	}
 
@@ -85,11 +82,11 @@ public class OrdersController {
 	public String renderOrderDetailPage(ModelMap model, HttpServletRequest request, @PathVariable("id") String id)
 			throws IOException {
 
-		entityData = new EntityData(factory);
-		OrderEntity order = entityData.getOrder(id);
+		orderDAO = new OrderDAO(factory);
+		OrderEntity order = orderDAO.getOrder(id);
 		PagedListHolder pagedListHolder = Pagination.orderDetailPagination(request, order.getOrderDetails(), 10, 10);
 
-		model.addAttribute("order", entityData.getOrder(id));
+		model.addAttribute("order", orderDAO.getOrder(id));
 		model.addAttribute("pagedListHolder", pagedListHolder);
 		model.addAttribute("type", "đơn hàng");
 		model.addAttribute("pagedLink", "admin/orders/" + id);
@@ -102,26 +99,28 @@ public class OrdersController {
 	public String changeOrderState(ModelMap model, HttpServletRequest request, @PathVariable("id") String id)
 			throws IOException {
 
-		entityData = new EntityData(factory);
+		orderDAO = new OrderDAO(factory);
 		int state = Integer.parseInt(request.getParameter("state"));
 
 		if (state == 3) { // ADMIN XÁC NHẬN ĐƠN HÀNG ĐÃ XONG
-			OrderEntity order = entityData.getOrder(id);
+			OrderEntity order = orderDAO.getOrder(id);
 			order.setState(state);
 			List<OrderDetailEntity> orderDetailList = order.getOrderDetails();
-			entityData.updateProducts(orderDetailList);
-			entityData.updateOrderInDB(order);
+			/* entityData.updateProducts(orderDetailList); */
+			orderDAO.updateOrderInDB(order);
 		} else {
-			OrderEntity order = entityData.getOrder(id);
+			OrderEntity order = orderDAO.getOrder(id);
 			if (order.getState() != 3) { // NẾU ĐƠN HÀNG CHƯA HOÀN THÀNH THÌ CÓ THỂ XUỐNG THẤP HƠN
 				order.setState(state);
-				entityData.updateOrderInDB(order);
+				orderDAO.updateOrderInDB(order);
 			}
 		}
 
-		OrderEntity order = entityData.getOrder(id);
-		model.addAttribute("order", order);
-		model.addAttribute("title", "Đơn hàng " + order.getId());
-		return viewsDirectory + "viewOrder";
+		/*
+		 * OrderEntity order = entityData.getOrder(id); model.addAttribute("order",
+		 * order); model.addAttribute("title", "Đơn hàng " + order.getId()); return
+		 * viewsDirectory + "viewOrder";
+		 */
+		return "redirect:/admin/orders/" + id;
 	}
 }
