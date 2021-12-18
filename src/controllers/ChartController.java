@@ -27,9 +27,12 @@ import com.google.gson.GsonBuilder;
 
 import entities.CategoryEntity;
 import entities.ProductEntity;
-import models.EntityData;
-import models.Revenue;
+import models.List.Categories;
+import models.List.Orders;
+import models.dao.CategoryDAO;
+import models.dao.OrderDAO;
 import models.statistics.OrderStatistics;
+import models.statistics.Revenue;
 import models.statistics.Statistics;
 
 @Controller
@@ -45,7 +48,8 @@ public class ChartController {
 	@Qualifier("sessionFactory")
 	SessionFactory factory;
 
-	EntityData entityData;
+	CategoryDAO categoryDAO;
+	OrderDAO orderDAO;
 
 	Statistics statistics;
 
@@ -53,8 +57,8 @@ public class ChartController {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ParseException {
 		// TODO Auto-generated method stub
 		// response.getWriter().append("Served at: ").append(request.getContextPath());
-		entityData = new EntityData(factory);
-		List<OrderStatistics> orderStatisticsByMonths = entityData.getOrderStatistics();
+		orderDAO = new OrderDAO(factory);
+		List<OrderStatistics> orderStatisticsByMonths = orderDAO.getOrderStatistics();
 
 		try {
 			Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
@@ -72,9 +76,10 @@ public class ChartController {
 	@RequestMapping(value = "products-of-category-chart", method = RequestMethod.GET)
 	public void returnProductsOfCategoryChart(HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
-		entityData = new EntityData(factory);
-		List<CategoryEntity> categories = entityData.getCategories();
-		for (CategoryEntity category : categories) {
+		categoryDAO = new CategoryDAO(factory);
+		Categories categories = categoryDAO.getCategories();
+
+		for (CategoryEntity category : categories.getList()) {
 			for (ProductEntity product : category.getProducts()) {
 				product.setCartDetails(null);
 				product.setCategory(null);
@@ -90,7 +95,7 @@ public class ChartController {
 			response.setContentType("application/json");
 			// response.setHeader("Access-Control-Allow-Origin",
 			PrintWriter out = response.getWriter();
-			out.println(gson.toJson(categories));
+			out.println(gson.toJson(categories.getList()));
 		} catch (Exception e) {
 			// TODO: handle exception
 			System.out.println(e.getMessage());
@@ -108,7 +113,6 @@ public class ChartController {
 			response.setContentType("application/json");
 			// response.setHeader("Access-Control-Allow-Origin",
 			PrintWriter out = response.getWriter();
-			/* Wrapper wrapper = new Wrapper(orderStatisticsByMonths); */
 			out.println(gson.toJson(revenues));
 		} catch (Exception e) {
 			// TODO: handle exception
