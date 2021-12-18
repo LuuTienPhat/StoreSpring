@@ -24,9 +24,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import entities.CustomerEntity;
 import entities.InvoiceDetailEntity;
-import models.EntityData;
 import models.Pagination;
 import models.UploadFile;
+import models.List.Customers;
+import models.dao.CustomerDAO;
 
 @Transactional
 @Controller
@@ -43,7 +44,7 @@ public class CustomerController {
 	@Qualifier("uploadFile")
 	UploadFile uploadFile;
 
-	EntityData entityData;
+	CustomerDAO customerDAO;
 
 	String viewsDirectory = "admin/pages/customer/";
 
@@ -51,20 +52,20 @@ public class CustomerController {
 	public String renderCustomerPage(ModelMap model, HttpServletRequest request,
 			@RequestParam(value = "search", required = false) String search) throws IOException {
 
-		List<CustomerEntity> customers = new ArrayList<CustomerEntity>();
-		entityData = new EntityData(factory);
+		Customers customers = new Customers();
+		customerDAO = new CustomerDAO(factory);
 
-		entityData = new EntityData(factory);
+		customerDAO = new CustomerDAO(factory);
 		if (search != null) {
-			customers = entityData.searchForCustomer(search);
+			customers = customerDAO.searchForCustomer(search);
 			model.addAttribute("pagedLink", "/admin/categories?search=" + search);
 
 		} else {
-			customers = entityData.getCustomers();
+			customers = customerDAO.getCustomers();
 			model.addAttribute("pagedLink", "/admin/categories");
 		}
 
-		PagedListHolder<CustomerEntity> pagedListHolder = Pagination.customerPagination(request, customers, 10, 10);
+		PagedListHolder pagedListHolder = Pagination.customerPagination(request, customers.getList(), 10, 10);
 
 		model.addAttribute("pagedListHolder", pagedListHolder);
 		model.addAttribute("title", "Quản lý Khách hàng");
@@ -72,29 +73,13 @@ public class CustomerController {
 		return viewsDirectory + "customer";
 	}
 
-	/*
-	 * @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET) public
-	 * String deleteCustomer(ModelMap model, @PathVariable("id") String id) throws
-	 * IOException { CustomerEntity customer = new CustomerEntity();
-	 * customer.setId(id);
-	 * 
-	 * Session session = factory.openSession(); Transaction t =
-	 * session.beginTransaction(); try { session.delete(customer); t.commit();
-	 * System.out.println("Deleted");
-	 * 
-	 * } catch (Exception e) { t.rollback(); System.out.println("Error");
-	 * e.printStackTrace(); } finally { session.close(); }
-	 * 
-	 * return "redirect:/admin/customers"; }
-	 */
-
 	// VIEW CUSTOMER
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public String productDetail(ModelMap model, @PathVariable("id") String id, HttpServletRequest request)
 			throws IOException {
 
-		entityData = new EntityData(factory);
-		CustomerEntity customer = entityData.getCustomer(id);
+		customerDAO = new CustomerDAO(factory);
+		CustomerEntity customer = customerDAO.getCustomer(id);
 
 		PagedListHolder pagedListHolder = Pagination.ordersPagination(request, customer.getOrders(), 10, 10);
 
